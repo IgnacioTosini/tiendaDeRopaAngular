@@ -1,18 +1,18 @@
 import { Clothes } from "./clothes.model";
 
 export class ClothesSold extends Clothes {
-  private quantity: number
+  private cant: number
 
-  constructor( id: number, name: string, price: number, code: string, size: string, image: string, description: number, genericType: string, specificType: string, publicationDate: Date, quantity: number) {
-    super(id, name, price, code, size, image, description, genericType, specificType, publicationDate);
-    this.quantity = quantity;
+  constructor( id: number, name: string, price: number, code: string, size: string, image: string, description: string, genericType: string, specificType: string, publication: string, cant: number) {
+    super(id, name, price, code, size, image, description, genericType, specificType, publication);
+    this.cant = cant;
   }
 
-  public getQuantity(): number {
-    return this.quantity;
+  public getcant(): number {
+    return this.cant;
   }
 
-  public setQuantity(quantity: number) {
-    this.quantity = quantity;
+  public setcant(cant: number) {
+    this.cant = cant;
   }
 }

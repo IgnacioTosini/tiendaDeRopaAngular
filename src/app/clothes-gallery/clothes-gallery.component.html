@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<section class="container">
+  <section class="filters">
+    <input [(ngModel)]="nameFilter" (input)="applyFilters()" placeholder="Nombre">
+    <section>
+      <button (click)="sizeFilter = sizeFilter === 'xs' ? '' : 'xs'; applyFilters()">XS</button>
+      <button (click)="sizeFilter = sizeFilter === 's' ? '' : 's'; applyFilters()">S</button>
+      <button (click)="sizeFilter = sizeFilter === 'm' ? '' : 'm'; applyFilters()">M</button>
+      <button (click)="sizeFilter = sizeFilter === 'l' ? '' : 'l'; applyFilters()">L</button>
+      <button (click)="sizeFilter = sizeFilter === 'xl' ? '' : 'xl'; applyFilters()">XL</button>
+    </section>
+    <input type="number" [(ngModel)]="minPriceFilter" (input)="applyFilters()" placeholder="Precio mínimo">
+    <input type="number" [(ngModel)]="maxPriceFilter" (input)="applyFilters()" placeholder="Precio máximo">
+    <button class="customButton" (click)="setSortOrder('name')">Ordenar por nombre</button>
+    <button class="customButton" (click)="setSortOrder('price')">Ordenar por precio (ascendente)</button>
+    <button class="customButton" (click)="setSortOrder('price-desc')">Ordenar por precio (descendente)</button>
+  </section>
+  <section class="gallery">
+    <ul>
+      @for (clothe of currentPageItems; track $index) {
+      <a href="">
+        <li>
+          <section class="clothe-item">
+            <img [src]="clothe.getImage()" alt="{{clothe.getName()}}">
+            <section class="clothe-details">
+              <h2>{{clothe.getName()}}</h2>
+              <p>Size: {{clothe.getSize()}}</p>
+              <p>Price: {{clothe.getPrice()}}</p>
+            </section>
+          </section>
+        </li>
+      </a>
+      }
+    </ul>
+    <button class="previous" (click)="previousPage()">Página anterior</button>
+    <button class="next" (click)="nextPage()">Página siguiente</button>
+  </section>
+</section>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<form [formGroup]="clotheForm" (ngSubmit)="createClothe()">
+  <section>
+    <label for="name">Name:</label>
+    <input type="text" id="name" formControlName="name">
+  </section>
+
+  <section>
+    <label for="price">Price:</label>
+    <input type="number" id="price" formControlName="price">
+  </section>
+
+  <section>
+    <label for="price">Stock:</label>
+    <input type="number" id="stock" formControlName="stock">
+  </section>
+
+  <section>
+    <label for="code">Code:</label>
+    <input type="text" id="code" formControlName="code">
+  </section>
+
+  <section>
+    <label for="size">Size:</label>
+    <input type="text" id="size" formControlName="size">
+  </section>
+
+  <section class="imageSection">
+    <label for="image">Image:</label>
+    <input id="image" type="file" (change)="onFileChange($event)">
+    <img class="preview" [src]='file' [alt]="file">
+  </section>
+
+  <section>
+    <label for="description">Description:</label>
+    <input type="text" id="description" formControlName="description">
+  </section>
+
+  <section>
+    <label for="genericType">Generic Type:</label>
+    <input type="text" id="genericType" formControlName="genericType">
+  </section>
+
+  <section>
+    <label for="specificType">Specific Type:</label>
+    <input type="text" id="specificType" formControlName="specificType">
+  </section>
+
+  <section>
+    <label for="publicationDate">Publication Date:</label>
+    <input type="date" id="publicationDate" formControlName="publicationDate">
+  </section>
+
+  <button type="submit">Create Clothe</button>
+</form>

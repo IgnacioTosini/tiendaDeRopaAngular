@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<section class="containerGallery">
+  <section class="gallery">
+    <ul>
+      @for (clothe of clothes; track $index) {
+      <a (click)="goToProduct(clothe)">
+        <li>
+          <section class="clothe-item">
+            <img [src]="clothe.getImage()" alt="{{clothe.getName()}}">
+            <section class="clothe-details">
+              <h2>{{clothe.getName()}}</h2>
+              <p>Size: {{clothe.getSize()}}</p>
+              <p>Price: {{clothe.getPrice()}}</p>
+            </section>
+          </section>
+        </li>
+      </a>
+      }
+    </ul>
+  </section>
+</section>

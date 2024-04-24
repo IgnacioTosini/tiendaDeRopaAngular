@@ -5,12 +5,12 @@ export class Clothes{
   private code: string
   private size: string
   private image: string
-  private description: number
+  private description: string
   private genericType: string
   private specificType: string
-  private publicationDate: Date
+  private publication: string
 
-  constructor( id: number, name: string, price: number, code: string, size: string, image: string, description: number, genericType: string, specificType: string, publicationDate: Date) {
+  constructor( id: number, name: string, price: number, code: string, size: string, image: string, description: string, genericType: string, specificType: string, publication: string) {
     this.id = id;
     this.name = name;
     this.price = price;
@@ -20,7 +20,7 @@ export class Clothes{
     this.description = description;
     this.genericType = genericType;
     this.specificType = specificType;
-    this.publicationDate = publicationDate;
+    this.publication = publication;
   }
 
   public getId(): number {
@@ -47,7 +47,7 @@ export class Clothes{
     return this.image;
   }
 
-  public getDescription(): number {
+  public getDescription(): string {
     return this.description;
   }
 
@@ -59,47 +59,47 @@ export class Clothes{
     return this.specificType;
   }
 
-  public getPublicationDate(): Date {
-    return this.publicationDate;
+  public getPublicationDate(): string {
+    return this.publication;
   }
 
-  public setId(id: number) {
+  setId(id: number) {
     this.id = id;
   }
 
-  public setName(name: string) {
+  setName(name: string) {
     this.name = name;
   }
 
-  public setPrice(price: number) {
+  setPrice(price: number) {
     this.price = price;
   }
 
-  public setCode(code: string) {
+  setCode(code: string) {
     this.code = code;
   }
 
-  public setSize(size: string) {
+  setSize(size: string) {
     this.size = size;
   }
 
-  public setImage(image: string) {
+  setImage(image: string) {
     this.image = image;
   }
 
-  public setDescription(description: number) {
+  setDescription(description: string) {
     this.description = description;
   }
 
-  public setGenericType(genericType: string) {
+  setGenericType(genericType: string) {
     this.genericType = genericType;
   }
 
-  public setSpecificType(specificType: string) {
+  setSpecificType(specificType: string) {
     this.specificType = specificType;
   }
 
-  public setPublicationDate(publicationDate: Date) {
-    this.publicationDate = publicationDate;
+  setPublicationDate(publication: string) {
+    this.publication = publication;
   }
 }

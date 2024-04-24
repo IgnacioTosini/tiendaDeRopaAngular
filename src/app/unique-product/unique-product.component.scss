@@ -1,0 +1,201 @@
+.uniqueProduct {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+  background-color: #9B8264;
+
+  .uniqueProductGalleryImage {
+    display: flex;
+    justify-content: space-evenly;
+
+    .smallImages {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      width: fit-content;
+      gap: 0.625rem;
+
+      .smallImage {
+        img {
+          width: 100%;
+          max-width: 10rem;
+          opacity: 0.5;
+          cursor: pointer;
+          border-radius: 2rem;
+
+          &.selected {
+            opacity: 1;
+          }
+        }
+      }
+    }
+
+    .mainImage {
+      width: 100%;
+      cursor: zoom-in;
+
+      img {
+        width: 40rem;
+        height: 40rem;
+        border-radius: 2rem;
+      }
+
+      .zoomLens {
+        position: absolute;
+        border: 1px solid #d4d4d4;
+        /* Adjust the size of the lens to match the zoom result size for more precise zooming: */
+        width: 10rem;
+        height: 10rem;
+        cursor: none;
+        opacity: 0;
+      }
+    }
+
+    .zoomResult {
+      border: 1px solid #d4d4d4;
+      /* Set the size of the result div: */
+      width: 10rem;
+      height: 10rem;
+      background-repeat: no-repeat;
+      position: absolute;
+      /* Hide the result div by default: */
+      display: none;
+      z-index: 999;
+    }
+  }
+
+  .uniqueProductInfo {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    border: 1px solid #ccc;
+    flex: 1;
+    padding: 20px;
+    color: #fff;
+    background-color: #4839249f;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+    h1 {
+      font-size: 2em;
+      margin-bottom: 10px;
+      text-align: center; // Centrar el título
+    }
+
+    p {
+      margin-bottom: 10px;
+      font-size: 1.2em;
+      text-align: justify; // Justificar el texto de la descripción
+    }
+
+    select {
+      width: 80%;
+      margin: 10px 0;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px; // Añadir border-radius para suavizar los bordes
+      background-color: #f8f8f8; // Cambiar el color de fondo
+      color: #ffffff; // Cambiar el color del texto
+      font-size: 1rem; // Aumentar el tamaño de la fuente
+      background-color: #483924;
+
+      // Estilizar la flecha del select
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="%23ffffff" color="%23ffffff" viewBox="0 0 20 20"><polygon points="5,8 10,13 15,8"/></svg>') no-repeat;
+      background-position: right 10px top 50%;
+      background-size: 1rem;
+    }
+
+    button {
+      margin: 10px 0; // Añadir margen superior para separar del select
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      background-color: #483924;
+      color: #fff;
+      cursor: pointer;
+      font-size: 16px;
+      width: 100%; // Hacer que el botón ocupe todo el ancho
+
+      &:hover {
+        transform: scale(1.05);
+        transition: 0.5s;
+        background-color: #977348;
+      }
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+
+    .addToCartContainer {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-around;
+      margin-top: 20px;
+      padding: 20px; // Añadir padding para dar más espacio
+      border-radius: 10px; // Añadir border-radius para suavizar los bordes
+
+      .quantityContainer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+        padding: 10px; // Añadir padding para dar más espacio
+        background-color: #906F48;
+        width: 100%;
+        max-width: 10rem;
+        border-radius: 5px;
+
+        .quantityButton {
+          background-color: transparent !important;
+          border: none;
+          font-size: 1.5em; // Aumentar el tamaño de la fuente para los botones de cantidad
+          transition: 0.5s;
+
+          &:hover {
+            cursor: pointer;
+            transform: scale(1.1);
+            background-color: #9B8264;
+          }
+        }
+      }
+
+      .addToCartButton {
+        background-color: #483924;
+        color: #fff;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        font-size: 1.2em; // Aumentar el tamaño de la fuente para el botón de agregar al carrito
+        transition: 0.5s;
+
+        &:hover {
+          cursor: pointer;
+          transform: scale(1.05);
+          background-color: #977348;
+        }
+      }
+    }
+  }
+}
+
+.productDescription {
+  width: 40rem;
+  padding: 20px;
+  border: 1px solid #ccc;
+  color: #fff;
+  background-color: #4839249f;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  margin: 2rem 0 0 2rem;
+
+  p {
+    margin-bottom: 10px;
+    font-size: 1.2em;
+    text-align: justify; // Justificar el texto de la descripción
+  }
+}

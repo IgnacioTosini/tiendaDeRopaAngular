@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+
+<section class="uniqueProduct">
+  <section class="uniqueProductGalleryImage">
+    <section class="smallImages">
+      <picture class="smallImage">
+        @for (smallImage of smallImages; track $index) {
+        <img [src]="smallImage" alt="" (click)="changeMainImage(smallImage)"
+          [class.selected]="smallImage === mainImage">
+        }
+      </picture>
+    </section>
+    <section class="mainImage" #mainImageDiv>
+      <img [src]="mainImage" alt="" (mousemove)="zoomImage($event)" (mouseout)="resetZoom()">
+    </section>
+    <div class="zoomResult" #zoomResultDiv #zoomLensDiv></div>
+  </section>
+
+  <section class="uniqueProductInfo">
+    <h1>{{ product.getName() }}</h1>
+    <p>$ {{ product.getPrice() }}</p>
+    <select name="size" id="size">
+      <option value="">Talle</option>
+      <option value="">S</option>
+      <option value="">M</option>
+      <option value="">L</option>
+      <option value="">XL</option>
+      <option value="">XXL</option>
+    </select>
+
+    <section class="addToCartContainer">
+      <section class="quantityContainer">
+        <button class="quantityButton" (click)="subtractQuantity()">-</button>
+        <span>{{ quantity }}</span>
+        <button class="quantityButton" (click)="sumAmount()">+</button>
+      </section>
+      <button class="addToCartButton" (click)="addToCart()">Agregar</button>
+    </section>
+  </section>
+</section>
+
+<section class="productDescription">
+  <p>{{ product.getDescription() }}</p>
+</section>

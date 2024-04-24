@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<form [formGroup]="userForm" class="userContainer">
+  <section class="imageSection">
+    <h2>Perfil de Usuario</h2>
+    <picture>
+      <img src="../../assets/photos/user.svg" alt=""><!-- <img src="{{ user?.getImage() }}" alt=""> -->
+    </picture>
+    <button class="customButton" (click)="updateImage()">Actualizar Imagen</button>
+  </section>
+  <section class="dataSection">
+    <section>
+      <label>Nombre: </label><input type="text" formControlName="name">
+    </section>
+    <section>
+      <label>Apellido: </label><input type="text" formControlName="lastname">
+    </section>
+    <section>
+      <label>Email: </label><input type="text" formControlName="email">
+    </section>
+    <section>
+      <label>Contraseña: </label><input type="password" formControlName="password">
+      <button class="customButton" (click)="updatePassword()">Actualizar Contraseña</button>
+    </section>
+  </section>
+</form>

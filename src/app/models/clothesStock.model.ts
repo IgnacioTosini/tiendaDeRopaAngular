@@ -3,7 +3,7 @@ import { Clothes } from "./clothes.model";
 export class ClothesStock extends Clothes{
   private stock: number;
 
-  constructor( id: number, name: string, price: number, code: string, size: string, image: string, description: number, genericType: string, specificType: string, publicationDate: Date, stock: number) {
+  constructor( id: number, name: string, price: number, code: string, size: string, image: string, description: string, genericType: string, specificType: string, publicationDate: string, stock: number) {
     super(id, name, price, code, size, image, description, genericType, specificType, publicationDate);
     this.stock = stock;
   }

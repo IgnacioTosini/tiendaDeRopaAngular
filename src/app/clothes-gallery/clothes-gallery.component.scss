@@ -1,0 +1,144 @@
+.container {
+  display: flex;
+  font-family: Arial, sans-serif;
+  background-color: #9B8264;
+
+
+  .filters {
+    width: 20%;
+    padding: 20px;
+    border-right: 1px solid #483924;
+    background-color: #F1B338;
+    border-radius: 0.5rem;
+
+    input,
+    section {
+      width: 100%;
+      margin-bottom: 20px;
+    }
+
+    input {
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #483924;
+      font-size: 16px;
+    }
+
+    section {
+      display: flex;
+      justify-content: space-between;
+
+      button {
+        width: 18%;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        background-color: #483924;
+        color: white;
+        font-size: 14px;
+        transition: background-color 0.3s ease;
+
+        &:hover {
+          background-color: #9B8264;
+        }
+      }
+    }
+  }
+
+  .gallery {
+    width: 75%;
+    padding: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+
+    ul {
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      list-style: none;
+      padding: 0;
+
+      a {
+        list-style: none;
+        text-decoration: none;
+        width: 30%;
+        margin-bottom: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 0.5rem;
+
+        li {
+          .clothe-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            border-radius: 0.5rem;
+
+            img {
+              width: 100%;
+              height: auto;
+              object-fit: cover;
+              border-radius: 0.5rem;
+              transition: all 0.5s ease;
+
+              &:hover {
+                opacity: 0.8;
+                cursor: pointer;
+                transform: scale(1.05);
+              }
+            }
+
+            .clothe-details {
+              h2 {
+                margin: 10px 0;
+                font-size: 18px;
+                color: #483924;
+              }
+
+              p {
+                margin: 0;
+                color: #dadada;
+                font-size: 16px;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #483924;
+    color: white;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #9B8264;
+    }
+
+    &:not(:last-child) {
+      margin-right: 10px;
+    }
+  }
+
+  button.previous,
+  button.next {
+    background-color: #F1B338;
+    height: fit-content;
+
+    &:hover {
+      background-color: #483924;
+    }
+  }
+
+  .customButton {
+    margin: 1rem;
+  }
+}

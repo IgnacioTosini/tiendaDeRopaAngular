@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<form [formGroup]="userForm" (ngSubmit)="createUser()">
+  <section>
+    <label for="id">ID:</label>
+    <input id="id" type="text" formControlName="id">
+  </section>
+
+  <section>
+    <label for="name">Name:</label>
+    <input id="name" type="text" formControlName="name">
+  </section>
+
+  <section>
+    <label for="lastname">Last Name:</label>
+    <input id="lastname" type="text" formControlName="lastname">
+  </section>
+
+  <section>
+    <label for="email">Email:</label>
+    <input id="email" type="email" formControlName="email">
+  </section>
+
+  <section>
+    <label for="password">Password:</label>
+    <input id="password" type="password" formControlName="password">
+  </section>
+
+  <section class="imageSection">
+    <label for="image">Image:</label>
+    <input id="image" type="file" (change)="onFileChange($event)">
+    <img class="preview" [src]='file' [alt]="file">
+  </section>
+
+  <section>
+    <label for="tel">Cellphone:</label>
+    <input id="tel" type="text" formControlName="tel">
+  </section>
+
+  <button type="submit">Create User</button>
+</form>
+
+<!-- <button (click)="updateUserPassword()">Update User Password</button> -->
+<button (click)="getUserById()">Get User By ID</button>
+<button (click)="getUserByEmail()">Get User By Email</button>
+<button (click)="getUsersByLastname()">Get Users By Last Name</button>
