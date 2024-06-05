@@ -1,26 +1,32 @@
 import { ClothesStockService } from './../services/clothes-stock.service';
 import { CartService } from './../services/cart.service';
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { Clothes } from '../models/clothes.model';
 import { ActivatedRoute } from '@angular/router';
 import { ClothesStock } from '../models/clothesStock.model';
+import { FormsModule } from '@angular/forms';
+import { GalleryComponent } from '../gallery/gallery.component';
+import { EMPTY, catchError } from 'rxjs';
+import { ProductReviewComponent } from '../product-review/product-review.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-unique-product',
   standalone: true,
-  imports: [],
+  imports: [FormsModule, GalleryComponent, ProductReviewComponent, CommonModule],
   templateUrl: './unique-product.component.html',
   styleUrl: './unique-product.component.scss'
 })
 export class UniqueProductComponent {
-  product: Clothes = new ClothesStock(1, 'Camisa', 100, '1234', 'M', '../../assets/photos/shirtGeneric.jpeg', 'Camisa de algodón', 'Ropa', 'Camisa', '2022-01-01', 4);
+  product: ClothesStock = new ClothesStock('', '', 0, '', '', [], '', '', '', '', 0);
   quantity: number = 1;
-  mainImage: string = '../../assets/photos/shirtGeneric.jpeg';
-  smallImages: string[] = [
-    '../../assets/photos/shirtGeneric.jpeg',
-    '../../assets/photos/logo-instagram.svg',
-    '../../assets/photos/logoGeneric.png'
-  ];
+  mainImage: string = '';
+  smallImages: string[] = [];
+  sizeFilter: string = '';
+  sizesAvailable: string[] = [];
+  isLoadingSizes: boolean = true;
+  selectedSize: string = '';
+  showNotification: boolean = false;
+  selectedProduct: any;
 
   @ViewChild('mainImageDiv') mainImageDiv!: ElementRef;
   @ViewChild('zoomLensDiv') zoomLensDiv!: ElementRef;
@@ -29,17 +35,49 @@ export class UniqueProductComponent {
   constructor(private CartService: CartService, private route: ActivatedRoute, private ClothesStockService: ClothesStockService) { }
 
   ngOnInit() {
-    const code = this.route.snapshot.paramMap.get('code');
-    if (code !== null) {
-      this.ClothesStockService.findByCode(code).subscribe(product => {
-        this.product = product;
-        this.mainImage = product.image;
-        this.smallImages = product.images; // Asegúrate de que tu modelo Clothes tenga una propiedad images que sea un array de strings
-      });
+    this.route.params.subscribe(params => {
+      this.smallImages = [];
+      const code = params['code'];
+      if (code !== null) {
+        this.ClothesStockService.findByCode(code).pipe(
+          catchError(error => {
+            console.error('Error fetching product:', error);
+            return EMPTY;
+          })
+        ).subscribe(products => {
+          const product = products[0];
+          this.product = product;
+
+          if (product.getImages().length > 0) { // Verifica si hay imágenes
+            this.mainImage = product.getImages()[0].getUrl();
+            for (let i = 0; i < product.getImages().length; i++) {
+              this.smallImages.push(product.getImages()[i].getUrl());
+            }
+          }
+
+          // Filtrar los tamaños disponibles
+          this.sizesAvailable = products.filter((p: ClothesStock) => p.getStock() > 0).map((p: ClothesStock) => p.getSize());
+          this.isLoadingSizes = false;
+
+          // Si solo hay un tamaño disponible, seleccionarlo automáticamente
+          if (this.sizesAvailable.length === 1) {
+            this.selectedSize = this.sizesAvailable[0];
+          }
+        });
+      }
+    });
+  }
+
+  selectSize(size: string) {
+    if (this.sizesAvailable.includes(size)) {
+      this.selectedSize = this.selectedSize === size ? '' : size;
     }
   }
 
   zoomImage(event: MouseEvent) {
+    if (window.innerWidth < 768) {
+      return;
+    }
     const lens = this.zoomLensDiv.nativeElement;
     const result = this.zoomResultDiv.nativeElement;
     const img = this.mainImageDiv.nativeElement;
@@ -103,22 +141,35 @@ export class UniqueProductComponent {
 
   changeMainImage(newImage: string) {
     this.mainImage = newImage;
-    this.product.setImage(this.mainImage);
   }
 
   sumAmount() {
     this.quantity++;
-    // Aquí puedes agregar el código para añadir el producto al carrito
   }
 
   subtractQuantity() {
     if (this.quantity > 1) {
       this.quantity--;
-      // Aquí puedes agregar el código para remover el producto del carrito
     }
   }
 
   addToCart() {
-    this.CartService.addToCart(this.product, this.quantity);
+    if (this.product.getStock() < this.quantity) {
+      console.error('No hay suficiente stock disponible');
+      return;
+    }
+
+    console.log('Adding to cart:', this.product, this.quantity, this.selectedSize);
+    this.CartService.addToCart(this.product, this.quantity, this.selectedSize);
+    this.quantity = 1;
+
+    this.selectedProduct = this.product;
+
+    // Mostrar la notificación
+    this.showNotification = true;
+    setTimeout(() => {
+      console.log('Hiding notification');
+      this.showNotification = false;
+    }, 7000);
   }
 }

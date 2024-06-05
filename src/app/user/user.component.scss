@@ -1,11 +1,11 @@
+@import '../utilities/mixins';
+
 form {
-  display: flex;
-  flex-direction: column;
+  @include properties-flex(column, center, center);
   gap: 1rem;
 
   section {
-    display: flex;
-    flex-direction: column;
+    @include properties-flex(column, center, center);
     gap: 0.5rem;
 
     label {
@@ -22,10 +22,8 @@ form {
   }
 
   .imageSection {
-    display: flex;
-    flex-direction: row;
+    @include properties-flex(row, center, center);
     gap: 0.5rem;
-    align-items: center;
 
     .preview {
       width: 100%;

@@ -1,32 +1,26 @@
 import { ClothesSold } from "./clothesSold.model";
 
-export class Tax{
-  private id: number;
-  private name: string;
+export class Tax {
+  private id: string;
   private price: number;
   private code: string;
   private adress: string;
-  private traverCost: number;
-  private date: Date;
+  private travelCost: number;
+  private date_creation: string;
   private clothes: ClothesSold[];
 
-  constructor( id: number, name: string, price: number, code: string, adress: string, traverCost: number, date: Date, clothes: ClothesSold) {
+  constructor(id: string, price: number, code: string, adress: string, travelCost: number, date_creation: string, clothes: ClothesSold[]) {
     this.id = id;
-    this.name = name;
     this.price = price;
     this.code = code;
     this.adress = adress;
-    this.traverCost = traverCost;
-    this.date = date;
-    this.clothes = [clothes];
+    this.travelCost = travelCost;
+    this.date_creation = date_creation;
+    this.clothes = clothes;
   }
 
-  public getId(): number {
+  public getId(): string {
     return this.id;
-  }
-
-  public getName(): string {
-    return this.name;
   }
 
   public getPrice(): number {
@@ -41,24 +35,20 @@ export class Tax{
     return this.adress;
   }
 
-  public getTraverCost(): number {
-    return this.traverCost;
+  public gettravelCost(): number {
+    return this.travelCost;
   }
 
-  public getDate(): Date {
-    return this.date;
+  public getDate(): string {
+    return this.date_creation;
   }
 
   public getClothes(): ClothesSold[] {
     return this.clothes;
   }
 
-  public setId(id: number) {
+  public setId(id: string) {
     this.id = id;
-  }
-
-  public setName(name: string) {
-    this.name = name;
   }
 
   public setPrice(price: number) {
@@ -73,12 +63,12 @@ export class Tax{
     this.adress = adress;
   }
 
-  public setTraverCost(traverCost: number) {
-    this.traverCost = traverCost;
+  public settravelCost(travelCost: number) {
+    this.travelCost = travelCost;
   }
 
-  public setDate(date: Date) {
-    this.date = date;
+  public setDate(date_creation: string) {
+    this.date_creation = date_creation;
   }
 
   public setClothes(clothes: ClothesSold) {

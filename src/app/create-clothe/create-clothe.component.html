@@ -27,8 +27,15 @@
 
   <section class="imageSection">
     <label for="image">Image:</label>
-    <input id="image" type="file" (change)="onFileChange($event)">
-    <img class="preview" [src]='file' [alt]="file">
+    @for (image of clotheForm.get('images')?.value; track $index) {
+    <div formArrayName="images">
+      <input id="image" type="file" (change)="onFileChange($event, $index)">
+      @if (file[$index] !== undefined) {
+      <img class="preview" [src]='file[$index]' [alt]="file[$index]">
+      }
+    </div>
+    }
+    <button type="button" (click)="addImageField()">Add another image</button>
   </section>
 
   <section>

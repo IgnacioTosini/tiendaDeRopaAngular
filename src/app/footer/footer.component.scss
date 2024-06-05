@@ -1,17 +1,16 @@
+@import '../utilities/mixins';
+@import '../utilities/variables';
+
 footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  background-color: #483924;
+  @include properties-flex(row, space-around, center);
+  background: $secondary-background;
   padding: 0.625rem;
   color: white;
   font-size: 0.875rem;
   font-weight: 600;
 
   .copyright {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    @include properties-flex(row, center, center);
 
     p {
       margin-left: 0.625rem;
@@ -19,10 +18,7 @@ footer {
   }
 
   .contactUs {
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    flex-direction: column;
+    @include properties-flex(column, center, flex-start);
     border: 0.125rem solid rgb(0, 0, 0);
     padding: 0.625rem;
     border-radius: 0.625rem;
@@ -37,14 +33,11 @@ footer {
   }
 
   .redes {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    @include properties-flex(row, center, center);
+    flex-wrap: wrap;
     gap: 1.625rem;
 
     picture {
-      cursor: pointer;
-
       img {
         width: 2.5rem;
         height: 2.5rem;
@@ -72,7 +65,7 @@ footer {
     :nth-child(2) {
       img {
         &:hover {
-          border: 0.125rem solid #D43087 ;
+          border: 0.125rem solid #D43087;
           background-color: #D43087;
         }
       }
@@ -84,6 +77,24 @@ footer {
           border: 0.125rem solid #25D366;
           background-color: #25D366;
         }
+      }
+    }
+  }
+
+  @media (max-width: 37.5rem) {// 600px
+    flex-direction: column;
+
+    .copyright,
+    .contactUs,
+    .redes {
+      margin-bottom: 0.625rem;
+    }
+
+    .redes {
+      @include properties-flex(row, center, flex-start);
+
+      picture {
+        margin-bottom: 0.625rem;
       }
     }
   }

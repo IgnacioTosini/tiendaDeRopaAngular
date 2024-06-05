@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<section class="generalContainer">
+  <section class="formShowSection">
+    <section class="formSection">
+      <form class="formItem" (ngSubmit)="getUsers()" #allUsersForm="ngForm">
+        <button class="formButton" type="submit">Get All Users</button>
+      </form>
+      <form class="formItem" (ngSubmit)="getUserById(id.value)" #idForm="ngForm">
+        <input class="formInput" type="text" ngModel #id="ngModel" name="id" placeholder="ID">
+        <button class="formButton" type="submit">Get User by ID</button>
+      </form>
+
+      <form class="formItem" (ngSubmit)="getUserByEmail(email.value)" #emailForm="ngForm">
+        <input class="formInput" type="text" ngModel #email="ngModel" name="email" placeholder="Email">
+        <button class="formButton" type="submit">Get User by Email</button>
+      </form>
+
+      <form class="formItem" (ngSubmit)="getClothes()" #allClothesForm="ngForm">
+        <button class="formButton" type="submit">Get All Clothes</button>
+      </form>
+
+      <form class="formItem" (ngSubmit)="findByCode(code.value)" #codeForm="ngForm">
+        <input class="formInput" type="text" ngModel #code="ngModel" name="code" placeholder="Code">
+        <button class="formButton" type="submit">Find Clothes by Code</button>
+      </form>
+
+      <form class="formItem" [formGroup]="searchForm" (ngSubmit)="findClothesByParameters()">
+        <input class="formInput" type="text" formControlName="param1" placeholder="Parameter 1">
+        <input class="formInput" type="text" formControlName="param2" placeholder="Parameter 2">
+        <button class="formButton" type="submit">Find Clothes by Parameters</button>
+      </form>
+    </section>
+
+    <section class="showSection">
+      <!-- Muestra el usuario -->
+      @if (user && user.getName() !== '') {
+      <section class="visualUser">
+        <section class="user">
+          <h2>User</h2>
+          <img src="{{ user.getImage() }}" alt="">
+          <p>{{ user.getId() }}</p>
+          <p>{{ user.getName() }}</p>
+          <p>{{ user.getEmail() }}</p>
+          <p>{{ role }}</p>
+        </section>
+      </section>
+      }
+
+      <!-- Muestra la lista de usuarios -->
+      @if (users && users.length > 0) {
+      <section class="visualUsers">
+        <h2>Users</h2>
+        @for (user of users; track $index) {
+        <section class="user">
+          <img src="{{ user.getImage() }}" alt="">
+          <p>{{ user.getId() }}</p>
+          <p>{{ user.getName() }}</p>
+          <p>{{ user.getEmail() }}</p>
+          <p>{{ roles[$index] }}</p>
+        </section>
+        }
+      </section>
+      }
+
+      <!-- Muestra la ropa -->
+      @if (clothe && clothe.getName() !== '') {
+      <section class="visualClothe">
+        <section class="clothe">
+          <h2>Clothe</h2>
+          <img src="{{ clothe?.getImages()?.[0]?.getUrl() }}" alt="">
+          <p>Name: {{ clothe.getName() }}</p>
+          <p>Code: {{ clothe.getCode() }}</p>
+          <p>Price: {{ clothe.getPrice() }}</p>
+          <p>Stock: {{ clothe.getStock() }}</p>
+        </section>
+      </section>
+      }
+
+      <!-- Muestra la lista de ropa -->
+      @if (clothes && clothes.length > 0) {
+      <section class="visualClothes">
+        <h2>Clothes</h2>
+        @for (clothe of clothes; track $index) {
+        <section class="clothe">
+          <img src="{{ clothe?.getImages()?.[0]?.getUrl() }}" alt="">
+          <p>Name: {{ clothe.getName() }}</p>
+          <p>Code: {{ clothe.getCode() }}</p>
+          <p>Price: {{ clothe.getPrice() }}</p>
+          <p>Stock: {{ clothe.getStock() }}</p>
+          <p>Size: {{ clothe.getSize() }}</p>
+        </section>
+        }
+      </section>
+      }
+    </section>
+  </section>
+
+  <button class="formButton" (click)="displayCreateClothes()">Create New Clothe</button>
+  @if (showCreateClothes) {
+  <app-create-clothe></app-create-clothe>
+  }
+</section>

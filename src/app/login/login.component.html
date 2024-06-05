@@ -1,12 +1,21 @@
-<!DOCTYPE html>
 <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-  <div>
+  <section>
     <label for="email">Email:</label>
-    <input id="email" type="email" formControlName="email" required>
-  </div>
-  <div>
+    <input id="email" type="email" formControlName="email">
+    @if (loginForm.controls['email'].errors?.['required'] && loginForm.controls['email'].touched) {
+    <section>
+      Email is required
+    </section>
+    }
+  </section>
+  <section>
     <label for="password">Password:</label>
-    <input id="password" type="password" formControlName="password" required>
-  </div>
+    <input id="password" type="password" formControlName="password">
+    @if (loginForm.controls['password'].errors?.['required'] && loginForm.controls['password'].touched) {
+    <section>
+      Password is required
+    </section>
+    }
+  </section>
   <button type="submit">Login</button>
 </form>

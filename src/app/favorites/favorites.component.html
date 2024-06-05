@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<section>
+  <h2>Tus productos favoritos</h2>
+  <ul>
+    @for (favorite of favorites; track $index) {
+    <li>
+      {{ favorite.getName() }}
+    </li>
+    }
+  </ul>
+</section>

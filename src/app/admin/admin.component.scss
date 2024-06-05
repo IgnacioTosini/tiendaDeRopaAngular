@@ -1,0 +1,99 @@
+@import '../utilities/mixins';
+
+.generalContainer {
+  @include properties-flex(column, space-between, flex-start);
+  padding: 2rem;
+
+  .formShowSection {
+    @include properties-flex(row, center, flex-start);
+
+    .formSection {
+      @include properties-flex(column, center, flex-start);
+      flex-wrap: wrap;
+      gap: 2rem;
+
+      .formItem {
+        margin-bottom: 2rem;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .formInput {
+        margin-bottom: 1rem;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        border: 0.1rem solid #ccc;
+      }
+    }
+
+    .showSection {
+      @include properties-flex(column, center, center);
+
+      .visualUser,
+      .visualUsers,
+      .visualClothe,
+      .visualClothes {
+        @include properties-flex(row, center, center);
+        flex-wrap: wrap;
+        gap: 2rem;
+        margin: 2rem;
+        padding: 2rem;
+        border-radius: 0.5rem;
+        background-color: white;
+        box-shadow: 0rem 0rem 1rem rgba(0, 0, 0, 0.1);
+        overflow: auto;
+        max-height: 50rem;
+
+        h2 {
+          margin-bottom: 2rem;
+          width: 100%;
+          text-align: center;
+        }
+
+        .user,
+        .clothe {
+          @include properties-flex(column, center, center);
+          padding: 1rem;
+          border-radius: 0.5rem;
+          background-color: #f8f9fa;
+          box-shadow: 0rem 0rem 1rem rgba(0, 0, 0, 0.1);
+          transition: transform 0.3s ease;
+          cursor: pointer;
+
+          &:hover {
+            transform: scale(1.02);
+          }
+
+          img {
+            width: 10rem;
+            height: 10rem;
+            object-fit: cover;
+            border-radius: 50%;
+          }
+
+          p {
+            margin-bottom: 1rem;
+          }
+        }
+      }
+    }
+  }
+
+  button,
+  .formButton {
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 0.5rem;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #0056b3;
+    }
+  }
+
+  button{
+    margin-bottom: 2rem;
+  }
+}

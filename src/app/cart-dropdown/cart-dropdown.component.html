@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<picture>
+  <a href="cart-detail">
+    <img src="../../assets/photos/shopping-cart.svg" alt="">
+  </a>
+  <section class="cart-dropdown">
+    <ul>
+      @if (cartItems.length > 0) {
+      @for (item of cartItems; track $index) {
+      <li class="productCart">
+        <img [src]="item.product.getImages()[0]?.url" [alt]="item.product.getName()"
+          (click)="goToProduct(item.product)">
+        <span>{{ item.product.getName() }}</span>
+        <span>
+          Tamaño:
+          {{item.product.getSize().toUpperCase()}}
+        </span>
+        <span>Precio total: ${{ getTotalPriceForProduct(item.product, item.quantity) }}</span>
+        <span>Cantidad: {{ item.quantity }}</span>
+        <button (click)="removeItem(item)">
+          <img src="../../assets/photos/trash.svg" alt="Thash Icon">
+        </button>
+      </li>
+      }
+      } @else {
+      <li>
+        <p>No hay productos en el carrito.</p>
+      </li>
+      }
+    </ul>
+  </section>
+</picture>

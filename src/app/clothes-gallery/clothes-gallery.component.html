@@ -1,38 +1,85 @@
 <!DOCTYPE html>
 <section class="container">
   <section class="filters">
-    <input [(ngModel)]="nameFilter" (input)="applyFilters()" placeholder="Nombre">
-    <section>
-      <button (click)="sizeFilter = sizeFilter === 'xs' ? '' : 'xs'; applyFilters()">XS</button>
-      <button (click)="sizeFilter = sizeFilter === 's' ? '' : 's'; applyFilters()">S</button>
-      <button (click)="sizeFilter = sizeFilter === 'm' ? '' : 'm'; applyFilters()">M</button>
-      <button (click)="sizeFilter = sizeFilter === 'l' ? '' : 'l'; applyFilters()">L</button>
-      <button (click)="sizeFilter = sizeFilter === 'xl' ? '' : 'xl'; applyFilters()">XL</button>
-    </section>
-    <input type="number" [(ngModel)]="minPriceFilter" (input)="applyFilters()" placeholder="Precio mínimo">
-    <input type="number" [(ngModel)]="maxPriceFilter" (input)="applyFilters()" placeholder="Precio máximo">
-    <button class="customButton" (click)="setSortOrder('name')">Ordenar por nombre</button>
-    <button class="customButton" (click)="setSortOrder('price')">Ordenar por precio (ascendente)</button>
-    <button class="customButton" (click)="setSortOrder('price-desc')">Ordenar por precio (descendente)</button>
-  </section>
-  <section class="gallery">
-    <ul>
-      @for (clothe of currentPageItems; track $index) {
-      <a href="">
-        <li>
-          <section class="clothe-item">
-            <img [src]="clothe.getImage()" alt="{{clothe.getName()}}">
-            <section class="clothe-details">
-              <h2>{{clothe.getName()}}</h2>
-              <p>Size: {{clothe.getSize()}}</p>
-              <p>Price: {{clothe.getPrice()}}</p>
-            </section>
-          </section>
-        </li>
-      </a>
+    <h2>Filtros</h2>
+    <label for="nameFilter">Buscar por nombre:</label>
+    <input id="nameFilter" [(ngModel)]="nameFilter" (input)="applyFilters()" (keypress)="preventNumberInput($event)"
+      placeholder="Nombre a buscar...">
+
+    <label for="minPriceFilter">Precio mínimo:</label>
+    <input id="minPriceFilter" type="number" [(ngModel)]="minPriceFilter"
+      (input)="setPriceRange(minPriceFilter, maxPriceFilter)" [placeholder]="minPriceFilter ? null : 'Precio mínimo'"
+      (focus)="minPriceFilter = null" (keypress)="preventNumberInputCant($event)">
+
+    <label for="maxPriceFilter">Precio máximo:</label>
+    <input id="maxPriceFilter" type="number" [(ngModel)]="maxPriceFilter"
+      (input)="setPriceRange(minPriceFilter, maxPriceFilter)" placeholder="Precio máximo"
+      (keypress)="preventNumberInputCant($event)">
+
+    <label for="typeFilter">Categoría:</label>
+    <select id="typeFilter" [(ngModel)]="typeFilter" (change)="applyFilters()">
+      <option value="">Todas las Categorias</option>
+      @for (genericType of genericTypes; track $index) {
+      <optgroup label="{{genericType}}">
+        @for (specificType of groupedTypes[genericType]; track $index) {
+        <option>{{specificType}}</option>
+        }
+      </optgroup>
       }
-    </ul>
-    <button class="previous" (click)="previousPage()">Página anterior</button>
-    <button class="next" (click)="nextPage()">Página siguiente</button>
+    </select>
+
+    <section class="containerButtons">
+      <button (click)="setSortOrder('name')">Ordenar por nombre</button>
+      <button (click)="setSortOrder('price')">Ordenar por precio (ascendente)</button>
+      <button (click)="setSortOrder('price-desc')">Ordenar por precio (descendente)</button>
+    </section>
+  </section>
+  <section class="filters-gallery-container">
+    <section class="active-filters">
+      @if (nameFilter) {
+      <span>Nombre: {{nameFilter}} <button (click)="resetNameFilter()">X</button></span>
+      }
+      @if (minPriceFilter) {
+      <span>Precio mínimo: {{minPriceFilter}} <button (click)="resetMinPriceFilter()">X</button></span>
+      }
+      @if (maxPriceFilter) {
+      <span>Precio máximo: {{maxPriceFilter}} <button (click)="resetMaxPriceFilter()">X</button></span>
+      }
+      @if (typeFilter) {
+      <span>Categoría: {{typeFilter}} <button (click)="resetTypeFilter()">X</button></span>
+      }
+      @if (sortOrder) {
+      <span>Orden: {{sortOrder}} <button (click)="resetSortOrder()">X</button></span>
+      }
+    </section>
+    <section class="gallery">
+      <ul>
+        @if (currentPageItems.length > 0) {
+        @for (clothe of currentPageItems; track $index) {
+          <li class="clothe-item">
+            <app-image-wrapper [clothe]="clothe" (changeImage)="changeImage($index, $event)"
+              (setActiveImage)="setActiveImage($index, $event)"></app-image-wrapper>
+            <a (click)="goToProduct(clothe)">
+              <section class="clothe-details">
+                <h2>{{clothe.getName()}}</h2>
+                <p>Size: {{clothe.getSize()}}</p>
+                <p>${{clothe.getPrice()}}</p>
+              </section>
+            </a>
+          </li>
+        }
+        } @else {
+        <section class="empty-message">No hay productos para esos filtros.</section>
+        }
+      </ul>
+      <section class="pagination">
+        @if (pageIndex > 0) {
+        <button class="previous" (click)="previousPage()">Página anterior</button>
+        }
+        @if ((pageIndex + 1) * pageSize < filteredClothes.length) { <button class="next" (click)="nextPage()">Página
+          siguiente</button>
+          }
+      </section>
+    </section>
   </section>
 </section>

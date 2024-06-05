@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<section class="menu">
+  <ul class="menu-list">
+    <li class="menu-item"><a href="/home">Inicio</a></li>
+    <li class="menu-item"><a href="/clothes-gallery">Productos <span class="dropdown-arrow"></span></a>
+      <ul class="generic-list">
+        @for (generic of getGenericTypes(); track $index) {
+        <li class="generic-item">
+          <a (click)="goToGallery(generic)">{{ generic }}</a>
+          <ul class="specific-list">
+            @for (specific of groupedClothes[generic]; track $index) {
+            <li class="specific-item">
+              <a (click)="goToGallery(specific)">{{ specific }}</a>
+            </li>
+            }
+          </ul>
+        </li>
+        }
+      </ul>
+    </li>
+    <li class="menu-item"><a href="contact-us">Contactanos</a></li>
+  </ul>
+</section>

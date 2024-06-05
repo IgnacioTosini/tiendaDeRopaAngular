@@ -1,5 +1,11 @@
+@import './utilities/variables';
+
 main {
-  background-color: #9B8264;
+  background: $global-background;
   min-height: 80vh;
   padding: 1rem;
+}
+
+a {
+  cursor: pointer;
 }

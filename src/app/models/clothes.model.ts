@@ -1,29 +1,27 @@
 export class Clothes{
-  private id: number
+  private id: string
   private name: string
   private price: number
   private code: string
   private size: string
-  private image: string
   private description: string
   private genericType: string
   private specificType: string
   private publication: string
 
-  constructor( id: number, name: string, price: number, code: string, size: string, image: string, description: string, genericType: string, specificType: string, publication: string) {
+  constructor( id: string, name: string, price: number, code: string, size: string, description: string, genericType: string, specificType: string, publication: string) {
     this.id = id;
     this.name = name;
     this.price = price;
     this.code = code;
     this.size = size;
-    this.image = image;
     this.description = description;
     this.genericType = genericType;
     this.specificType = specificType;
     this.publication = publication;
   }
 
-  public getId(): number {
+  public getId(): string {
     return this.id;
   }
 
@@ -43,10 +41,6 @@ export class Clothes{
     return this.size;
   }
 
-  public getImage(): string {
-    return this.image;
-  }
-
   public getDescription(): string {
     return this.description;
   }
@@ -63,7 +57,7 @@ export class Clothes{
     return this.publication;
   }
 
-  setId(id: number) {
+  setId(id: string) {
     this.id = id;
   }
 
@@ -81,10 +75,6 @@ export class Clothes{
 
   setSize(size: string) {
     this.size = size;
-  }
-
-  setImage(image: string) {
-    this.image = image;
   }
 
   setDescription(description: string) {

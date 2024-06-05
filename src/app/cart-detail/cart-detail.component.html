@@ -1,0 +1,22 @@
+<section class="cart-detail">
+  <ul>
+    @for (item of cartItems; track $index) {
+    <li>
+      <img [src]="item.product.getImages()[0]?.url" [alt]="item.product.getName()">
+      <section (click)="goToProduct(item.product)" class="product-info">
+        <span>{{ item.product.getName() }}</span>
+        <span>Precio total: ${{ getTotalPriceForProduct(item.product, item.quantity) }}</span>
+        <span>Cantidad: {{ item.quantity }}</span>
+      </section>
+      <button (click)="removeItem(item)">
+        <img src="../../assets/photos/trash.svg" alt="Thash Icon">
+      </button>
+    </li>
+    }
+  </ul>
+  <section class="cart-actions">
+    <button (click)="clearCart()">Vaciar carrito</button>
+    <span>Total: ${{ cartService.getTotalPrice() }}</span>
+    <button (click)="confirmPurchase()">Confirmar compra</button>
+  </section>
+</section>

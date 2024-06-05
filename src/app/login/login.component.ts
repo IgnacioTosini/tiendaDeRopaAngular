@@ -12,7 +12,6 @@ import { UserService } from '../services/user.service';
 })
 export class LoginComponent {
   loginForm: FormGroup = new FormGroup({});
-  isLoggedIn = false;
 
   constructor(private formBuilder: FormBuilder, private userService: UserService, private AuthService: AuthService) { }
 
@@ -29,7 +28,14 @@ export class LoginComponent {
         if (user) {
           // El usuario existe, puedes continuar con la verificación de la contraseña
           console.log('Usuario encontrado:', user);
-          this.AuthService.login(user.email); // Añade esta línea
+          if (this.loginForm.value.password === this.userService.getUserPassword()) {
+            // La contraseña es correcta, puedes continuar con el inicio de sesión
+            console.log('Contraseña correcta');
+            this.AuthService.login(user.getEmail());
+          } else {
+            // La contraseña es incorrecta
+            console.log('Contraseña incorrecta');
+          }
         } else {
           // El usuario no existe
           console.log('Usuario no encontrado');

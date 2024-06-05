@@ -1,0 +1,45 @@
+@import '../utilities/mixins';
+
+form {
+  @include properties-flex(column, center, center);
+  padding: 2rem;
+  border: 1px solid #ccc;
+  border-radius: 0.5rem;
+  max-width: 400px;
+  margin: 0 auto;
+
+  section {
+    @include properties-flex(column, center, none);
+    margin-bottom: 1rem;
+    width: 100%;
+
+    label {
+      margin-bottom: 0.5rem;
+    }
+
+    input {
+      padding: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 0.25rem;
+    }
+
+    section {
+      color: red;
+      margin-top: 0.25rem;
+    }
+  }
+
+  button {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 0.25rem;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: #0056b3;
+    }
+  }
+}

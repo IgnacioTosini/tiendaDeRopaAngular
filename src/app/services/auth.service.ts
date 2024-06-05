@@ -1,66 +1,98 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
 import { User } from '../models/user.model';
+import { UserService } from './user.service';
+import { LocalStorageService } from './local-storage.service';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private loggedIn = new BehaviorSubject<boolean>(false);
-  private apiUrl = 'http://localhost:8080/api/users';
-  private user: User = new User(0, "", "", "", "", "");
+  user: User = new User('', '', '', '', '', '');
+  users: User[] = [];
+  isLoggedIn: Boolean = false;
+  isAdminIn: Boolean = false;
 
-  constructor(private http: HttpClient) {
-    const loggedIn = localStorage.getItem('loggedIn') === 'true';
-    this.loggedIn.next(loggedIn);
-    if (loggedIn) {
-      this.validateLogin();
-    }
-  }
-
-  get isLoggedIn() {
-    return this.loggedIn.asObservable();
-  }
+  constructor(private userService: UserService, private localStorageService: LocalStorageService, private router: Router) { }
 
   async login(email: string) {
     let flag = false;
     let value = 0;
-    const users: User[] = await this.http.get<User[]>(`${this.apiUrl}`).toPromise() || [];
-    for (let i = 0; i < users.length && flag == false; i++) {
-      if (users[i].getEmail() == email) {
-          this.user = users[i];
+    this.userService.getUsers().subscribe((users: any[]) => {
+      this.users = users.map(user => new User(user.id, user.name, user.lastname, user.tel, user.image, user.email));
+      for (let i = 0; i < this.users.length && flag == false; i++) {
+        if (this.users[i].getEmail() == email) {
+          this.user = this.users[i];
           value = 0;
-          localStorage.setItem("token", this.user.getId().toString()); // Convert the number to a string
-          localStorage.setItem("loggedIn", "true");
-          this.loggedIn.next(true);
+          this.localStorageService.setItem("token", this.user.getId().toString()); // Convert the number to a string
+          this.localStorageService.setItem("log", "true");
           flag = true;
-      } else {
-        value = 1;
+          this.validateLogin();
+        } else {
+          value = 1;
+        }
       }
-    }
+    });
     return value;
   }
 
   logOut() {
-    this.user = new User(0, "", "", "", "", "");
-    localStorage.setItem("token","0");
-    localStorage.setItem("loggedIn", "false");
-    this.loggedIn.next(false);
+    this.user = new User('', '', '', '', '', '');
+    this.localStorageService.setItem("token", "0");
+    this.localStorageService.setItem("log", "false");
+    this.isLoggedIn = false;
+    this.router.navigate(["/home"]).then(() => {
+      window.location.reload();
+    });
   }
 
-  async validateLogin(){
-    let token = Number(localStorage.getItem("token"));
-    let loggedIn = localStorage.getItem("loggedIn");
+  validateLogin() {
+    let token = this.localStorageService.getItem("token");
+    let log = this.localStorageService.getItem("log");
 
     let flag = false;
-    const users: User[] = await this.http.get<User[]>(`${this.apiUrl}`).toPromise() ?? [];
-    for(let i = 0; i<users.length && flag == false; i++){
-      if(users[i].getId() === token && loggedIn === "true"){
-        this.user = users[i];
+    for (let i = 0; i < this.users.length && flag == false; i++) {
+      if (String(this.users[i].getId()) === token && log === 'true') {
+        this.user = this.users[i];
         flag = true;
+        this.isLoggedIn = true;
       }
     }
+    this.router.navigate(["/home"]).then(() => {
+      window.location.reload();
+    });
+  }
+
+  get UserAdmin(): Boolean {
+    if (this.userService.getUserRole() == 'ROLE_ADMIN') {
+      this.isAdminIn = true;
+    }
+    return this.isAdminIn;
+  }
+
+  get UserLogged(): boolean {
+    let log = this.localStorageService.getItem("log");
+    if (log === 'true') {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  get UserData(): Promise<User> {
+    let userId = this.localStorageService.getItem("token");
+    if (!userId) {
+      return Promise.reject('User ID not found in local storage');
+    }
+    return new Promise((resolve, reject) => {
+      this.userService.getUserById(userId).subscribe((user: any) => {
+        if (user) {
+          this.user.setImage(user.image);
+          resolve(this.user);
+        } else {
+          reject('User not found');
+        }
+      }, reject);
+    });
   }
 }

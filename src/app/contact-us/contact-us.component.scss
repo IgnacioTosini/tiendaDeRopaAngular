@@ -1,0 +1,72 @@
+@import '../utilities/mixins';
+
+.contact-us {
+  @include properties-flex(column, center, center);
+  width: 100%;
+  max-width: 20rem;
+  margin: 0 auto;
+  padding: 1rem;
+  font-family: Arial, sans-serif;
+
+  h2 {
+    text-align: center;
+    color: #333;
+  }
+
+  form {
+    @include properties-flex(column, center, center);
+    border: 1px solid #ccc;
+    padding: 1em;
+    border-radius: 0.5em;
+    width: 100%;
+
+    label {
+      margin-top: 1em;
+      color: #333;
+    }
+
+    input,
+    textarea {
+      margin-top: 0.5em;
+      padding: 0.5em;
+      border: 1px solid #ccc;
+      border-radius: 0.25em;
+    }
+
+    textarea {
+      min-width: 10rem;
+      max-width: 16rem;
+      min-height: 5rem;
+      max-height: 10rem;
+    }
+
+    button {
+      margin-top: 1em;
+      padding: 0.5em;
+      border: none;
+      background-color: #007bff;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        background-color: #0056b3;
+      }
+
+      &:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+      }
+    }
+  }
+
+  @media (max-width: 576px) {
+    max-width: 90%;
+
+    form {
+      textarea {
+        max-width: 100%;
+      }
+    }
+  }
+}

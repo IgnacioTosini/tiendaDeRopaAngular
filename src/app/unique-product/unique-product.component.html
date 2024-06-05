@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <section class="uniqueProduct">
   <section class="uniqueProductGalleryImage">
     <section class="smallImages">
@@ -17,28 +16,44 @@
   </section>
 
   <section class="uniqueProductInfo">
-    <h1>{{ product.getName() }}</h1>
-    <p>$ {{ product.getPrice() }}</p>
-    <select name="size" id="size">
-      <option value="">Talle</option>
-      <option value="">S</option>
-      <option value="">M</option>
-      <option value="">L</option>
-      <option value="">XL</option>
-      <option value="">XXL</option>
-    </select>
+    <h1>{{ product?.getName() }}</h1>
+    <p>$ {{ product?.getPrice() }}</p>
+
+    <label for="sizes">Tamaño</label>
+    <section id="sizes" class="sizes">
+      @for (size of ['xs', 's', 'm', 'l', 'xl']; track $index) {
+      <button [disabled]="!sizesAvailable.includes(size)" (click)="selectSize(size)"
+        [class.selected]="selectedSize === size"
+        [title]="!sizesAvailable.includes(size) ? 'Tamaño no disponible' : ''">{{size}}</button>
+      }
+    </section>
 
     <section class="addToCartContainer">
-      <section class="quantityContainer">
+      <label for="quantityContainer">Cantidad</label>
+      <section id="quantityContainer" class="quantityContainer">
         <button class="quantityButton" (click)="subtractQuantity()">-</button>
         <span>{{ quantity }}</span>
         <button class="quantityButton" (click)="sumAmount()">+</button>
       </section>
-      <button class="addToCartButton" (click)="addToCart()">Agregar</button>
+      <button class="addToCartButton" [disabled]="!selectedSize" (click)="addToCart()"
+        [title]="!selectedSize ? 'Selecciona un tamaño para agregar este producto al carrito' : ''">Agregar</button>
     </section>
   </section>
 </section>
 
-<section class="productDescription">
-  <p>{{ product.getDescription() }}</p>
+@if (showNotification) {
+<section class="notification" [ngClass]="{'hide': !showNotification}">
+  <h3>Producto agregado</h3>
+  <section class="clotheInfo">
+    <img [src]="selectedProduct.getImages()[0]?.url" [alt]="selectedProduct.getName()">
+    <span>{{ selectedProduct.getName() }}</span>
+  </section>
 </section>
+}
+
+<section class="productDescription">
+  <p>{{ product?.getDescription() }}</p>
+</section>
+
+<app-product-review></app-product-review>
+<app-gallery></app-gallery>

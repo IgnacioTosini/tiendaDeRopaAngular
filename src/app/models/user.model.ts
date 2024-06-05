@@ -1,12 +1,12 @@
 export class User {
-  private id: number;
+  private id: string;
   private name: string;
   private lastname: string;
   private tel: string;
   private image: string;
   private email: string;
 
-  constructor( id: number, name: string, lastname: string, tel: string, image: string, email: string) {
+  constructor( id: string, name: string, lastname: string, tel: string, image: string, email: string) {
     this.id = id;
     this.name = name;
     this.lastname = lastname;
@@ -15,7 +15,7 @@ export class User {
     this.email = email;
   }
 
-  public getId(): number {
+  public getId(): string {
     return this.id;
   }
 
@@ -39,7 +39,7 @@ export class User {
     return this.email;
   }
 
-  public setId(id: number) {
+  public setId(id: string) {
     this.id = id;
   }
 

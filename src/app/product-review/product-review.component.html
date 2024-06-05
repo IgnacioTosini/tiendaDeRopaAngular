@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<section>
+  <h2>Comentarios</h2>
+  <section>
+    @for (review of reviews; track $index) {
+    <p>{{ review }}</p>
+    }
+  </section>
+
+  <input #reviewInput type="text" placeholder="Añade un comentario">
+  <button (click)="addReview(reviewInput.value); reviewInput.value=''">Enviar</button>
+</section>

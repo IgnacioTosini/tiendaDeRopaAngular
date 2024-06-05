@@ -3,98 +3,41 @@
   <nav>
     <section class="container">
       <section class="logo">
-        <img src="../../assets/photos/logoGeneric.png" alt="Logo Tienda">
+        <a href="/home"><img src="../../assets/photos/logoGeneric.png" alt="Logo Tienda"></a>
       </section>
-      <section class="search">
-        <input type="text" [(ngModel)]="searchQuery" (input)="searchClothes()" placeholder="Buscar Producto...">
-        @if (searchResults.length > 0) {
-        <section class="search-results">
-          <section>
-            <ul>
-              @for (item of searchResults; track $index) {
-              <!-- Muestra la información del producto aquí -->
-              <a href="/clothes/{{ item.getId() }}">
-                <li>{{ item.getName() }}</li>
-              </a>
-              }
-            </ul>
-          </section>
-        </section>
-        }
-      </section>
+      <app-search (search)="searchClothes($event)"></app-search>
       <section class="icons">
+        <app-cart-dropdown [cartItems]="cartItems" [isLogging]="isLogging"></app-cart-dropdown>
         <picture>
-          <img src="../../assets/photos/shopping-cart.svg" alt="">
-          <section class="cart-dropdown">
-            <ul>
-              @if (cartItems.length > 0) {
-              <li>
-                @for (item of cartItems; track $index) {
-                <img [src]="item.product.getImage()" alt="">
-                <span>{{ item.product.getName() }}</span>
-                <span>{{ cartService.getTotalPrice() }}</span>
-                <span>{{ item.quantity }}</span>
-                <button (click)="removeItem(item)">
-                  <img src="../../assets/photos/trash.svg" alt="Thash Icon">
-                </button>
-                }
-              </li>
-              }
-              @else {
-              <li>
-                <p>No hay productos en el carrito.</p>
-              </li>
-              }
-            </ul>
-          </section>
-        </picture>
-        <picture>
+          @if (!isLogging) {
           <img src="../../assets/photos/user.svg" alt="">
-          <section class="cart-dropdown">
+          }@else {
+          <img [src]="user.getImage()" class="userImage" alt="">
+          }
+          <section class="cart-dropdown user-dropdown">
             <ul class="subMenuUser">
-              @if (showSubMenu && !isLoggedIn) {
-              <a href="/create-user">
-                <li>Crear usuario</li>
-              </a>
-              <a href="/login">
-                <li>Loguearse</li>
-              </a>
+              @if (!isLogging) {
+              <li><a href="/create-user">Crear usuario</a></li>
+              <li><a href="/login">Loguearse</a></li>
               }
               @else {
-              <a href="/user-profile">
-                <li>Perfil de Usuario</li>
-              </a>
-              <a (click)="logOut()">
-                <li>Cerrar Sesión</li>
-              </a>
+              @if (isAdminIn) {
+              <li><a href="/admin">Panel de Control</a></li>
+              <li><a href="/user-profile">Perfil de Usuario</a></li>
+              <li><a href="/favorites">Favoritos</a></li>
+              <li><a (click)="logOut()">Cerrar Sesión</a></li>
+              } @else {
+              <li><a href="/user-profile">Perfil de Usuario</a></li>
+              <li><a href="/favorites">Favoritos</a></li>
+              <li><a (click)="logOut()">Cerrar Sesión</a></li>
+              }
               }
             </ul>
           </section>
         </picture>
       </section>
     </section>
-    <section class="menu">
-      <ul>
-        <a href="/home">
-          <li>Inicio</li>
-        </a>
-        <a href="/clothes-gallery">
-          <li>
-            Productos <span class="dropdown-arrow"></span>
-            <!-- <ul>
-            @for (product of products; track product.id){
-              <li>{{ product.name }}</li>
-            }
-          </ul> -->
-            <ul>
-              <li>Camisas</li>
-              <li>Pantalones</li>
-              <li>Accesorios</li>
-            </ul>
-          </li>
-        </a>
-        <li>Quienes Somos</li>
-      </ul>
-    </section>
+    <app-drop-down-menu-products [groupedClothes]="groupedClothes" [isLogging]="isLogging"
+      [isAdminIn]="isAdminIn"></app-drop-down-menu-products>
   </nav>
 </header>

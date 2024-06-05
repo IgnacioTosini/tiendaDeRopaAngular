@@ -3,23 +3,50 @@
   <section class="imageSection">
     <h2>Perfil de Usuario</h2>
     <picture>
-      <img src="../../assets/photos/user.svg" alt=""><!-- <img src="{{ user?.getImage() }}" alt=""> -->
+      <img src="{{ user?.getImage() }}" alt="">
     </picture>
-    <button class="customButton" (click)="updateImage()">Actualizar Imagen</button>
+    <input id="image" type="file" (change)="updateImage($event)">
   </section>
   <section class="dataSection">
     <section>
-      <label>Nombre: </label><input type="text" formControlName="name">
+      <label>Nombre:</label>
+      <input type="text" formControlName="name" [value]="userForm.get('name')?.value.value">
+      @if (userForm.get('name')?.invalid && userForm.get('name')?.touched) {
+      <small class="text-danger">Nombre es requerido</small>
+      }
     </section>
     <section>
-      <label>Apellido: </label><input type="text" formControlName="lastname">
+      <label>Apellido:</label>
+      <input type="text" formControlName="lastname" [value]="userForm.get('lastname')?.value.value">
+      @if (userForm.get('lastname')?.invalid && userForm.get('lastname')?.touched) {
+      <small class="text-danger">Apellido es requerido</small>
+      }
     </section>
     <section>
-      <label>Email: </label><input type="text" formControlName="email">
+      <label>Email:</label>
+      <input type="text" formControlName="email" [value]="userForm.get('email')?.value.value">
+      @if (userForm.get('email')?.invalid && userForm.get('email')?.touched) {
+      <small class="text-danger">Email es requerido</small>
+      }
     </section>
     <section>
-      <label>Contraseña: </label><input type="password" formControlName="password">
-      <button class="customButton" (click)="updatePassword()">Actualizar Contraseña</button>
+      <label>Contraseña: </label>
+      <section class="password-field">
+        <input [type]="hidePassword ? 'password' : 'text'" formControlName="password">
+        <button class="customButtonEye" (click)="hidePassword = !hidePassword">
+          <img [src]="hidePassword ? '../../assets/photos/eye.svg' : '../../assets/photos/eye-off.svg'"
+            alt="Mostrar/Ocultar Contraseña">
+        </button>
+      </section>
+      @if (userForm.get('password')?.invalid && userForm.get('password')?.touched) {
+      @if (userForm.get('password')?.errors?.['required']) {
+      <small class="text-danger">Contraseña es requerida</small>
+      }
+      @if (userForm.get('password')?.errors?.['minlength']) {
+      <small class="text-danger">La contraseña debe tener al menos 8 caracteres</small>
+      }
+      }
     </section>
+    <button class="customButton" (click)="updateUserDetails()">Actualizar Detalles</button>
   </section>
 </form>

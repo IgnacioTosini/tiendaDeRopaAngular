@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<section class="invoice-detail">
+  <h2>Factura</h2>
+  <p>ID: {{ invoice.getId() }}</p>
+  <p>Precio: {{ invoice.getPrice() }}</p>
+  <p>Código: {{ invoice.getCode() }}</p>
+  <p>Dirección: {{ invoice.getAdress() }}</p>
+  <p>Costo de envío: {{ invoice.gettravelCost() }}</p>
+  <p>Fecha: {{ invoice.getDate() }}</p>
+  <h3>Ropa vendida:</h3>
+  <ul>
+    @for (clothe of invoice.getClothes(); track $index) {
+    <li>
+      <p>Nombre: {{ clothe.getName() }}</p>
+      <p>Precio: {{ clothe.getPrice() }}</p>
+      <p>Código: {{ clothe.getCode() }}</p>
+      <p>Talla: {{ clothe.getSize() }}</p>
+    </li>
+    }
+  </ul>
+</section>

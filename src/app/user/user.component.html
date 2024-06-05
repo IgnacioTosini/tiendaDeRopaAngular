@@ -1,45 +1,91 @@
 <!DOCTYPE html>
 <form [formGroup]="userForm" (ngSubmit)="createUser()">
   <section>
-    <label for="id">ID:</label>
-    <input id="id" type="text" formControlName="id">
-  </section>
-
-  <section>
     <label for="name">Name:</label>
     <input id="name" type="text" formControlName="name">
+    @if (userForm.controls['name'].invalid && userForm.controls['name'].touched) {
+    <section>
+      @if (userForm.controls['name'].errors?.['required']) {
+      <small class="text-danger">Name is required</small>
+      }
+      @if (userForm.controls['name'].errors?.['minlength']) {
+      <small class="text-danger">Name must be at least 2 characters</small>
+      }
+    </section>
+    }
   </section>
 
   <section>
     <label for="lastname">Last Name:</label>
     <input id="lastname" type="text" formControlName="lastname">
+    @if (userForm.controls['lastname'].invalid && userForm.controls['lastname'].touched) {
+    <section>
+      @if (userForm.controls['lastname'].errors?.['required']) {
+      <small class="text-danger">Last Name is required</small>
+      }
+      @if (userForm.controls['lastname'].errors?.['minlength']) {
+      <small class="text-danger">Last Name must be at least 2
+        characters</small>
+      }
+    </section>
+    }
   </section>
 
   <section>
     <label for="email">Email:</label>
     <input id="email" type="email" formControlName="email">
+    @if (userForm.controls['email'].invalid && userForm.controls['email'].touched) {
+    <section>
+      @if (userForm.controls['email'].errors?.['required']) {
+      <small class="text-danger">Email is required</small>
+      }
+      @if (userForm.controls['email'].errors?.['email']) {
+      <small class="text-danger">Email is not valid</small>
+      }
+    </section>
+    }
   </section>
 
   <section>
     <label for="password">Password:</label>
     <input id="password" type="password" formControlName="password">
+    @if (userForm.controls['password'].invalid && userForm.controls['password'].touched) {
+    <section>
+      @if (userForm.controls['password'].errors?.['required']) {
+      <small class="text-danger">Password is required</small>
+      }
+      @if (userForm.controls['password'].errors?.['minlength']) {
+      <small class="text-danger">Password must be at least 8
+        characters</small>
+      }
+    </section>
+    }
   </section>
 
   <section class="imageSection">
     <label for="image">Image:</label>
     <input id="image" type="file" (change)="onFileChange($event)">
     <img class="preview" [src]='file' [alt]="file">
+    @if (userForm.controls['image'].invalid && userForm.controls['image'].touched) {
+    <section>
+      <small class="text-danger">Image is required</small>
+    </section>
+    }
   </section>
 
   <section>
     <label for="tel">Cellphone:</label>
     <input id="tel" type="text" formControlName="tel">
+    @if (userForm.controls['tel'].invalid && userForm.controls['tel'].touched) {
+    <section>
+      @if (userForm.controls['tel'].errors?.['required']) {
+      <small class="text-danger">Cellphone is required</small>
+      }
+      @if (userForm.controls['tel'].errors?.['pattern']) {
+      <small class="text-danger">Cellphone is not valid</small>
+      }
+    </section>
+    }
   </section>
-
   <button type="submit">Create User</button>
 </form>
-
-<!-- <button (click)="updateUserPassword()">Update User Password</button> -->
-<button (click)="getUserById()">Get User By ID</button>
-<button (click)="getUserByEmail()">Get User By Email</button>
-<button (click)="getUsersByLastname()">Get Users By Last Name</button>
