@@ -3,8 +3,10 @@
   <section class="imageSection">
     <h2>Perfil de Usuario</h2>
     <picture>
-      <img src="{{ user?.getImage() }}" alt="">
+      <img src="{{ user?.getImage() }}" alt="{{ user?.getName() }}" (click)="openImage()"
+        [class.open]="imageOpen === true">
     </picture>
+    <label for="image">Cargar imagen</label>
     <input id="image" type="file" (change)="updateImage($event)">
   </section>
   <section class="dataSection">
@@ -50,3 +52,4 @@
     <button class="customButton" (click)="updateUserDetails()">Actualizar Detalles</button>
   </section>
 </form>
+<app-invoice [invoices]="invoices" [userForm]="userForm"></app-invoice>

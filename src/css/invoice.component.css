@@ -1,0 +1,58 @@
+.viewInvoices {
+  font-family: Arial, sans-serif;
+  color: #333;
+  padding: 1.25rem;
+}
+.viewInvoices h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1.25rem;
+}
+.viewInvoices button {
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 0.9375rem 2rem;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 1rem;
+  margin: 0.25rem 0.125rem;
+  cursor: pointer;
+}
+.viewInvoices input[type=text] {
+  width: 100%;
+  padding: 0.75rem 1.25rem;
+  margin: 0.5rem 0;
+  box-sizing: border-box;
+  border: 0.1875rem solid #ccc;
+  -webkit-transition: 0.5s;
+  transition: 0.5s;
+  outline: none;
+}
+.viewInvoices input[type=text]:focus {
+  border: 0.1875rem solid #555;
+}
+.viewInvoices ul {
+  list-style-type: none;
+  padding: 0;
+}
+.viewInvoices ul li {
+  margin-bottom: 0.625rem;
+  padding: 0.625rem;
+  border: 0.0625rem solid #ddd;
+}
+.viewInvoices ul li p {
+  margin: 0;
+  line-height: 1.5;
+}
+.viewInvoices ul li h4 {
+  margin-top: 0.625rem;
+}
+.viewInvoices ul li ul {
+  margin-top: 0.625rem;
+}
+.viewInvoices ul li ul li {
+  margin-bottom: 0.3125rem;
+  padding: 0.3125rem;
+  border: 0.0625rem solid #ccc;
+}/*# sourceMappingURL=invoice.component.css.map */

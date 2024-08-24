@@ -14,5 +14,9 @@
       }
     </ul>
   </section>
+  } @else if(searchResults.length === 0 && searchQuery.length > 0){
+  <section class="search-results" (click)="$event.stopPropagation()">
+    <p>No se encontraron resultados</p>
+  </section>
   }
 </section>

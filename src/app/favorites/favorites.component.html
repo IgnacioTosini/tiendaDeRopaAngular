@@ -1,11 +1,20 @@
 <!DOCTYPE html>
 <section>
   <h2>Tus productos favoritos</h2>
-  <ul>
-    @for (favorite of favorites; track $index) {
-    <li>
-      {{ favorite.getName() }}
-    </li>
+  <section class="favorites-container">
+    @for (favorite of user.getWisheList(); track $index) {
+    <section class="favorite-item">
+      <div class="image-container">
+        <img [src]="favorite.getPhoto()" alt="{{ favorite.getName() }}">
+        <button class="favorite" (click)="toggleFavorite(favorite)" [class.filled]="isFavorite">&#9733;</button>
+      </div>
+      <section class="favorite-details">
+        <h2>{{favorite.getName()}}</h2>
+      </section>
+      <a (click)="goToProduct(favorite)">
+        <button>Ver producto</button>
+      </a>
+    </section>
     }
-  </ul>
+  </section>
 </section>

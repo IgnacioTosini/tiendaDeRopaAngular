@@ -1,5 +1,6 @@
 @import '../utilities/mixins';
 @import '../utilities/variables';
+@import '../utilities/keyFrames';
 
 .menu {
   position: relative;
@@ -107,25 +108,5 @@
       background-size: contain;
       font-weight: 800;
     }
-  }
-}
-
-@keyframes rainbow {
-
-  0%,
-  42%,
-  85% {
-    border-color: #BAA892;
-  }
-
-  14%,
-  57%,
-  100% {
-    border-color: #786A54;
-  }
-
-  28%,
-  71% {
-    border-color: #F1B338;
   }
 }

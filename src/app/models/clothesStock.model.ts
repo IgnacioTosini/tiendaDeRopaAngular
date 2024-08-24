@@ -4,12 +4,14 @@ import { Image } from "./images.model";
 export class ClothesStock extends Clothes {
   private stock: number;
   private images: Image[];
+  private comments: Comment[];
   public currentImage: number;
 
-  constructor(id: string, name: string, price: number, code: string, size: string, images: Image[], description: string, genericType: string, specificType: string, publicationDate: string, stock: number) {
+  constructor(id: string, name: string, price: number, code: string, size: string, images: Image[], description: string, genericType: string, specificType: string, publicationDate: string, stock: number, comments: Comment[]) {
     super(id, name, price, code, size, description, genericType, specificType, publicationDate);
     this.stock = stock;
     this.images = images;
+    this.comments = comments;
     this.currentImage = 0;
   }
 
@@ -38,11 +40,11 @@ export class ClothesStock extends Clothes {
     this.currentImage = imageIndex;
   }
 
-  getReviews() {
-    // Devuelve los comentarios actuales del producto
+  public getComments(): Comment[] {
+    return this.comments;
   }
 
-  addReview(review: string) {
-    // Añade un nuevo comentario a la lista de comentarios del producto
+  public setComments(comments: Comment[]) {
+    this.comments = comments;
   }
 }

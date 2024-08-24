@@ -1,0 +1,170 @@
+header nav {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  align-items: start;
+  background: linear-gradient(to right, #9B8264, #BAA892);
+}
+header nav .container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(1, 1fr);
+  gap: 0.625rem;
+  padding: 0.625rem;
+  align-items: center;
+}
+header nav .container .logo {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+}
+header nav .container .logo img {
+  width: 6rem;
+}
+header nav .container .icons {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  z-index: 99;
+}
+header nav .container .icons .user {
+  width: 100%;
+  min-width: 11rem;
+}
+header nav .container .icons picture {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(to right, #F1B338, #F1D638);
+  border-radius: 2rem;
+  width: 3rem;
+  height: 3rem;
+  cursor: pointer;
+  margin: 0.3125rem;
+  position: relative;
+}
+header nav .container .icons picture .userImage {
+  border-radius: 50%;
+  padding: 0%;
+  height: 2.5rem;
+}
+header nav .container .icons picture .userImage:hover {
+  transform: scale(1.1);
+  transition: 0.5s;
+}
+header nav .container .icons picture img {
+  width: 2.5rem;
+  padding: 0.3125rem;
+  cursor: pointer;
+  object-fit: cover;
+}
+header nav .container .icons picture:hover .cart-dropdown {
+  display: block;
+}
+header nav .container .icons .user-dropdown {
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: linear-gradient(to right, #F1B338, #F1D638);
+  border-radius: 0.625rem;
+  padding: 0.625rem;
+  transition: all 0.3s ease;
+  max-height: 15rem;
+  overflow-y: auto;
+  width: 27rem;
+}
+header nav .container .icons .user-dropdown ul {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+header nav .container .icons .user-dropdown ul li {
+  display: flex;
+  flex-direction: row;
+  justify-content: none;
+  align-items: center;
+  gap: 0.625rem;
+  border: #000 solid 0rem 0rem 0.1rem 0rem;
+}
+header nav .container .icons .user-dropdown ul li img {
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 0.625rem;
+}
+header nav .container .icons .user-dropdown ul li img:hover {
+  opacity: 0.7;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  transform: scale(1.1);
+}
+header nav .container .icons .user-dropdown ul li span {
+  text-align: center;
+  font-size: 1rem;
+  color: #000;
+}
+header nav .container .icons .user-dropdown ul li button {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+}
+header nav .container .icons .user-dropdown ul li button img {
+  width: 2rem;
+  height: 2rem;
+}
+header nav .container .icons .user-dropdown .subMenuUser {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  padding: 0;
+  max-width: 10rem;
+}
+header nav .container .icons .user-dropdown .subMenuUser a {
+  width: 100%;
+  max-width: 10rem;
+  color: #000;
+  font-size: 1rem;
+  text-decoration: none;
+  cursor: pointer;
+  padding: 0.625rem;
+  box-sizing: border-box;
+  white-space: nowrap;
+  transition: all 1s ease;
+}
+header nav .container .icons .user-dropdown .subMenuUser a:hover {
+  color: #ffffff;
+  background-color: #906F48;
+  width: calc(100% + 1.25rem);
+  position: relative;
+  left: -0.625rem;
+  transition: all 1s ease;
+}
+@media screen and (max-width: 48rem) {
+  header nav .container .icons .user-dropdown {
+    width: 80%;
+    left: -8rem;
+  }
+}
+header nav .container .icons .user-dropdown {
+  width: 100%;
+  min-width: 10.5rem;
+}
+@media screen and (max-width: 48rem) {
+  header nav .container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+}/*# sourceMappingURL=navbar.component.css.map */

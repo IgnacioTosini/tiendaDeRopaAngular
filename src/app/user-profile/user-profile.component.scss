@@ -30,6 +30,31 @@
         cursor: pointer;
         width: 10rem;
         height: 10rem;
+        transition: all 0.5s ease-in-out;
+
+        &.open {
+          width: 15rem;
+          height: 15rem;
+          border-radius: 0%;
+        }
+      }
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+
+    label {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      color: white;
+      background-color: #483924be;
+      border-radius: 0.625rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        background-color: #483924;
       }
     }
   }

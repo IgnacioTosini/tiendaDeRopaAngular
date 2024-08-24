@@ -1,0 +1,138 @@
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes color-shift {
+  0% {
+    background-position: 0 0;
+  }
+  50% {
+    background-position: 400% 0;
+  }
+  100% {
+    background-position: 0 0;
+  }
+}
+@keyframes bounce {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes rainbow {
+  0%, 42%, 85% {
+    border-color: #BAA892;
+  }
+  14%, 57%, 100% {
+    border-color: #786A54;
+  }
+  28%, 71% {
+    border-color: #F1B338;
+  }
+}
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+.image-wrapper {
+  position: relative;
+}
+.image-wrapper .image-link {
+  position: relative;
+  z-index: 1;
+}
+.image-wrapper .favorite {
+  position: absolute;
+  bottom: 10rem;
+  right: 0.5rem;
+  background: none;
+  border: none;
+  color: #ccc;
+  font-size: 2rem;
+  cursor: pointer;
+  z-index: 9;
+}
+.image-wrapper .favorite:hover {
+  animation: bounce 1s infinite;
+}
+.image-wrapper .favorite.filled {
+  color: #f1b338;
+}
+@media screen and (max-width: 410px) {
+  .image-wrapper .favorite {
+    bottom: 10rem;
+  }
+}
+@media screen and (max-width: 390px) {
+  .image-wrapper .favorite {
+    bottom: 8rem;
+  }
+}
+.image-wrapper img {
+  width: 100%;
+  max-width: 200px;
+  height: auto;
+  object-fit: cover;
+  border-radius: 0.5rem;
+  transition: all 0.5s ease;
+  cursor: pointer;
+}
+.image-wrapper .image-controls {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0 1rem;
+}
+.image-wrapper .image-controls button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 2rem;
+  cursor: pointer;
+  z-index: 1;
+}
+.image-wrapper .image-dots {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+}
+.image-wrapper .image-dots span {
+  display: block;
+  width: 10px;
+  height: 10px;
+  margin: 0 5px;
+  background-color: #483924;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.image-wrapper .image-dots span.active {
+  background-color: #F1B338;
+}/*# sourceMappingURL=image-wrapper.component.css.map */

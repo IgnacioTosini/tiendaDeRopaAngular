@@ -13,7 +13,7 @@ import { UserService } from '../services/user.service';
 export class LoginComponent {
   loginForm: FormGroup = new FormGroup({});
 
-  constructor(private formBuilder: FormBuilder, private userService: UserService, private AuthService: AuthService) { }
+  constructor(private formBuilder: FormBuilder, private userService: UserService, private authService: AuthService) { }
 
   ngOnInit(): void {
     this.loginForm = this.formBuilder.group({
@@ -23,24 +23,25 @@ export class LoginComponent {
   }
 
   onSubmit(): void {
-    if (this.loginForm.valid) {
-      this.userService.getUserByEmail(this.loginForm.value.email).subscribe(user => {
-        if (user) {
-          // El usuario existe, puedes continuar con la verificación de la contraseña
-          console.log('Usuario encontrado:', user);
-          if (this.loginForm.value.password === this.userService.getUserPassword()) {
-            // La contraseña es correcta, puedes continuar con el inicio de sesión
-            console.log('Contraseña correcta');
-            this.AuthService.login(user.getEmail());
-          } else {
-            // La contraseña es incorrecta
-            console.log('Contraseña incorrecta');
-          }
-        } else {
-          // El usuario no existe
-          console.log('Usuario no encontrado');
-        }
-      });
+    if (!this.loginForm.valid) {
+      console.log('Invalid form data');
+      return;
     }
+
+    this.authService.login(this.loginForm.value.email, this.loginForm.value.password).subscribe(response => {
+      console.log('User:', response);
+      if (response) {
+        this.userService.getUserByEmail(response.username, response.token).subscribe(user => {
+          console.log(user);
+          this.authService.handleLoginResponse(response);
+        }, error => {
+          console.error('Error fetching user by email:', error);
+        });
+      } else {
+        console.log('User not found');
+      }
+    }, error => {
+      console.error('Login error:', error);
+    });
   }
 }

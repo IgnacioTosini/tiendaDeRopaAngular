@@ -1,21 +1,41 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { AuthService } from './../services/auth.service';
 import { ClothesStock } from '../models/clothesStock.model';
 import { Router } from '@angular/router';
+import { UserService } from '../services/user.service';
+import { User } from '../models/user.model';
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-image-wrapper',
   standalone: true,
   imports: [],
   templateUrl: './image-wrapper.component.html',
-  styleUrl: './image-wrapper.component.scss'
+  styleUrls: ['./image-wrapper.component.scss']
 })
-export class ImageWrapperComponent {
-  @Input() clothe: ClothesStock = new ClothesStock('', '', 0, '', '', [], '', '', '', '', 0);
+export class ImageWrapperComponent implements OnInit {
+  @Input() clothe: ClothesStock = new ClothesStock('', '', 0, '', '', [], '', '', '', '', 0, []);
   @Output() changeImage = new EventEmitter<number>();
   @Output() setActiveImage = new EventEmitter<number>();
   isFavorite: boolean = false;
+  user: User = new User(0, '', '', '', '', '', [], [], '');
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private userService: UserService, private authService: AuthService) { }
+
+  async ngOnInit() {
+    this.user = await this.authService.UserData;
+    this.checkIfFavorite();
+  }
+
+  checkIfFavorite() {
+    this.userService.detectWish(this.user.getId(), this.clothe.getId()).subscribe({
+      next: (isFavorite) => {
+        this.isFavorite = isFavorite;
+      },
+      error: (error) => {
+        console.error('Error al verificar si el producto está en favoritos', error);
+      }
+    });
+  }
 
   onPrevClick() {
     this.changeImage.emit(-1);
@@ -33,9 +53,28 @@ export class ImageWrapperComponent {
     this.router.navigate(['/product', clothe.getCode()]);
   }
 
+  get isLogging(): Boolean {
+    return this.authService.isLoggedIn;
+  }
+
   toggleFavorite(clothe: ClothesStock) {
     this.isFavorite = !this.isFavorite;
-    /* clothe.isFavorite = !clothe.isFavorite; */
-    // Aquí puedes agregar más lógica, como actualizar la base de datos o el almacenamiento local del navegador.
+    if (this.isFavorite) {
+      const newWish = {
+        id: clothe.getId(),
+        name: clothe.getName(),
+        url: clothe.getCode(),
+        photo: clothe.getImages()[0]?.getUrl(),
+      };
+      this.userService.addToWisheList(this.user.getId(), newWish).subscribe({
+        next: (response) => console.log('Producto agregado a favoritos', response),
+        error: (error) => console.error('Error al agregar a favoritos', error)
+      });
+    } else {
+      this.userService.removeFromWisheList(this.user.getId(), clothe.getId()).subscribe({
+        next: (response) => console.log('Producto removido de favoritos', response),
+        error: (error) => console.error('Error al remover de favoritos', error)
+      });
+    }
   }
 }

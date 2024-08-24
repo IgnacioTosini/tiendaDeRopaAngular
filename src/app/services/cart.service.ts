@@ -1,3 +1,5 @@
+import { ClothesStockService } from './clothes-stock.service';
+import { UserService } from './user.service';
 import { Injectable } from '@angular/core';
 import { Clothes } from '../models/clothes.model';
 import { of } from 'rxjs';
@@ -10,10 +12,12 @@ import { LocalStorageService } from './local-storage.service';
 export class CartService {
   private items: { product: ClothesStock, quantity: number }[] = [];
   private totalPrice: number = 0;
+  private userId: number = 0;
 
-  constructor(private localStorageService: LocalStorageService) { }
+  constructor(private localStorageService: LocalStorageService, private userService: UserService, private clothesStockService: ClothesStockService) { }
 
-  addToCart(product: ClothesStock, quantity: number, size: string) {
+  addToCart(product: ClothesStock, quantity: number, size: string | null) {
+    size = size ?? ''; // Provide a default value for size if it is null
     // Create a copy of the product with the correct size
     let productCopy = new ClothesStock(
       product.getId(),
@@ -27,6 +31,7 @@ export class CartService {
       product.getSpecificType(),
       product.getPublicationDate(),
       product.getStock(),
+      product.getComments()
     );
     let item = this.items.find(i => i.product.getCode() === productCopy.getCode() && i.product.getSize() === size);
     if (item) {
@@ -36,8 +41,16 @@ export class CartService {
       // Add the specific product with the selected size
       this.items.push({ product: productCopy, quantity });
     }
-    console.log('items',this.items);
     this.saveCart();
+  }
+
+  loadUser(email: string) {
+    this.userService.getUserByEmail(email, '').subscribe(user => {
+      (user);
+      this.userId = user.getId();
+      (this.userId);
+      this.loadCart();
+    });
   }
 
   getTotalPrice() {
@@ -73,29 +86,26 @@ export class CartService {
   }
 
   saveCart() {
-    this.localStorageService.setItem('cart', JSON.stringify(this.items));
+    this.userId = this.userService.usersArray[0].getId();
+    let simpleItems = this.items.map(item => ({
+      productId: item.product.getId(),
+      quantity: item.quantity,
+      size: item.product.getSize(),
+      productCode: item.product.getCode(),
+    }));
+
+    this.localStorageService.setItem(`cart-${this.userId}`, JSON.stringify(simpleItems));
   }
 
   loadCart() {
-    const storedCart = this.localStorageService.getItem('cart');
+    const storedCart = this.localStorageService.getItem(`cart-${this.userId}`);
     if (storedCart) {
       let itemsJson = JSON.parse(storedCart);
-      console.log('jsonItems',itemsJson);
       for (let item of itemsJson) {
-        let product = new ClothesStock('', '', 0, '', '', [], '', '', '', '', 0);
-        product.setId(item.product.id);
-        product.setName(item.product.name);
-        product.setPrice(item.product.price);
-        product.setCode(item.product.code);
-        product.setSize(item.product.size);
-        product.setDescription(item.product.description);
-        product.setGenericType(item.product.genericType);
-        product.setSpecificType(item.product.specificType);
-        product.setPublicationDate(item.product.publication);
-        product.setImages(item.product.images);
-        product.setStock(item.product.stock);
-        this.items.push({ product: product, quantity: item.quantity });
-        console.log('items cargados',this.items);
+        this.clothesStockService.findByCode(item.productCode).subscribe(clothes => {
+          let product = clothes[0];
+          this.items.push({ product: product, quantity: item.quantity });
+        });
       }
     }
   }

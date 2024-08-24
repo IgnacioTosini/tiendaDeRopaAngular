@@ -1,0 +1,66 @@
+.contact-us {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 20rem;
+  margin: 0 auto;
+  padding: 1rem;
+  font-family: Arial, sans-serif;
+}
+.contact-us h2 {
+  text-align: center;
+  color: #333;
+}
+.contact-us form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #ccc;
+  padding: 1em;
+  border-radius: 0.5em;
+  width: 100%;
+}
+.contact-us form label {
+  margin-top: 1em;
+  color: #333;
+}
+.contact-us form input,
+.contact-us form textarea {
+  margin-top: 0.5em;
+  padding: 0.5em;
+  border: 1px solid #ccc;
+  border-radius: 0.25em;
+}
+.contact-us form textarea {
+  min-width: 10rem;
+  max-width: 16rem;
+  min-height: 5rem;
+  max-height: 10rem;
+}
+.contact-us form button {
+  margin-top: 1em;
+  padding: 0.5em;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.contact-us form button:hover {
+  background-color: #0056b3;
+}
+.contact-us form button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+@media (max-width: 576px) {
+  .contact-us {
+    max-width: 90%;
+  }
+  .contact-us form textarea {
+    max-width: 100%;
+  }
+}/*# sourceMappingURL=contact-us.component.css.map */

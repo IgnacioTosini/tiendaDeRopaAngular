@@ -19,45 +19,50 @@ import { DropDownMenuProductsComponent } from '../drop-down-menu-products/drop-d
 })
 export class NavbarComponent implements OnInit {
   cartItems: { product: ClothesStock, quantity: number }[] = [];
-  user: User = new User('', '', '', '', '', '');
+  user: User = new User(0, '', '', '', '', '', [], [], '');
   searchQuery: string = '';
   clothes: ClothesStock[] = [];
   searchResults: ClothesStock[] = [];
   groupedClothes: { [genericType: string]: string[] } = {};
 
-  constructor(protected cartService: CartService, private clothesStockService: ClothesStockService, private AuthService: AuthService, private router: Router) { }
+  constructor(protected cartService: CartService, private clothesStockService: ClothesStockService, private authService: AuthService, private router: Router) { }
 
   async ngOnInit() {
     try {
-      this.user = await this.AuthService.UserData;
-      this.AuthService.isLoggedIn = this.AuthService.UserLogged;
-      this.AuthService.isAdminIn = this.AuthService.UserAdmin;
+      const userId = localStorage.getItem('userId');
+      if (userId) {
+        this.user = await this.authService.UserData;
+        this.authService.isLoggedIn = this.authService.UserLogged;
+        this.authService.isAdmin();
+
+        if (this.authService.isLoggedIn !== false) {
+          this.cartItems = [];
+
+          // Load user and cart
+          this.cartService.loadUser(this.user.getEmail());
+
+          // Subscribe to cart items
+          this.cartService.getItems().subscribe(items => {
+            this.cartItems = items;
+          });
+        }
+      } else {
+        console.warn('User ID not found in local storage');
+      }
     } catch (error) {
       console.error('Error getting user data:', error);
     }
 
-    if (this.AuthService.isLoggedIn !== false) {
-      this.cartItems = [];
-
-      // Subscribe to cart items before loading cart
-      this.cartService.getItems().subscribe(items => {
-        this.cartItems = items;
-      });
-
-      // Load cart from localStorage
-      this.cartService.loadCart();
-    }
-
     try {
+      // Load clothes regardless of user login status
       const clothes = await this.clothesStockService.findAll().toPromise();
       this.clothes = clothes || [];
-    } catch (error) {
-      console.error('Error getting clothes:', error);
-      this.clothes = [];
-    }
 
-    // Group clothes by genericType and specificType
-    this.groupedClothes = this.groupByTypes(this.clothes);
+      // Group clothes by genericType and specificType
+      this.groupedClothes = this.groupByTypes(this.clothes);
+    } catch (error) {
+      console.error('Error loading clothes data:', error);
+    }
   }
 
   groupByTypes(clothes: ClothesStock[]) {
@@ -79,11 +84,11 @@ export class NavbarComponent implements OnInit {
   }
 
   get isLogging(): Boolean {
-    return this.AuthService.isLoggedIn;
+    return this.authService.isLoggedIn;
   }
 
   get isAdminIn(): Boolean {
-    return this.AuthService.isAdminIn;
+    return this.authService.isAdminIn;
   }
 
   goToProduct(clothe: ClothesStock) {
@@ -91,7 +96,7 @@ export class NavbarComponent implements OnInit {
   }
 
   logOut() {
-    this.AuthService.logOut();
+    this.authService.logOut();
   }
 
   searchClothes(query: string) {

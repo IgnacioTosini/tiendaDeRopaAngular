@@ -1,0 +1,92 @@
+@import '../utilities/mixins';
+@import '../utilities/variables';
+
+.filters {
+  width: 100%;
+  padding: 1.25rem;
+  border-right: 1px solid #483924;
+  background: $tertiary-background;
+  border-radius: 0.5rem;
+
+  h2 {
+    text-align: center;
+    color: #483924;
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    padding: 1rem;
+  }
+
+  input,
+  section {
+    width: 100%;
+    margin-bottom: 1.25rem;
+  }
+
+  input {
+    padding: 0.625rem;
+    border-radius: 0.3125rem;
+    border: 1px solid #483924;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+
+    &:focus {
+      border-color: #9B8264;
+    }
+  }
+
+  .containerButtons {
+    @include properties-flex(column, center, center);
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  select {
+    width: 100%;
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+    border: 1px solid #ffffff;
+    background-color: #483924;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    color: #ffffff;
+  }
+
+  label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    margin: 1rem 0;
+
+    &::before,
+    &::after {
+      content: "";
+      flex-grow: 1;
+      border-bottom: 1px solid #483924;
+      margin: 0 10px;
+    }
+  }
+}
+
+button {
+  padding: 0.625rem 1rem;
+  border: none;
+  border-radius: 0.3125rem;
+  background: linear-gradient(to right, #483924, #786A54);
+  color: white;
+  font-size: 0.8rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #9B8264;
+    filter: brightness(1.2);
+  }
+}

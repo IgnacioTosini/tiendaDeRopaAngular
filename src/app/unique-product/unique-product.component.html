@@ -4,8 +4,8 @@
     <section class="smallImages">
       <picture class="smallImage">
         @for (smallImage of smallImages; track $index) {
-        <img [src]="smallImage" alt="" (click)="changeMainImage(smallImage)"
-          [class.selected]="smallImage === mainImage">
+        <img [src]="smallImage" alt="" (click)="changeMainImage(smallImage)" [class.selected]="smallImage === mainImage"
+          [class.notSelected]="smallImage !== mainImage">
         }
       </picture>
     </section>
@@ -21,7 +21,7 @@
 
     <label for="sizes">Tamaño</label>
     <section id="sizes" class="sizes">
-      @for (size of ['xs', 's', 'm', 'l', 'xl']; track $index) {
+      @for (size of ['XS', 'S', 'M', 'L', 'XL']; track $index) {
       <button [disabled]="!sizesAvailable.includes(size)" (click)="selectSize(size)"
         [class.selected]="selectedSize === size"
         [title]="!sizesAvailable.includes(size) ? 'Tamaño no disponible' : ''">{{size}}</button>
@@ -35,7 +35,7 @@
         <span>{{ quantity }}</span>
         <button class="quantityButton" (click)="sumAmount()">+</button>
       </section>
-      <button class="addToCartButton" [disabled]="!selectedSize" (click)="addToCart()"
+      <button class="addToCartButton" (click)="addToCart()"
         [title]="!selectedSize ? 'Selecciona un tamaño para agregar este producto al carrito' : ''">Agregar</button>
     </section>
   </section>
@@ -43,6 +43,7 @@
 
 @if (showNotification) {
 <section class="notification" [ngClass]="{'hide': !showNotification}">
+  <button class="closeNotification" (click)="closeNotification()">x</button>
   <h3>Producto agregado</h3>
   <section class="clotheInfo">
     <img [src]="selectedProduct.getImages()[0]?.url" [alt]="selectedProduct.getName()">
@@ -51,9 +52,16 @@
 </section>
 }
 
+@if (clickedButton) {
+<section class="notificationStock" [ngClass]="{'hide': !showNotification}">
+  <button class="closeNotification" (click)="closeNotification()">x</button>
+  <h3>Seleccione un Tamaño</h3>
+</section>
+}
+
 <section class="productDescription">
   <p>{{ product?.getDescription() }}</p>
 </section>
 
-<app-product-review></app-product-review>
+<app-product-review [product]="product"></app-product-review>
 <app-gallery></app-gallery>

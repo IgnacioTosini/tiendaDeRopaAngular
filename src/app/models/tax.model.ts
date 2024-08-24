@@ -6,16 +6,16 @@ export class Tax {
   private code: string;
   private adress: string;
   private travelCost: number;
-  private date_creation: string;
+  private date: string;
   private clothes: ClothesSold[];
 
-  constructor(id: string, price: number, code: string, adress: string, travelCost: number, date_creation: string, clothes: ClothesSold[]) {
+  constructor(id: string, price: number, code: string, adress: string, travelCost: number, date: string, clothes: ClothesSold[]) {
     this.id = id;
     this.price = price;
     this.code = code;
     this.adress = adress;
     this.travelCost = travelCost;
-    this.date_creation = date_creation;
+    this.date = date;
     this.clothes = clothes;
   }
 
@@ -40,7 +40,7 @@ export class Tax {
   }
 
   public getDate(): string {
-    return this.date_creation;
+    return this.date;
   }
 
   public getClothes(): ClothesSold[] {
@@ -67,8 +67,8 @@ export class Tax {
     this.travelCost = travelCost;
   }
 
-  public setDate(date_creation: string) {
-    this.date_creation = date_creation;
+  public setDate(date: string) {
+    this.date = date;
   }
 
   public setClothes(clothes: ClothesSold) {

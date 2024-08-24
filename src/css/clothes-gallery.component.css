@@ -1,0 +1,200 @@
+.container {
+  display: flex;
+  font-family: Arial, sans-serif;
+}
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
+}
+.container .filters {
+  width: 20%;
+  padding: 1.25rem;
+  border-right: 1px solid #483924;
+  background: linear-gradient(to right, #F1B338, #F1D638);
+  border-radius: 0.5rem;
+}
+.container .filters h2 {
+  text-align: center;
+  color: #483924;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+@media (max-width: 768px) {
+  .container .filters {
+    width: 100%;
+    padding: 1rem;
+  }
+}
+.container .filters input,
+.container .filters section {
+  width: 100%;
+  margin-bottom: 1.25rem;
+}
+.container .filters input {
+  padding: 0.625rem;
+  border-radius: 0.3125rem;
+  border: 1px solid #483924;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+.container .filters input:focus {
+  border-color: #9B8264;
+}
+.container .filters .containerButtons {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+.container .filters select {
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  border: 1px solid #ffffff;
+  background-color: #483924;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  color: #ffffff;
+}
+.container .filters label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  margin: 1rem 0;
+}
+.container .filters label::before, .container .filters label::after {
+  content: "";
+  flex-grow: 1;
+  border-bottom: 1px solid #483924;
+  margin: 0 10px;
+}
+.container .filters-gallery-container {
+  position: relative;
+}
+.container .filters-gallery-container .gallery {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: normal;
+  flex-wrap: wrap;
+  width: 100%;
+  padding: 2.25rem;
+}
+.container .filters-gallery-container .gallery ul {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: normal;
+  flex-wrap: wrap;
+  width: 100%;
+  max-width: 63rem;
+  gap: 1rem;
+  list-style: none;
+  padding: 0;
+}
+.container .filters-gallery-container .gallery ul .clothe-item {
+  list-style: none;
+  text-decoration: none;
+  width: 100%;
+  max-width: 15rem;
+  height: 21.875rem;
+  margin-bottom: 1.25rem;
+  border-radius: 0.5rem;
+  background: linear-gradient(to right, #483924, #786A54);
+  cursor: pointer;
+  transition: filter 0.5s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 1.25rem;
+}
+.container .filters-gallery-container .gallery ul .clothe-item:hover {
+  filter: drop-shadow(0 0 0.625rem rgba(0, 0, 0, 0.788)) brightness(1.2);
+}
+.container .filters-gallery-container .gallery ul .clothe-item .clothe-details h2 {
+  margin: 0.625rem 0;
+  font-size: 1.125rem;
+  color: #dadada;
+}
+.container .filters-gallery-container .gallery ul .clothe-item .clothe-details p {
+  margin: 0;
+  color: #dadada;
+  font-size: 1rem;
+}
+.container .filters-gallery-container .gallery ul .clothe-item a {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+.container .filters-gallery-container .gallery ul .empty-message {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+}
+.container .filters-gallery-container .active-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.625rem;
+  flex-grow: 1;
+  padding: 0.625rem;
+  z-index: 1;
+}
+.container .filters-gallery-container .active-filters span {
+  width: fit-content;
+  color: #dadada;
+  padding: 0.125rem 0.3125rem;
+  border-radius: 0.3125rem;
+  font-size: 0.8em;
+  cursor: pointer;
+  background: linear-gradient(to right, #483924, #786A54);
+}
+.container .filters-gallery-container .active-filters button {
+  font-size: 0.8em;
+  padding: 0.1rem 0.2rem;
+  margin-left: 0.2rem;
+  background: none;
+  background-color: none;
+  transition: all 0.3s ease-in-out;
+}
+.container .filters-gallery-container .active-filters button:hover {
+  transform: scale(1.1);
+}
+
+button {
+  padding: 0.625rem 1.25rem;
+  border: none;
+  border-radius: 0.3125rem;
+  background: linear-gradient(to right, #483924, #786A54);
+  color: white;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+button:hover {
+  background-color: #9B8264;
+  filter: brightness(1.2);
+}
+button:not(:last-child) {
+  margin-right: 0.625rem;
+}
+button.previous, button.next {
+  background-color: #F1B338;
+  height: fit-content;
+}
+button.previous:hover, button.next:hover {
+  background-color: #483924;
+  transform: scale(1.1);
+}/*# sourceMappingURL=clothes-gallery.component.css.map */

@@ -3,59 +3,88 @@
   <section>
     <label for="name">Name:</label>
     <input type="text" id="name" formControlName="name">
+    @if (clotheForm.controls.name.invalid && (clotheForm.controls.name.dirty || clotheForm.controls.name.touched)) {
+    <small class="text-danger">Name is required.</small>
+    }
   </section>
 
   <section>
     <label for="price">Price:</label>
     <input type="number" id="price" formControlName="price">
+    @if (clotheForm.controls.price.invalid && (clotheForm.controls.price.dirty || clotheForm.controls.price.touched)) {
+    <small class="text-danger">Price is required.</small>
+    <small class="text-danger">Price must be at least 0.</small>
+    }
   </section>
 
   <section>
-    <label for="price">Stock:</label>
+    <label for="stock">Stock:</label>
     <input type="number" id="stock" formControlName="stock">
+    @if (clotheForm.controls.stock.invalid && (clotheForm.controls.stock.dirty || clotheForm.controls.stock.touched)) {
+    <small class="text-danger">Stock is required.</small>
+    <small class="text-danger">Stock must be at least 0.</small>
+    }
   </section>
 
   <section>
     <label for="code">Code:</label>
     <input type="text" id="code" formControlName="code">
+    @if (clotheForm.controls.code.invalid && (clotheForm.controls.code.dirty || clotheForm.controls.code.touched)) {
+    <small class="text-danger">Code is required.</small>
+    }
   </section>
 
   <section>
     <label for="size">Size:</label>
     <input type="text" id="size" formControlName="size">
+    @if (clotheForm.controls.size.invalid && (clotheForm.controls.size.dirty || clotheForm.controls.size.touched)) {
+    <small class="text-danger">Size is required.</small>
+    }
   </section>
 
-  <section class="imageSection">
-    <label for="image">Image:</label>
-    @for (image of clotheForm.get('images')?.value; track $index) {
-    <div formArrayName="images">
-      <input id="image" type="file" (change)="onFileChange($event, $index)">
-      @if (file[$index] !== undefined) {
-      <img class="preview" [src]='file[$index]' [alt]="file[$index]">
-      }
-    </div>
+  @for (image of clotheForm.get('images')?.value; track $index) {
+  <section formArrayName="images">
+    <input id="image" type="file" (change)="onFileChange($event, $index)">
+    @if (file[$index] !== undefined) {
+    <img class="preview" [src]='file[$index]' [alt]="file[$index]">
     }
-    <button type="button" (click)="addImageField()">Add another image</button>
   </section>
+  }
 
   <section>
     <label for="description">Description:</label>
     <input type="text" id="description" formControlName="description">
+    @if (clotheForm.controls.description.invalid && (clotheForm.controls.description.dirty ||
+    clotheForm.controls.description.touched)) {
+    <small class="text-danger">Description is required.</small>
+    }
   </section>
 
   <section>
     <label for="genericType">Generic Type:</label>
     <input type="text" id="genericType" formControlName="genericType">
+    @if (clotheForm.controls.genericType.invalid && (clotheForm.controls.genericType.dirty ||
+    clotheForm.controls.genericType.touched)) {
+    <small class="text-danger" *ngIf="clotheForm.controls.genericType.errors.required">Generic Type is required.</small>
+    }
   </section>
 
   <section>
     <label for="specificType">Specific Type:</label>
     <input type="text" id="specificType" formControlName="specificType">
+    @if (clotheForm.controls.specificType.invalid && (clotheForm.controls.specificType.dirty ||
+    clotheForm.controls.specificType.touched)) {
+    <small class="text-danger">Specific Type is required.</small>
+    }
   </section>
 
   <section>
     <label for="publicationDate">Publication Date:</label>
     <input type="date" id="publicationDate" formControlName="publicationDate">
+    @if (clotheForm.controls.publicationDate.invalid && (clotheForm.controls.publicationDate.dirty ||
+    clotheForm.controls.publicationDate.touched)) {
+    <small class="text-danger">Publication Date is required.</small>
+    }
   </section>
 
   <button type="submit">Create Clothe</button>

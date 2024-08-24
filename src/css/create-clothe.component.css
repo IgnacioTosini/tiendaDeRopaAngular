@@ -1,0 +1,76 @@
+form {
+  display: flex;
+  flex-direction: row;
+  justify-content: none;
+  align-items: none;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+form section {
+  display: flex;
+  flex-direction: row;
+  justify-content: none;
+  align-items: none;
+  gap: 0.5rem;
+}
+form section label {
+  width: 100%;
+  max-width: 10rem;
+  text-align: center;
+  border-radius: 0.25rem;
+  padding: 10px;
+  background-color: #4CAF50;
+  color: white;
+  cursor: pointer;
+}
+form section label:hover {
+  background-color: #45a049;
+}
+form section input {
+  width: 100%;
+  max-width: 50rem;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 0.25rem;
+  font-size: 1rem;
+}
+form .imageSection {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+}
+form .imageSection .preview {
+  width: 100%;
+  max-width: 5rem;
+  opacity: 0.5;
+}
+form button {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.25rem;
+  background-color: #007BFF;
+  color: #fff;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+form button:hover {
+  background-color: #0056b3;
+}
+
+button {
+  width: 100%;
+  max-width: 10rem;
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.25rem;
+  background-color: #28a745;
+  color: #fff;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+button:hover {
+  background-color: #1e7e34;
+}/*# sourceMappingURL=create-clothe.component.css.map */

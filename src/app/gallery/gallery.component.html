@@ -9,7 +9,7 @@
         <a (click)="goToProduct(clothe)">
           <section class="clothe-details">
             <h2>{{clothe.getName()}}</h2>
-            <p>Size: {{clothe.getSize()}}</p>
+            <p>Size: {{ getSizesForProduct(clothe.getCode()).join(', ') }}</p>
             <p>${{clothe.getPrice()}}</p>
           </section>
         </a>

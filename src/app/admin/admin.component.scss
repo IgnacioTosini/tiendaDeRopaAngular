@@ -1,99 +1,135 @@
 @import '../utilities/mixins';
+@import '../utilities/variables';
 
 .generalContainer {
-  @include properties-flex(column, space-between, flex-start);
+  @include properties-flex(column, space-between, center);
   padding: 2rem;
+}
 
-  .formShowSection {
-    @include properties-flex(row, center, flex-start);
+.formShowSection {
+  @include properties-flex(column, normal, normal);
+  width: 100%;
+}
 
-    .formSection {
-      @include properties-flex(column, center, flex-start);
-      flex-wrap: wrap;
-      gap: 2rem;
+.userViewSection,
+.clothesViewSection {
+  @include properties-flex(row, normal, normal); // Changed to row for horizontal layout
+  margin: 2rem;
+  padding: 2rem;
+  background: $tertiary-background;
+  border-radius: 0.5rem;
+  gap: 1rem;
+  box-shadow: 0rem 0rem 1rem rgba(0, 0, 0, 0.1);
 
-      .formItem {
-        margin-bottom: 2rem;
-        display: flex;
-        flex-direction: column;
-      }
+  .filterSection {
+    @include properties-flex(column, normal, normal);
+    width: 25%; // Takes 1/4 of the space
+    margin-bottom: 2rem;
+
+    .formItem {
+      @include properties-flex(column, normal, normal);
 
       .formInput {
-        margin-bottom: 1rem;
         padding: 1rem;
-        border-radius: 0.5rem;
         border: 0.1rem solid #ccc;
-      }
-    }
-
-    .showSection {
-      @include properties-flex(column, center, center);
-
-      .visualUser,
-      .visualUsers,
-      .visualClothe,
-      .visualClothes {
-        @include properties-flex(row, center, center);
-        flex-wrap: wrap;
-        gap: 2rem;
-        margin: 2rem;
-        padding: 2rem;
         border-radius: 0.5rem;
-        background-color: white;
-        box-shadow: 0rem 0rem 1rem rgba(0, 0, 0, 0.1);
-        overflow: auto;
-        max-height: 50rem;
-
-        h2 {
-          margin-bottom: 2rem;
-          width: 100%;
-          text-align: center;
-        }
-
-        .user,
-        .clothe {
-          @include properties-flex(column, center, center);
-          padding: 1rem;
-          border-radius: 0.5rem;
-          background-color: #f8f9fa;
-          box-shadow: 0rem 0rem 1rem rgba(0, 0, 0, 0.1);
-          transition: transform 0.3s ease;
-          cursor: pointer;
-
-          &:hover {
-            transform: scale(1.02);
-          }
-
-          img {
-            width: 10rem;
-            height: 10rem;
-            object-fit: cover;
-            border-radius: 50%;
-          }
-
-          p {
-            margin-bottom: 1rem;
-          }
-        }
       }
     }
   }
 
-  button,
-  .formButton {
-    padding: 1rem 2rem;
-    border: none;
+  .visualClothes {
+    @include properties-flex(row, center, center); // Allow wrapping to multiple rows
+    flex-wrap: wrap;
+    width: 75%; // Takes 3/4 of the space
+    overflow: hidden; // Prevents overflow
+    overflow-y: auto;
+    height: 50rem;
+    background: $tertiary-background; // Apply global background color
+    padding: 1rem;
     border-radius: 0.5rem;
-    background-color: #007bff;
-    color: white;
+
+    .clothe {
+      @include properties-flex(column, center, center);
+      padding: 1rem;
+      border-radius: 0.5rem;
+      background-color: $secondary-background; // Apply secondary background color
+      box-shadow: 0rem 0rem 1rem rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+      cursor: pointer;
+      margin: 0.5rem; // Add margin to prevent overlap
+
+      &:hover {
+        transform: scale(1.02);
+      }
+
+      img {
+        width: 10rem;
+        height: 10rem;
+        object-fit: cover;
+        border-radius: 50%;
+      }
+
+      p {
+        margin-bottom: 1rem;
+      }
+    }
+
+    h2 {
+      margin-bottom: 2rem;
+      width: fit-content;
+      text-align: center;
+    }
+  }
+}
+
+.formButton {
+  padding: 0.625rem 1rem;
+  border: none;
+  border-radius: 0.3125rem;
+  background: linear-gradient(to right, #483924, #786A54);
+  color: white;
+  font-size: 0.8rem;
+  margin-top: 1rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #9B8264;
+    filter: brightness(1.2);
+  }
+}
+
+.visualUsers {
+  @include properties-flex(row, space-between, center);
+
+  .user {
+    @include properties-flex(column, center, center);
+    padding: 1rem;
+    border-radius: 0.5rem;
+    background-color: #f8f9fa;
+    box-shadow: 0rem 0rem 1rem rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
     cursor: pointer;
 
     &:hover {
-      background-color: #0056b3;
+      transform: scale(1.02);
+    }
+
+    img {
+      width: 10rem;
+      height: 10rem;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+
+    p {
+      margin-bottom: 1rem;
     }
   }
 
-  button{
+  h2 {
     margin-bottom: 2rem;
+    width: fit-content;
+    text-align: center;
   }
 }

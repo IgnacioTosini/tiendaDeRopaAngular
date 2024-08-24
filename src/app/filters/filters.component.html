@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<section class="filters">
+  <h2>Filtros</h2>
+  <label for="nameFilter">Buscar por nombre:</label>
+  <input id="nameFilter" [(ngModel)]="nameFilter" (input)="applyFilters()" (keypress)="preventNumberInput($event)" placeholder="Nombre a buscar...">
+
+  <label for="minPriceFilter">Precio mínimo:</label>
+  <input id="minPriceFilter" type="number" [(ngModel)]="minPriceFilter" (input)="applyFilters()" [placeholder]="minPriceFilter ? null : 'Precio mínimo'" (focus)="minPriceFilter = null" (keypress)="preventNumberInputCant($event)">
+
+  <label for="maxPriceFilter">Precio máximo:</label>
+  <input id="maxPriceFilter" type="number" [(ngModel)]="maxPriceFilter" (input)="applyFilters()" placeholder="Precio máximo" (keypress)="preventNumberInputCant($event)">
+
+  <label for="typeFilter">Categoría:</label>
+  <select id="typeFilter" [(ngModel)]="typeFilter" (change)="applyFilters()">
+    <option value="">Todas las Categorias</option>
+    @for (genericType of genericTypes; track $index) {
+    <optgroup label="{{genericType}}">
+      @for (specificType of groupedTypes[genericType]; track $index) {
+      <option>{{specificType}}</option>
+      }
+    </optgroup>
+    }
+  </select>
+
+  <section class="containerButtons">
+    <button (click)="setSortOrder('name')">Ordenar por nombre</button>
+    <button (click)="setSortOrder('price')">Ordenar por precio (ascendente)</button>
+    <button (click)="setSortOrder('price-desc')">Ordenar por precio (descendente)</button>
+  </section>
+</section>

@@ -17,7 +17,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './unique-product.component.scss'
 })
 export class UniqueProductComponent {
-  product: ClothesStock = new ClothesStock('', '', 0, '', '', [], '', '', '', '', 0);
+  product: ClothesStock = new ClothesStock('', '', 0, '', '', [], '', '', '', '', 0, []);
   quantity: number = 1;
   mainImage: string = '';
   smallImages: string[] = [];
@@ -27,19 +27,20 @@ export class UniqueProductComponent {
   selectedSize: string = '';
   showNotification: boolean = false;
   selectedProduct: any;
+  clickedButton: boolean = false;
 
   @ViewChild('mainImageDiv') mainImageDiv!: ElementRef;
   @ViewChild('zoomLensDiv') zoomLensDiv!: ElementRef;
   @ViewChild('zoomResultDiv') zoomResultDiv!: ElementRef;
 
-  constructor(private CartService: CartService, private route: ActivatedRoute, private ClothesStockService: ClothesStockService) { }
+  constructor(private CartService: CartService, private route: ActivatedRoute, private clothesStockService: ClothesStockService) { }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.smallImages = [];
       const code = params['code'];
       if (code !== null) {
-        this.ClothesStockService.findByCode(code).pipe(
+        this.clothesStockService.findByCode(code).pipe(
           catchError(error => {
             console.error('Error fetching product:', error);
             return EMPTY;
@@ -73,7 +74,6 @@ export class UniqueProductComponent {
       this.selectedSize = this.selectedSize === size ? '' : size;
     }
   }
-
   zoomImage(event: MouseEvent) {
     if (window.innerWidth < 768) {
       return;
@@ -143,6 +143,11 @@ export class UniqueProductComponent {
     this.mainImage = newImage;
   }
 
+  closeNotification() {
+    this.showNotification = false;
+    this.clickedButton = false;
+  }
+
   sumAmount() {
     this.quantity++;
   }
@@ -154,19 +159,31 @@ export class UniqueProductComponent {
   }
 
   addToCart() {
+    this.showNotification = false;
+    this.clickedButton = true;
+
     if (this.product.getStock() < this.quantity) {
       console.error('No hay suficiente stock disponible');
       return;
     }
 
-    console.log('Adding to cart:', this.product, this.quantity, this.selectedSize);
-    this.CartService.addToCart(this.product, this.quantity, this.selectedSize);
-    this.quantity = 1;
+    setTimeout(() => {
+      console.log('Hiding notification');
+      this.clickedButton = false;
+    }, 7000);
 
-    this.selectedProduct = this.product;
+    if (this.selectedSize !== '') {
+      this.clickedButton = false;
+      console.log('Adding to cart:', this.product, this.quantity, this.selectedSize);
+      this.CartService.addToCart(this.product, this.quantity, this.selectedSize);
+      this.quantity = 1;
 
-    // Mostrar la notificación
-    this.showNotification = true;
+      this.selectedProduct = this.product;
+
+      // Mostrar la notificación
+      this.showNotification = true;
+    }
+
     setTimeout(() => {
       console.log('Hiding notification');
       this.showNotification = false;

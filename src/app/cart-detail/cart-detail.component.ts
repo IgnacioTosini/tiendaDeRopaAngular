@@ -18,17 +18,21 @@ import { ClothesSold } from '../models/clothesSold.model';
 })
 export class CartDetailComponent {
   cartItems: { product: ClothesStock, quantity: number }[] = [];
-  user: User = new User('', '', '', '', '', '');
+  user: User = new User(0, '', '', '', '', '', [], [], '');
 
   constructor(public cartService: CartService, private router: Router, private taxService: TaxService, private authService: AuthService, private localStorageService: LocalStorageService) {
     this.cartService.getItems().subscribe(items => {
       this.cartItems = items;
-      console.log(this.cartItems);
     });
   }
 
   async ngOnInit() {
-    this.user = await this.authService.UserData;
+    try {
+      this.user = await this.authService.UserData;
+    } catch (error) {
+      console.error('Error getting user data:', error);
+    }
+    console.log(this.user);
   }
 
   goToProduct(clothe: ClothesStock) {
@@ -60,7 +64,7 @@ export class CartDetailComponent {
     return allTaxes;
   }
 
-  getNewId(allTaxes: Tax[]) {
+  getNewId(allTaxes: Tax[]): string {
     let newId;
     if (allTaxes.length === 0) {
       newId = 0;
@@ -127,7 +131,6 @@ export class CartDetailComponent {
     console.log('Items vendidos:', clothesSoldItems);
     const tax = this.createTax(newId, randomCode, clothesSoldItems);
     console.log('Factura a guardar:', tax);
-    console.log('id usuario', typeof this.user.getId().toString());
 
     // Guardar la factura en el backend
     this.taxService.create(this.user.getId(), tax).subscribe({

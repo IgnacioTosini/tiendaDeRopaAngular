@@ -1,8 +1,8 @@
-import { LocalStorageService } from './../services/local-storage.service';
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, Input } from '@angular/core';
 import { Tax } from '../models/tax.model';
 import { TaxService } from '../services/tax.service';
+import { FormGroup } from '@angular/forms';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-invoice',
@@ -11,16 +11,55 @@ import { TaxService } from '../services/tax.service';
   templateUrl: './invoice.component.html',
   styleUrl: './invoice.component.scss'
 })
-export class InvoiceComponent implements OnInit {
-  invoice: Tax = new Tax('', 0, '', '', 0, '', []);
+export class InvoiceComponent {
+  @Input() invoices: Tax[] = [];
+  @Input() userForm: FormGroup = new FormGroup({});
 
-  constructor(private taxService: TaxService, private localStorageService: LocalStorageService) { }
+  constructor(private taxService: TaxService, private userService: UserService) { }
 
-  ngOnInit(): void {
-    const invoiceCode = this.localStorageService.getItem('invoiceCode');
-    console.log(invoiceCode);
-    this.taxService.findByCode(invoiceCode || '').subscribe(invoice => {
-      this.invoice = invoice;
-    });
+  verFacturaPorId(): void {
+    this.taxService.findByCode(this.userForm?.get('invoiceCode')?.value).subscribe(
+      data => {
+        console.log(data);
+        this.invoices = [data];
+      },
+      error => {
+        console.error(error);
+      }
+    );
   }
+
+  verTodasLasFacturas(): void {
+    this.taxService.findAllTaxUser(this.userService.getUserId()).subscribe(
+      data => {
+        console.log(data);
+        this.invoices = data;
+      },
+      error => {
+        console.error(error);
+      }
+    );
+  }
+
+  /* startPaymentProcess(): void {
+    const mp = new MercadoPago('YOUR_ACCESS_TOKEN', {
+      locale: 'es-AR'
+    });
+
+    const preference = {
+      items: this.invoices.map(invoice => ({
+        title: `Factura ${invoice.getId()}`,
+        unit_price: invoice.getPrice(),
+        quantity: 1,
+      })),
+    };
+
+    mp.preferences.create(preference)
+      .then(response => {
+        window.open(response.body.init_point, '_blank');
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  } */
 }

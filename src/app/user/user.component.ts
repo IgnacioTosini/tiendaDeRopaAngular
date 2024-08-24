@@ -43,37 +43,15 @@ export class UserComponent {
     }
   }
 
-  getMaxId(users: User[]): number {
-    let maxId = 0;
-    users.forEach((user: User) => {
-      const userId = Number(user.getId());
-      if (user instanceof User && userId > maxId) {
-        maxId = userId;
-      }
-    });
-    return maxId;
-  }
-
-  createNewUser(newUser: any): void {
-    this.userService.createUser(newUser).subscribe(response => {
+  createNewUser(): void {
+    // Check if the form is valid
+    if (!this.userForm.valid) {
+      console.log('Invalid form data');
+      return;
+    }
+    console.log(this.userForm.value.password);
+    this.userService.register(this.userForm.value).subscribe(response => {
       console.log(response);
     });
-  }
-
-  createUser(): void {
-    if (this.userForm.valid) {
-      this.userService.getUsers().subscribe(users => {
-        console.log(users);
-        // Encuentra el ID más grande
-        const maxId = this.getMaxId(users);
-
-        // Asigna un nuevo ID que es el ID más grande + 1
-        const newUser = this.userForm.value;
-        newUser.id = maxId + 1;
-
-        // Crea el nuevo usuario
-        this.createNewUser(newUser);
-      });
-    }
   }
 }

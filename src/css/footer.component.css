@@ -1,0 +1,86 @@
+footer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  background: linear-gradient(to right, #483924, #786A54);
+  padding: 0.625rem;
+  color: white;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+footer .copyright {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+footer .copyright p {
+  margin-left: 0.625rem;
+}
+footer .contactUs {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  border: 0.125rem solid rgb(0, 0, 0);
+  padding: 0.625rem;
+  border-radius: 0.625rem;
+}
+footer .contactUs h3 {
+  margin-bottom: 0.625rem;
+}
+footer .contactUs p {
+  margin: 0 0 0.625rem 0.625rem;
+}
+footer .redes {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1.625rem;
+}
+footer .redes picture img {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  border: 0.125rem solid rgb(0, 0, 0);
+  padding: 0.3125rem;
+  transition: all 0.3s;
+}
+footer .redes picture img:hover {
+  transform: scale(1.1);
+  transition: all 0.3s;
+}
+footer .redes :nth-child(1) img:hover {
+  border: 0.125rem solid #1A78F4;
+  background-color: #1A78F4;
+}
+footer .redes :nth-child(2) img:hover {
+  border: 0.125rem solid #D43087;
+  background-color: #D43087;
+}
+footer .redes :nth-child(3) img:hover {
+  border: 0.125rem solid #25D366;
+  background-color: #25D366;
+}
+@media (max-width: 37.5rem) {
+  footer {
+    flex-direction: column;
+  }
+  footer .copyright,
+  footer .contactUs,
+  footer .redes {
+    margin-bottom: 0.625rem;
+  }
+  footer .redes {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+  }
+  footer .redes picture {
+    margin-bottom: 0.625rem;
+  }
+}/*# sourceMappingURL=footer.component.css.map */

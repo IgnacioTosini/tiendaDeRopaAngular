@@ -3,96 +3,97 @@ import { User } from '../models/user.model';
 import { UserService } from './user.service';
 import { LocalStorageService } from './local-storage.service';
 import { Router } from '@angular/router';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  user: User = new User('', '', '', '', '', '');
+  user: User = new User(0, '', '', '', '', '', [], [], '');
   users: User[] = [];
   isLoggedIn: Boolean = false;
   isAdminIn: Boolean = false;
+  private apiUrl = "http://localhost:8080";
+  private headers = new HttpHeaders({ "Content-Type": "application/json" });
 
-  constructor(private userService: UserService, private localStorageService: LocalStorageService, private router: Router) { }
+  constructor(
+    private userService: UserService,
+    private localStorageService: LocalStorageService,
+    private router: Router,
+    private httpClient: HttpClient
+  ) { }
 
-  async login(email: string) {
-    let flag = false;
-    let value = 0;
-    this.userService.getUsers().subscribe((users: any[]) => {
-      this.users = users.map(user => new User(user.id, user.name, user.lastname, user.tel, user.image, user.email));
-      for (let i = 0; i < this.users.length && flag == false; i++) {
-        if (this.users[i].getEmail() == email) {
-          this.user = this.users[i];
-          value = 0;
-          this.localStorageService.setItem("token", this.user.getId().toString()); // Convert the number to a string
-          this.localStorageService.setItem("log", "true");
-          flag = true;
-          this.validateLogin();
-        } else {
-          value = 1;
-        }
-      }
+  login(email: string, password: string): Observable<any> {
+    const loginData = {
+      email: email,
+      password: password
+    };
+    return this.httpClient.post(`${this.apiUrl}/login`, loginData, { headers: this.headers });
+  }
+
+  handleLoginResponse(response: any) {
+    const token = response.token;
+    this.localStorageService.setItem("token", token);
+    this.localStorageService.setItem("log", "true");
+    this.isLoggedIn = true;
+    this.router.navigate(["/home"]).then(() => {
+      window.location.reload();
     });
-    return value;
   }
 
   logOut() {
-    this.user = new User('', '', '', '', '', '');
-    this.localStorageService.setItem("token", "0");
+    this.user = new User(0, '', '', '', '', '', [], [], '');
+    this.localStorageService.setItem("token", "");
     this.localStorageService.setItem("log", "false");
+    this.localStorageService.setItem("user", "");
     this.isLoggedIn = false;
     this.router.navigate(["/home"]).then(() => {
       window.location.reload();
     });
   }
 
-  validateLogin() {
-    let token = this.localStorageService.getItem("token");
-    let log = this.localStorageService.getItem("log");
-
-    let flag = false;
-    for (let i = 0; i < this.users.length && flag == false; i++) {
-      if (String(this.users[i].getId()) === token && log === 'true') {
-        this.user = this.users[i];
-        flag = true;
-        this.isLoggedIn = true;
-      }
-    }
-    this.router.navigate(["/home"]).then(() => {
-      window.location.reload();
-    });
-  }
-
-  get UserAdmin(): Boolean {
-    if (this.userService.getUserRole() == 'ROLE_ADMIN') {
+  async isAdmin(): Promise<boolean> {
+    const role = await this.userService.getUserRole();
+    if (role === 'ROLE_ADMIN') {
       this.isAdminIn = true;
-    }
-    return this.isAdminIn;
-  }
-
-  get UserLogged(): boolean {
-    let log = this.localStorageService.getItem("log");
-    if (log === 'true') {
       return true;
     } else {
+      this.isAdminIn = false;
       return false;
     }
   }
 
+  get UserLogged(): boolean {
+    const log = this.localStorageService.getItem("log");
+    return log === 'true';
+  }
+
   get UserData(): Promise<User> {
-    let userId = this.localStorageService.getItem("token");
-    if (!userId) {
-      return Promise.reject('User ID not found in local storage');
-    }
+    let user = this.userService.recoverUser();
     return new Promise((resolve, reject) => {
-      this.userService.getUserById(userId).subscribe((user: any) => {
-        if (user) {
-          this.user.setImage(user.image);
-          resolve(this.user);
+      setTimeout(() => {
+        let token = this.localStorageService.getItem("token");
+        if (!token) {
+          reject('User ID not found in local storage');
         } else {
-          reject('User not found');
+          this.userService.getUserById(user.id).subscribe((user: any) => {
+            if (user) {
+              this.user.setImage(user.image);
+              this.user.setEmail(user.email);
+              this.user.setId(user.id);
+              this.user.setName(user.name);
+              this.user.setLastname(user.lastname);
+              this.user.setCellphone(user.tel);
+              this.user.setWisheList(user.wisheList);
+              this.user.setComments(user.comments);
+              resolve(this.user);
+            } else {
+              reject('User not found');
+            }
+          }, reject);
         }
-      }, reject);
+      }, 1000);
     });
   }
 }

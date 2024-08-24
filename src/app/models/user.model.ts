@@ -1,21 +1,30 @@
+import { Comment } from "./comment.model";
+import { Wish } from "./wish.model";
+
 export class User {
-  private id: string;
+  private id: number;
   private name: string;
   private lastname: string;
   private tel: string;
   private image: string;
   private email: string;
+  private wisheList: Wish[];
+  private comments: Comment[];
+  private vip: string;
 
-  constructor( id: string, name: string, lastname: string, tel: string, image: string, email: string) {
+  constructor(id: number, name: string, lastname: string, tel: string, image: string, email: string, wisheList: Wish[], comments: Comment[], vip: string) {
     this.id = id;
     this.name = name;
     this.lastname = lastname;
     this.tel = tel;
     this.image = image;
     this.email = email;
+    this.wisheList = wisheList;
+    this.comments = comments;
+    this.vip = vip;
   }
 
-  public getId(): string {
+  public getId(): number {
     return this.id;
   }
 
@@ -39,7 +48,31 @@ export class User {
     return this.email;
   }
 
-  public setId(id: string) {
+  public getWisheList(): Array<Wish> {
+    return this.wisheList;
+  }
+
+  public getComments(): Array<Comment> {
+    return this.comments;
+  }
+
+  public getVip(): string {
+    return this.vip;
+  }
+
+  public setVip(vip: string): void {
+    this.vip = vip;
+  }
+
+  public setComments(comments: Array<Comment>): void {
+    this.comments = comments;
+  }
+
+  public setWisheList(wishList: Array<Wish>): void {
+    this.wisheList = wishList;
+  }
+
+  public setId(id: number) {
     this.id = id;
   }
 

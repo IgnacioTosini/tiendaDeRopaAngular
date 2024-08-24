@@ -1,5 +1,6 @@
 @import '../utilities/mixins';
 @import '../utilities/variables';
+@import '../utilities/keyFrames';
 
 .search {
   position: relative;
@@ -70,34 +71,34 @@
       li {
         width: 100%;
 
-        a {
-          display: flex; // Añade flexbox
-          align-items: center; // Centra los elementos hijos en el eje transversal
-          cursor: pointer;
-          text-decoration: none;
-          list-style: none;
-          color: #00000088;
-          margin: 0; // Elimina los márgenes para un mejor control del espaciado
-          padding: 0.625rem; // Añade un poco de padding vertical para separar los resultados
-          border-bottom: 1px solid #ddd; // Añade una línea divisoria entre los resultados
-          transition: all 0.5s ease;
-          border-radius: 0.625rem;
-          z-index: 99;
-
-          &:last-child {
-            border-bottom: none; // Elimina la línea divisoria del último resultado
-          }
-
-          &:hover {
-            color: #ffffff;
-            background: $secondary-background; // Cambia el color de fondo al pasar el mouse por encima
-          }
-        }
-
         img {
           width: 3.5rem;
           padding: 0.3125rem;
         }
+      }
+    }
+
+    a,
+    p {
+      @include properties-flex(flex, normal, center);
+      cursor: pointer;
+      text-decoration: none;
+      list-style: none;
+      color: #00000088;
+      margin: 0; // Elimina los márgenes para un mejor control del espaciado
+      padding: 0.625rem; // Añade un poco de padding vertical para separar los resultados
+      border-bottom: 1px solid #ddd; // Añade una línea divisoria entre los resultados
+      transition: all 0.5s ease;
+      border-radius: 0.625rem;
+      z-index: 99;
+
+      &:last-child {
+        border-bottom: none; // Elimina la línea divisoria del último resultado
+      }
+
+      &:hover {
+        color: #ffffff;
+        background: $secondary-background; // Cambia el color de fondo al pasar el mouse por encima
       }
     }
   }
@@ -110,19 +111,5 @@
     .search-results {
       width: 100%;
     }
-  }
-}
-
-@keyframes color-shift {
-  0% {
-    background-position: 0 0;
-  }
-
-  50% {
-    background-position: 400% 0;
-  }
-
-  100% {
-    background-position: 0 0;
   }
 }

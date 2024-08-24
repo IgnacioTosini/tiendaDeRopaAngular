@@ -1,0 +1,118 @@
+picture {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(to right, #F1B338, #F1D638);
+  border-radius: 2rem;
+  width: 3rem;
+  height: 3rem;
+  cursor: pointer;
+  margin: 0.3125rem;
+  position: relative;
+}
+picture img {
+  width: 2.5rem;
+  padding: 0.3125rem;
+  cursor: pointer;
+  object-fit: cover;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: -o-crisp-edges;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: pixelated;
+  -ms-interpolation-mode: nearest-neighbor;
+}
+picture img:hover {
+  transform: scale(1.05);
+  transition: 0.5s;
+}
+picture a img {
+  width: 2.5rem;
+  padding: 0.3125rem;
+  cursor: pointer;
+  object-fit: cover;
+}
+picture a:hover {
+  transform: scale(1.1);
+  transition: 0.3s;
+}
+picture .cart-dropdown {
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: linear-gradient(to right, #F1B338, #F1D638);
+  border-radius: 0.625rem;
+  padding: 0.625rem;
+  transition: all 0.3s ease;
+  max-height: 15rem;
+  overflow-y: auto;
+  min-width: 20rem;
+  max-width: calc(100% - 2rem);
+}
+@media screen and (max-width: 480px) {
+  picture .cart-dropdown {
+    right: -10rem;
+  }
+}
+@media screen and (min-width: 480px) {
+  picture .cart-dropdown {
+    max-width: 27rem;
+  }
+}
+picture .cart-dropdown ul {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+picture .cart-dropdown ul li {
+  display: flex;
+  flex-direction: row;
+  justify-content: none;
+  align-items: center;
+  gap: 0.625rem;
+  border: #000 solid 0rem 0rem 0.1rem 0rem;
+}
+picture .cart-dropdown ul li img {
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 0.625rem;
+}
+picture .cart-dropdown ul li img:hover {
+  opacity: 0.7;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  transform: scale(1.1);
+}
+picture .cart-dropdown ul li span {
+  text-align: center;
+  font-size: 1rem;
+  color: #000;
+}
+picture .cart-dropdown ul li button {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+}
+picture .cart-dropdown ul li button img {
+  width: 2rem;
+  height: 2rem;
+}
+picture .cart-dropdown ul .productCart {
+  width: fit-content;
+  transition: all 0.5s ease;
+  border-radius: 0.625rem;
+}
+picture .cart-dropdown ul .productCart:hover {
+  background-color: #db9b1a;
+}
+picture:hover .cart-dropdown {
+  display: block;
+}/*# sourceMappingURL=cart-dropdown.component.css.map */

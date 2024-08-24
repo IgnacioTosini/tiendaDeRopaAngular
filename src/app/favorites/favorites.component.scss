@@ -1,0 +1,89 @@
+@import '../utilities/mixins';
+@import '../utilities/variables';
+
+.favorites-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15.625rem, 1fr)); // 250px to rem
+  gap: 1.25rem; // 20px to rem
+  padding: 1.25rem; // 20px to rem
+  background: $global-background;
+
+  .favorite-item {
+    list-style: none;
+    text-decoration: none;
+    width: 100%;
+    max-width: 15rem;
+    margin-bottom: 1.25rem;
+    border-radius: 0.5rem;
+    background: $secondary-background;
+    transition: filter 0.5s ease-in-out;
+    @include properties-flex(column, center, center);
+    padding: 1.25rem;
+    position: relative;
+
+    &:hover {
+      filter: drop-shadow(0 0 0.625rem rgba(0, 0, 0, 0.788)) brightness(1.2);
+    }
+
+    .image-container {
+      position: relative;
+      width: 100%;
+      height: auto;
+
+      img {
+        width: 100%;
+        border-radius: 0.5rem;
+      }
+
+      .favorite {
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        color: #ccc;
+        cursor: pointer;
+
+        &.filled {
+          color: #f1b338;
+        }
+      }
+    }
+
+    .favorite-details {
+      h2 {
+        margin: 0.625rem 0;
+        font-size: 1.125rem;
+        color: #dadada;
+      }
+
+      p {
+        margin: 0;
+        color: #dadada;
+        font-size: 1rem;
+      }
+    }
+
+    a {
+      display: block;
+      text-decoration: none;
+      color: inherit;
+
+      button{
+        margin-top: 1.25rem;
+        padding: 0.625rem 1.25rem;
+        border: none;
+        border-radius: 0.5rem;
+        background: #BAA892;
+        color: $global-background;
+        cursor: pointer;
+        transition: background 0.5s ease-in-out;
+
+        &:hover {
+          background: darken(#F1B338, 10%);
+        }
+      }
+    }
+  }
+}

@@ -1,4 +1,5 @@
 @import '../utilities/mixins';
+@import '../utilities/keyFrames';
 
 .uniqueProduct {
   @include properties-flex(column, space-between, center);
@@ -37,6 +38,11 @@
 
           &.selected {
             opacity: 1;
+            filter: brightness(1.1);
+          }
+
+          &.notSelected {
+            filter: blur(2px);
           }
         }
       }
@@ -270,12 +276,20 @@ label {
 }
 
 .notification {
+  background-color: #28a745;
+}
+
+.notificationStock {
+  background-color: #dc3545;
+}
+
+.notification,
+.notificationStock {
   @include properties-flex(column, center, center);
   position: fixed;
   top: 1.25rem;
   right: 1.25rem;
   padding: 0.625rem;
-  background-color: #28a745;
   color: white;
   border-radius: 0.3125rem;
   z-index: 1000;
@@ -284,6 +298,18 @@ label {
 
   &.hide {
     animation: fadeOut 7s forwards;
+  }
+
+  .closeNotification {
+    position: absolute;
+    top: 0.625rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.25rem;
+    cursor: pointer;
+    z-index: 1001;
   }
 
   h3 {
@@ -323,16 +349,3 @@ label {
   }
 }
 
-@keyframes fadeOut {
-  0% {
-    opacity: 1;
-  }
-
-  50% {
-    opacity: 1;
-  }
-
-  100% {
-    opacity: 0;
-  }
-}

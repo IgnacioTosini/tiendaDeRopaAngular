@@ -1,6 +1,5 @@
 import { ClothesStockService } from './../services/clothes-stock.service';
 import { Component } from '@angular/core';
-import { Clothes } from '../models/clothes.model';
 import { Router } from '@angular/router';
 import { ClothesStock } from '../models/clothesStock.model';
 import { ImageWrapperComponent } from '../image-wrapper/image-wrapper.component';
@@ -31,6 +30,9 @@ export class GalleryComponent {
   goToProduct(clothe: ClothesStock) {
     this.router.navigate(['/product', clothe.getCode()]).then(() => {
       window.location.reload();
+      setTimeout(() => {
+        window.scrollTo(0, 0); // Desplazar hacia la parte superior de la página
+      }, 0);
     });
   }
 
@@ -43,5 +45,11 @@ export class GalleryComponent {
 
   setActiveImage(index: number, imageIndex: number) {
     this.clothes[index].currentImage = imageIndex;
+  }
+
+  getSizesForProduct(code: string): string[] {
+    return this.clothes
+      .filter(item => item.getCode() === code)
+      .map(item => item.getSize());
   }
 }

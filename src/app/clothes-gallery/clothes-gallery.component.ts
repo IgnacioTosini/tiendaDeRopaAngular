@@ -1,31 +1,31 @@
-import { ClothesStockService } from './../services/clothes-stock.service';
 import { Component } from '@angular/core';
-import { Clothes } from '../models/clothes.model';
-import { FormsModule } from '@angular/forms';
+import { ClothesStockService } from './../services/clothes-stock.service';
 import { ClothesStock } from '../models/clothesStock.model';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { ImageWrapperComponent } from '../image-wrapper/image-wrapper.component';
+import { FiltersComponent } from '../filters/filters.component';
+import { ActiveFiltersComponent } from '../active-filters/active-filters.component';
 
 @Component({
   selector: 'app-clothes-gallery',
   standalone: true,
-  imports: [FormsModule, ImageWrapperComponent],
+  imports: [FormsModule, ImageWrapperComponent, FiltersComponent, ActiveFiltersComponent],
   templateUrl: './clothes-gallery.component.html',
-  styleUrl: './clothes-gallery.component.scss'
+  styleUrls: ['./clothes-gallery.component.scss']
 })
 export class ClothesGalleryComponent {
   clothes: ClothesStock[] = [];
-  filteredClothes: ClothesStock[] = [...this.clothes];
+  filteredClothes: ClothesStock[] = [];
   nameFilter: string = '';
   minPriceFilter: number | null = null;
   maxPriceFilter: number | null = null;
-  pageSize: number = 8;
-  pageIndex: number = 0;
   sortOrder: 'name' | 'price' | 'price-desc' | null = null;
   typeFilter: string = '';
-  types: string[] = [];
   groupedTypes: { [key: string]: string[] } = {};
   genericTypes: string[] = [];
+  pageSize: number = 8;
+  pageIndex: number = 0;
 
   constructor(private ClothesStockService: ClothesStockService, private router: Router, private route: ActivatedRoute) { }
 
@@ -48,12 +48,19 @@ export class ClothesGalleryComponent {
       return acc;
     }, {});
 
-    // Convert each array of specific types to a Set and back to an array to remove duplicates
     for (let genericType in this.groupedTypes) {
       this.groupedTypes[genericType] = Array.from(new Set(this.groupedTypes[genericType]));
     }
 
     this.genericTypes = Object.keys(this.groupedTypes);
+  }
+
+  handleApplyFilters(filters: { nameFilter: string; minPriceFilter: number | null; maxPriceFilter: number | null; typeFilter: string; }) {
+    this.nameFilter = filters.nameFilter;
+    this.minPriceFilter = filters.minPriceFilter;
+    this.maxPriceFilter = filters.maxPriceFilter;
+    this.typeFilter = filters.typeFilter;
+    this.applyFilters();
   }
 
   applyFilters() {
@@ -78,8 +85,6 @@ export class ClothesGalleryComponent {
       minPrice: this.minPriceFilter,
       maxPrice: this.maxPriceFilter,
       sortOrder: this.sortOrder,
-      pageIndex: this.pageIndex,
-      pageSize: this.pageSize
     };
   }
 
@@ -132,6 +137,11 @@ export class ClothesGalleryComponent {
     });
   }
 
+  setSortOrder(order: 'name' | 'price' | 'price-desc') {
+    this.sortOrder = order;
+    this.applyFilters();
+  }
+
   getSizesForProduct(code: string): string[] {
     return this.clothes
       .filter(item => item.getCode() === code)
@@ -146,7 +156,7 @@ export class ClothesGalleryComponent {
     }
   }
 
-  goToProduct(clothe: Clothes) {
+  goToProduct(clothe: ClothesStock) {
     this.router.navigate(['/product', clothe.getCode()]);
   }
 
@@ -168,82 +178,34 @@ export class ClothesGalleryComponent {
     }
   }
 
-  setSortOrder(order: 'name' | 'price' | 'price-desc' | null) {
-    this.sortOrder = order;
+  handleResetFilter(filterName: string) {
+    switch (filterName) {
+      case 'name':
+        this.nameFilter = '';
+        break;
+      case 'minPrice':
+        this.minPriceFilter = null;
+        break;
+      case 'maxPrice':
+        this.maxPriceFilter = null;
+        break;
+      case 'type':
+        this.typeFilter = '';
+        break;
+      case 'sortOrder':
+        this.sortOrder = null;
+        break;
+    }
     this.applyFilters();
   }
 
   changeImage(index: number, change: number) {
     const clothe = this.clothes[index];
     const imagesCount = clothe.getImages().length;
-
     clothe.currentImage = (clothe.currentImage + change + imagesCount) % imagesCount;
   }
 
   setActiveImage(index: number, imageIndex: number) {
     this.clothes[index].currentImage = imageIndex;
-  }
-
-  setPriceRange(min: number | null, max: number | null) {
-    const maxLength = 5; // set your desired max length here
-
-    if (min !== null && min !== undefined && min.toString().length > maxLength) {
-      this.minPriceFilter = Number(min.toString().slice(0, maxLength));
-    } else {
-      this.minPriceFilter = min;
-    }
-
-    if (max !== null && max !== undefined && max.toString().length > maxLength) {
-      this.maxPriceFilter = Number(max.toString().slice(0, maxLength));
-    } else {
-      this.maxPriceFilter = max;
-    }
-
-    this.applyFilters();
-  }
-
-  resetNameFilter() {
-    this.nameFilter = '';
-    this.applyFilters();
-  }
-
-  resetMinPriceFilter() {
-    this.minPriceFilter = null;
-    this.applyFilters();
-  }
-
-  resetMaxPriceFilter() {
-    this.maxPriceFilter = Infinity;
-    this.applyFilters();
-  }
-
-  resetTypeFilter() {
-    this.typeFilter = '';
-    this.applyFilters();
-  }
-
-  resetSortOrder() {
-    this.sortOrder = null;
-    this.applyFilters();
-  }
-
-  preventNumberInput(event: any) {
-    const pattern = /[0-9\.\ ]/;
-    let inputChar = String.fromCharCode(event.charCode);
-
-    if (pattern.test(inputChar)) {
-      // invalid character, prevent input
-      event.preventDefault();
-    }
-  }
-
-  preventNumberInputCant(event: any) {
-    const maxLength = 5;
-    let inputField = event.target;
-
-    if (inputField.value.length >= maxLength) {
-      // prevent input if max length reached
-      event.preventDefault();
-    }
   }
 }

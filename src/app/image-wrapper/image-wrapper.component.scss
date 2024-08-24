@@ -1,4 +1,5 @@
 @import '../utilities/mixins';
+@import '../utilities/keyFrames';
 
 .image-wrapper {
   position: relative;
@@ -86,19 +87,5 @@
         background-color: #F1B338;
       }
     }
-  }
-}
-
-@keyframes bounce {
-  0% {
-    transform: scale(1);
-  }
-
-  50% {
-    transform: scale(1.2);
-  }
-
-  100% {
-    transform: scale(1);
   }
 }

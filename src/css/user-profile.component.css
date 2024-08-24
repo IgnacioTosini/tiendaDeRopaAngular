@@ -1,0 +1,148 @@
+.userContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+}
+.userContainer h2 {
+  text-align: center;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+  color: #333;
+}
+.userContainer .imageSection {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+.userContainer .imageSection picture {
+  padding: 0.5rem;
+  transition: all 0.5s ease-in-out;
+}
+.userContainer .imageSection picture:hover {
+  transform: scale(1.1);
+  transition: 0.5s;
+}
+.userContainer .imageSection picture img {
+  border: 1px solid #ccc;
+  border-radius: 50%;
+  object-fit: cover;
+  cursor: pointer;
+  width: 10rem;
+  height: 10rem;
+  transition: all 0.5s ease-in-out;
+}
+.userContainer .imageSection picture img.open {
+  width: 15rem;
+  height: 15rem;
+  border-radius: 0%;
+}
+.userContainer .imageSection input[type=file] {
+  display: none;
+}
+.userContainer .imageSection label {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  color: white;
+  background-color: rgba(72, 57, 36, 0.7450980392);
+  border-radius: 0.625rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.userContainer .imageSection label:hover {
+  background-color: #483924;
+}
+.userContainer .dataSection {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+.userContainer .dataSection section label {
+  font-size: 1rem;
+  color: #333;
+}
+.userContainer .dataSection section input {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 0.25rem;
+  font-size: 1rem;
+  width: 20rem;
+  margin: 1rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.5s ease-in-out;
+}
+.userContainer .dataSection section input:hover {
+  transform: scale(1.05);
+  transition: 0.5s;
+  background-color: #ccc;
+  color: #333;
+  border: 1px solid #333;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+.userContainer .dataSection .password-field {
+  position: relative;
+  display: inline-block;
+}
+.userContainer .dataSection .password-field input {
+  width: 15rem;
+  height: 1.875rem;
+  border-radius: 0.625rem;
+  border: none;
+  padding: 0.625rem;
+  padding-right: 2.5rem;
+}
+.userContainer .dataSection .password-field .customButtonEye {
+  position: absolute;
+  right: 1.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+.userContainer .dataSection .password-field .customButtonEye img {
+  height: 1rem;
+  width: 1rem;
+}
+.userContainer .customButton {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 0.25rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.5s ease-in-out;
+}
+.userContainer .customButton:hover {
+  transform: scale(1.1);
+  transition: 0.5s;
+  background-color: #ccc;
+  color: #333;
+  border: 1px solid #333;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+@media (max-width: 650px) {
+  .userContainer {
+    flex-direction: column;
+  }
+  .userContainer .imageSection picture img {
+    width: 8rem;
+    height: 8rem;
+  }
+  .userContainer .dataSection section {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+}
+@media (max-width: 650px) and (max-width: 600px) {
+  .userContainer .dataSection section input {
+    width: 15rem;
+  }
+}/*# sourceMappingURL=user-profile.component.css.map */

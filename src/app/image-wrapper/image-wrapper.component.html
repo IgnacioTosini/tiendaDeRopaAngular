@@ -3,7 +3,9 @@
   <a (click)="goToProduct(clothe)" class="image-link">
     <img [src]="clothe.getImages()[clothe.currentImage]?.getUrl()" alt="{{clothe?.getName()}}">
   </a>
-  <button class="favorite" (click)="toggleFavorite(clothe)" [class.filled]="isFavorite">&#9733;</button>
+  @if (isLogging) {
+    <button class="favorite" (click)="toggleFavorite(clothe)" [class.filled]="isFavorite">&#9733;</button>
+  }
   <section class="image-controls">
     <button class="prev" (click)="clothe.changeImage(-1)">&#10094;</button>
     <button class="next" (click)="clothe.changeImage(1)">&#10095;</button>

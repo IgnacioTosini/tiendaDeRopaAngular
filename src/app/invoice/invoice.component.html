@@ -1,21 +1,31 @@
 <!DOCTYPE html>
-<section class="invoice-detail">
-  <h2>Factura</h2>
-  <p>ID: {{ invoice.getId() }}</p>
-  <p>Precio: {{ invoice.getPrice() }}</p>
-  <p>Código: {{ invoice.getCode() }}</p>
-  <p>Dirección: {{ invoice.getAdress() }}</p>
-  <p>Costo de envío: {{ invoice.gettravelCost() }}</p>
-  <p>Fecha: {{ invoice.getDate() }}</p>
-  <h3>Ropa vendida:</h3>
+<section class="viewInvoices">
+  <h3>Facturas</h3>
+  <button (click)="verTodasLasFacturas()">Ver todas las facturas</button>
+  <button (click)="verFacturaPorId()">Ver factura por codigo:</button>
+  <input type="text" formControlName="invoiceCode">
   <ul>
-    @for (clothe of invoice.getClothes(); track $index) {
+    @for (invoice of invoices; track $index) {
     <li>
-      <p>Nombre: {{ clothe.getName() }}</p>
-      <p>Precio: {{ clothe.getPrice() }}</p>
-      <p>Código: {{ clothe.getCode() }}</p>
-      <p>Talla: {{ clothe.getSize() }}</p>
+      <p>ID: {{ invoice.getId() }}</p>
+      <p>Precio: {{ invoice.getPrice() }}</p>
+      <p>Código: {{ invoice.getCode() }}</p>
+      <p>Dirección: {{ invoice.getAdress() }}</p>
+      <p>Costo de envío: {{ invoice.gettravelCost() }}</p>
+      <p>Fecha: {{ invoice.getDate() }}</p>
+      <h4>Ropa vendida:</h4>
+      <ul>
+        @for (clothe of invoice.getClothes(); track $index) {
+        <li>
+          <p>Nombre: {{ clothe.getName() }}</p>
+          <p>Precio: {{ clothe.getPrice() }}</p>
+          <p>Código: {{ clothe.getCode() }}</p>
+          <p>Talla: {{ clothe.getSize() }}</p>
+        </li>
+        }
+      </ul>
     </li>
     }
   </ul>
+  <!-- <button (click)="startPaymentProcess()">Pagar con MercadoPago</button> -->
 </section>

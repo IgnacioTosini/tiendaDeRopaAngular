@@ -1,72 +1,29 @@
 <!DOCTYPE html>
 <section class="container">
-  <section class="filters">
-    <h2>Filtros</h2>
-    <label for="nameFilter">Buscar por nombre:</label>
-    <input id="nameFilter" [(ngModel)]="nameFilter" (input)="applyFilters()" (keypress)="preventNumberInput($event)"
-      placeholder="Nombre a buscar...">
+  <app-filters [nameFilter]="nameFilter" [minPriceFilter]="minPriceFilter" [maxPriceFilter]="maxPriceFilter"
+    [typeFilter]="typeFilter" [genericTypes]="genericTypes" [groupedTypes]="groupedTypes"
+    (applyFiltersEvent)="handleApplyFilters($event)" (sortChanged)="setSortOrder($event)">
+  </app-filters>
 
-    <label for="minPriceFilter">Precio mínimo:</label>
-    <input id="minPriceFilter" type="number" [(ngModel)]="minPriceFilter"
-      (input)="setPriceRange(minPriceFilter, maxPriceFilter)" [placeholder]="minPriceFilter ? null : 'Precio mínimo'"
-      (focus)="minPriceFilter = null" (keypress)="preventNumberInputCant($event)">
-
-    <label for="maxPriceFilter">Precio máximo:</label>
-    <input id="maxPriceFilter" type="number" [(ngModel)]="maxPriceFilter"
-      (input)="setPriceRange(minPriceFilter, maxPriceFilter)" placeholder="Precio máximo"
-      (keypress)="preventNumberInputCant($event)">
-
-    <label for="typeFilter">Categoría:</label>
-    <select id="typeFilter" [(ngModel)]="typeFilter" (change)="applyFilters()">
-      <option value="">Todas las Categorias</option>
-      @for (genericType of genericTypes; track $index) {
-      <optgroup label="{{genericType}}">
-        @for (specificType of groupedTypes[genericType]; track $index) {
-        <option>{{specificType}}</option>
-        }
-      </optgroup>
-      }
-    </select>
-
-    <section class="containerButtons">
-      <button (click)="setSortOrder('name')">Ordenar por nombre</button>
-      <button (click)="setSortOrder('price')">Ordenar por precio (ascendente)</button>
-      <button (click)="setSortOrder('price-desc')">Ordenar por precio (descendente)</button>
-    </section>
-  </section>
   <section class="filters-gallery-container">
-    <section class="active-filters">
-      @if (nameFilter) {
-      <span>Nombre: {{nameFilter}} <button (click)="resetNameFilter()">X</button></span>
-      }
-      @if (minPriceFilter) {
-      <span>Precio mínimo: {{minPriceFilter}} <button (click)="resetMinPriceFilter()">X</button></span>
-      }
-      @if (maxPriceFilter) {
-      <span>Precio máximo: {{maxPriceFilter}} <button (click)="resetMaxPriceFilter()">X</button></span>
-      }
-      @if (typeFilter) {
-      <span>Categoría: {{typeFilter}} <button (click)="resetTypeFilter()">X</button></span>
-      }
-      @if (sortOrder) {
-      <span>Orden: {{sortOrder}} <button (click)="resetSortOrder()">X</button></span>
-      }
-    </section>
+    <app-active-filters [nameFilter]="nameFilter" [minPriceFilter]="minPriceFilter" [maxPriceFilter]="maxPriceFilter"
+      [typeFilter]="typeFilter" [sortOrder]="sortOrder" (resetFilterEvent)="handleResetFilter($event)">
+    </app-active-filters>
     <section class="gallery">
       <ul>
         @if (currentPageItems.length > 0) {
         @for (clothe of currentPageItems; track $index) {
-          <li class="clothe-item">
-            <app-image-wrapper [clothe]="clothe" (changeImage)="changeImage($index, $event)"
-              (setActiveImage)="setActiveImage($index, $event)"></app-image-wrapper>
-            <a (click)="goToProduct(clothe)">
-              <section class="clothe-details">
-                <h2>{{clothe.getName()}}</h2>
-                <p>Size: {{clothe.getSize()}}</p>
-                <p>${{clothe.getPrice()}}</p>
-              </section>
-            </a>
-          </li>
+        <li class="clothe-item">
+          <app-image-wrapper [clothe]="clothe" (changeImage)="changeImage($index, $event)"
+            (setActiveImage)="setActiveImage($index, $event)"></app-image-wrapper>
+          <a (click)="goToProduct(clothe)">
+            <section class="clothe-details">
+              <h2>{{clothe.getName()}}</h2>
+              <p>Size: {{ getSizesForProduct(clothe.getCode()).join(', ') }}</p>
+              <p>${{clothe.getPrice()}}</p>
+            </section>
+          </a>
+        </li>
         }
         } @else {
         <section class="empty-message">No hay productos para esos filtros.</section>

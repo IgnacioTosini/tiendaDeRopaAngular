@@ -1,0 +1,18 @@
+main {
+  background: linear-gradient(to right, #9B8264, #BAA892);
+  min-height: 80vh;
+  padding: 1rem;
+}
+
+a {
+  cursor: pointer;
+}
+
+img {
+  object-fit: cover;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: -o-crisp-edges;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: pixelated;
+  -ms-interpolation-mode: nearest-neighbor;
+}/*# sourceMappingURL=app.component.css.map */

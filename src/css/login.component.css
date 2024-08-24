@@ -1,0 +1,43 @@
+form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  border: 1px solid #ccc;
+  border-radius: 0.5rem;
+  max-width: 400px;
+  margin: 0 auto;
+}
+form section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: none;
+  margin-bottom: 1rem;
+  width: 100%;
+}
+form section label {
+  margin-bottom: 0.5rem;
+}
+form section input {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 0.25rem;
+}
+form section section {
+  color: red;
+  margin-top: 0.25rem;
+}
+form button {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.25rem;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+form button:hover {
+  background-color: #0056b3;
+}/*# sourceMappingURL=login.component.css.map */

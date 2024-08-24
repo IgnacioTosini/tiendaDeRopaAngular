@@ -1,0 +1,132 @@
+.generalContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 2rem;
+}
+.generalContainer .formShowSection {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
+}
+.generalContainer .formShowSection .formSection {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 2rem;
+}
+.generalContainer .formShowSection .formSection .formItem {
+  margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+}
+.generalContainer .formShowSection .formSection .formInput {
+  margin-bottom: 1rem;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  border: 0.1rem solid #ccc;
+}
+.generalContainer .formShowSection .showSection {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.generalContainer .formShowSection .showSection .visualUser,
+.generalContainer .formShowSection .showSection .visualUsers,
+.generalContainer .formShowSection .showSection .visualClothe,
+.generalContainer .formShowSection .showSection .visualClothes {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 2rem;
+  margin: 2rem;
+  padding: 2rem;
+  border-radius: 0.5rem;
+  background-color: white;
+  box-shadow: 0rem 0rem 1rem rgba(0, 0, 0, 0.1);
+  overflow: auto;
+  max-height: 50rem;
+}
+.generalContainer .formShowSection .showSection .visualUser h2,
+.generalContainer .formShowSection .showSection .visualUsers h2,
+.generalContainer .formShowSection .showSection .visualClothe h2,
+.generalContainer .formShowSection .showSection .visualClothes h2 {
+  margin-bottom: 2rem;
+  width: 100%;
+  text-align: center;
+}
+.generalContainer .formShowSection .showSection .visualUser .user,
+.generalContainer .formShowSection .showSection .visualUser .clothe,
+.generalContainer .formShowSection .showSection .visualUsers .user,
+.generalContainer .formShowSection .showSection .visualUsers .clothe,
+.generalContainer .formShowSection .showSection .visualClothe .user,
+.generalContainer .formShowSection .showSection .visualClothe .clothe,
+.generalContainer .formShowSection .showSection .visualClothes .user,
+.generalContainer .formShowSection .showSection .visualClothes .clothe {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  background-color: #f8f9fa;
+  box-shadow: 0rem 0rem 1rem rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+.generalContainer .formShowSection .showSection .visualUser .user:hover,
+.generalContainer .formShowSection .showSection .visualUser .clothe:hover,
+.generalContainer .formShowSection .showSection .visualUsers .user:hover,
+.generalContainer .formShowSection .showSection .visualUsers .clothe:hover,
+.generalContainer .formShowSection .showSection .visualClothe .user:hover,
+.generalContainer .formShowSection .showSection .visualClothe .clothe:hover,
+.generalContainer .formShowSection .showSection .visualClothes .user:hover,
+.generalContainer .formShowSection .showSection .visualClothes .clothe:hover {
+  transform: scale(1.02);
+}
+.generalContainer .formShowSection .showSection .visualUser .user img,
+.generalContainer .formShowSection .showSection .visualUser .clothe img,
+.generalContainer .formShowSection .showSection .visualUsers .user img,
+.generalContainer .formShowSection .showSection .visualUsers .clothe img,
+.generalContainer .formShowSection .showSection .visualClothe .user img,
+.generalContainer .formShowSection .showSection .visualClothe .clothe img,
+.generalContainer .formShowSection .showSection .visualClothes .user img,
+.generalContainer .formShowSection .showSection .visualClothes .clothe img {
+  width: 10rem;
+  height: 10rem;
+  object-fit: cover;
+  border-radius: 50%;
+}
+.generalContainer .formShowSection .showSection .visualUser .user p,
+.generalContainer .formShowSection .showSection .visualUser .clothe p,
+.generalContainer .formShowSection .showSection .visualUsers .user p,
+.generalContainer .formShowSection .showSection .visualUsers .clothe p,
+.generalContainer .formShowSection .showSection .visualClothe .user p,
+.generalContainer .formShowSection .showSection .visualClothe .clothe p,
+.generalContainer .formShowSection .showSection .visualClothes .user p,
+.generalContainer .formShowSection .showSection .visualClothes .clothe p {
+  margin-bottom: 1rem;
+}
+.generalContainer button,
+.generalContainer .formButton {
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: 0.5rem;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+}
+.generalContainer button:hover,
+.generalContainer .formButton:hover {
+  background-color: #0056b3;
+}
+.generalContainer button {
+  margin-bottom: 2rem;
+}/*# sourceMappingURL=admin.component.css.map */

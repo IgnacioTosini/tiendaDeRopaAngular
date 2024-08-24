@@ -1,7 +1,7 @@
 import { ClothesStockService } from './../services/clothes-stock.service';
 import { ImageService } from './../services/image.service'; // Import the ImageService
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpResponse } from '@angular/common/http';
 import { ClothesStock } from '../models/clothesStock.model';
 import { Image } from '../models/images.model';
@@ -15,22 +15,22 @@ import { Image } from '../models/images.model';
 })
 export class CreateClotheComponent implements OnInit {
   clotheForm = new FormGroup({
-    name: new FormControl(''),
-    price: new FormControl(''),
-    stock: new FormControl(''),
-    code: new FormControl(''),
-    size: new FormControl(''),
+    name: new FormControl('', Validators.required),
+    price: new FormControl('', [Validators.required, Validators.min(0)]),
+    stock: new FormControl('', [Validators.required, Validators.min(0)]),
+    code: new FormControl('', Validators.required),
+    size: new FormControl('', Validators.required),
     images: new FormArray([new FormControl('')]),
-    description: new FormControl(''),
-    genericType: new FormControl(''),
-    specificType: new FormControl(''),
-    publicationDate: new FormControl(''),
+    description: new FormControl('', Validators.required),
+    genericType: new FormControl('', Validators.required),
+    specificType: new FormControl('', Validators.required),
+    publicationDate: new FormControl('', Validators.required),
   });
   file: string[] = [];
   clothes: ClothesStock[] = []; // Modificado para ser un arreglo de Clothes
   lastImageId: number = 0;
 
-  constructor(private clothesStockService: ClothesStockService, private imageService: ImageService) { } // Inject the ImageService
+  constructor(private clothesStockService: ClothesStockService, private imageService: ImageService) { }
 
   async ngOnInit() {
     await this.clothesStockService.findAll().toPromise();
@@ -58,6 +58,12 @@ export class CreateClotheComponent implements OnInit {
   }
 
   createClothe() {
+    // Check if the form is valid
+    if (!this.clotheForm.valid) {
+      console.log('Invalid form data');
+      return;
+    }
+
     const formValue = this.clotheForm.value;
     let newId = this.getNextId();
     let date = new Date(this.clotheForm.value.publicationDate ?? '');
@@ -83,6 +89,7 @@ export class CreateClotheComponent implements OnInit {
       formValue.specificType || '',
       formattedDate,
       Number(formValue.stock) || 0,
+      []
     );
 
     this.clothesStockService.createUpdate(newClothe).subscribe(() => {
