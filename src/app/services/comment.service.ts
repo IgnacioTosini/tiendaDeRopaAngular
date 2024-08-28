@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { Observable, of, throwError } from 'rxjs';
+import { catchError, map, tap } from 'rxjs/operators';
 import { Comment } from '../models/comment.model';
 import { UserService } from './user.service';
 
@@ -35,7 +35,15 @@ export class CommentService {
           throw new Error('Response does not contain the expected arrays');
         }
       }),
-      tap(comments => console.log('Comments:', comments))
+      tap(comments => console.log('Comments:', comments)),
+      catchError(error => {
+        if (error.status === 404) {
+          console.info('No hay comentarios para este producto.');
+          return of([]); // Devuelve un array vacío si no se encuentran comentarios
+        } else {
+          return throwError(error); // Lanza otros errores
+        }
+      })
     );
   }
 }

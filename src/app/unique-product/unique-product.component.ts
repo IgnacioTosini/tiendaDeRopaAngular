@@ -1,3 +1,4 @@
+import { AuthService } from './../services/auth.service';
 import { ClothesStockService } from './../services/clothes-stock.service';
 import { CartService } from './../services/cart.service';
 import { Component, ElementRef, ViewChild } from '@angular/core';
@@ -8,11 +9,12 @@ import { GalleryComponent } from '../gallery/gallery.component';
 import { EMPTY, catchError } from 'rxjs';
 import { ProductReviewComponent } from '../product-review/product-review.component';
 import { CommonModule } from '@angular/common';
+import { ToastNotificationComponent } from '../toast-notification/toast-notification.component';
 
 @Component({
   selector: 'app-unique-product',
   standalone: true,
-  imports: [FormsModule, GalleryComponent, ProductReviewComponent, CommonModule],
+  imports: [FormsModule, GalleryComponent, ProductReviewComponent, CommonModule, ToastNotificationComponent],
   templateUrl: './unique-product.component.html',
   styleUrl: './unique-product.component.scss'
 })
@@ -28,12 +30,13 @@ export class UniqueProductComponent {
   showNotification: boolean = false;
   selectedProduct: any;
   clickedButton: boolean = false;
+  userLogged: boolean = this.authService.UserLogged;
 
   @ViewChild('mainImageDiv') mainImageDiv!: ElementRef;
   @ViewChild('zoomLensDiv') zoomLensDiv!: ElementRef;
   @ViewChild('zoomResultDiv') zoomResultDiv!: ElementRef;
 
-  constructor(private CartService: CartService, private route: ActivatedRoute, private clothesStockService: ClothesStockService) { }
+  constructor(private CartService: CartService, private route: ActivatedRoute, private clothesStockService: ClothesStockService, private authService: AuthService) { }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
@@ -143,11 +146,6 @@ export class UniqueProductComponent {
     this.mainImage = newImage;
   }
 
-  closeNotification() {
-    this.showNotification = false;
-    this.clickedButton = false;
-  }
-
   sumAmount() {
     this.quantity++;
   }
@@ -170,9 +168,10 @@ export class UniqueProductComponent {
     setTimeout(() => {
       console.log('Hiding notification');
       this.clickedButton = false;
-    }, 7000);
+      this.showNotification = false;
+    }, 3500);
 
-    if (this.selectedSize !== '') {
+    if (this.selectedSize !== '' && this.authService.UserLogged) {
       this.clickedButton = false;
       console.log('Adding to cart:', this.product, this.quantity, this.selectedSize);
       this.CartService.addToCart(this.product, this.quantity, this.selectedSize);
@@ -183,10 +182,5 @@ export class UniqueProductComponent {
       // Mostrar la notificación
       this.showNotification = true;
     }
-
-    setTimeout(() => {
-      console.log('Hiding notification');
-      this.showNotification = false;
-    }, 7000);
   }
 }

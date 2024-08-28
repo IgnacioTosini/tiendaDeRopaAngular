@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <section class="container">
-  <app-filters [nameFilter]="nameFilter" [minPriceFilter]="minPriceFilter" [maxPriceFilter]="maxPriceFilter"
-    [typeFilter]="typeFilter" [genericTypes]="genericTypes" [groupedTypes]="groupedTypes"
-    (applyFiltersEvent)="handleApplyFilters($event)" (sortChanged)="setSortOrder($event)">
+  <app-filters [clothes]="clothes" [nameFilter]="nameFilter" [minPriceFilter]="minPriceFilter" [maxPriceFilter]="maxPriceFilter"
+      [typeFilter]="typeFilter" [genericTypes]="genericTypes" [groupedTypes]="groupedTypes"
+      (filteredClothes)="handleFilteredClothes($event)" (sortOrderChanged)="setSortOrder($event)">
   </app-filters>
 
   <section class="filters-gallery-container">
@@ -19,7 +19,7 @@
           <a (click)="goToProduct(clothe)">
             <section class="clothe-details">
               <h2>{{clothe.getName()}}</h2>
-              <p>Size: {{ getSizesForProduct(clothe.getCode()).join(', ') }}</p>
+              <p>Size: {{ getSizesForProduct(clothe.getCode()).split(', ').join(', ') }}</p>
               <p>${{clothe.getPrice()}}</p>
             </section>
           </a>
@@ -29,14 +29,9 @@
         <section class="empty-message">No hay productos para esos filtros.</section>
         }
       </ul>
-      <section class="pagination">
-        @if (pageIndex > 0) {
-        <button class="previous" (click)="previousPage()">Página anterior</button>
-        }
-        @if ((pageIndex + 1) * pageSize < filteredClothes.length) { <button class="next" (click)="nextPage()">Página
-          siguiente</button>
-          }
-      </section>
+      <app-pagination [pageIndex]="pageIndex" [pageSize]="pageSize" [totalItems]="filteredClothes.length"
+        (previousPage)="previousPage()" (nextPage)="nextPage()">
+      </app-pagination>
     </section>
   </section>
 </section>

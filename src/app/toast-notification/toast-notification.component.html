@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+@if (isVisible) {
+<div class="toast-notification" [class.show]="isVisible" [class.hide]="!isVisible" [class.success]="isSuccess" [class.error]="!isSuccess">
+  <fa-icon [icon]="isSuccess ? ['fas', 'check-circle'] : ['fas', 'times-circle']"></fa-icon>
+  <div class="message-container"
+    [ngClass]="{'image-side': imagePosition === 'side', 'image-below': imagePosition === 'below'}">
+    @if (imageUrl) {
+    <img [src]="imageUrl" alt="Notification Image" class="notification-image">
+    }
+    <span>{{ message }}</span>
+  </div>
+</div>
+}

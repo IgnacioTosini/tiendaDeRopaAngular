@@ -43,10 +43,9 @@
         </form>
 
         @if (clothes.length !== 0) {
-        <app-filters [nameFilter]="nameFilter" [minPriceFilter]="minPriceFilter" [maxPriceFilter]="maxPriceFilter"
-          [typeFilter]="typeFilter" [genericTypes]="genericTypes" [groupedTypes]="groupedTypes"
-          (applyFiltersEvent)="handleApplyFilters($event)" (sortChanged)="setSortOrder($event)">
-        </app-filters>
+          <app-filters [nameFilter]="nameFilter" [minPriceFilter]="minPriceFilter" [maxPriceFilter]="maxPriceFilter"
+          [typeFilter]="typeFilter" [genericTypes]="genericTypes" [groupedTypes]="groupedTypes">
+      </app-filters>
         }
       </section>
       @if (clothes && filteredClothes.length > 0) {

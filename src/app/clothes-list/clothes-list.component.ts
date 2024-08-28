@@ -53,6 +53,7 @@ export class ClothesListComponent implements OnInit {
   updateClothes(): void {
     if (this.selectedClothes) {
       const updatedClothes = { ...this.selectedClothes, ...this.clothesForm.value };
+      console.log(updatedClothes);
       this.clothesService.createUpdate(updatedClothes).subscribe(() => {
         this.selectedClothes = null;
         location.reload(); // Recarga la página

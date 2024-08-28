@@ -25,8 +25,10 @@ export class ProductReviewComponent implements OnInit, OnChanges {
 
   async ngOnInit() {
     this.user = await this.authService.UserData;
-    this.userId = this.user.getId();
-    this.productId = this.product.getId();
+    if (this.user) {
+      this.userId = this.user.getId();
+      this.productId = this.product.getId();
+    }
     this.loadComments();
   }
 
@@ -40,10 +42,13 @@ export class ProductReviewComponent implements OnInit, OnChanges {
   loadComments() {
     this.commentService.findComments(this.productId).subscribe({
       next: (comments) => {
-        this.reviews = comments.length > 0 ? comments : [];
+        if (comments.length > 0) {
+          this.reviews = comments;
+        } else {
+          this.reviews = [];
+        }
       },
-      error: (error) => {
-        console.error('Error al cargar comentarios:', error);
+      error: () => {
         this.reviews = [];
       }
     });

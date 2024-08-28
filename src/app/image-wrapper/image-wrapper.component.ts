@@ -23,7 +23,9 @@ export class ImageWrapperComponent implements OnInit {
 
   async ngOnInit() {
     this.user = await this.authService.UserData;
-    this.checkIfFavorite();
+    if (this.user) {
+      this.checkIfFavorite();
+    }
   }
 
   checkIfFavorite() {

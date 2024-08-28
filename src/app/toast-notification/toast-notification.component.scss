@@ -1,0 +1,67 @@
+@import '../utilities/mixins';
+
+.toast-notification {
+  position: fixed;
+  @include properties-flex(row, normal, center);
+  top: 2rem;
+  right: 2rem;
+  background-color: #007bff;
+  color: #fff;
+  padding: 1rem 2rem;
+  border-radius: 0.8rem;
+  box-shadow: 0 0.4rem 1.2rem rgba(0, 0, 0, 0.2);
+  opacity: 0.95;
+  z-index: 1000;
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+  font-size: 1rem;
+  font-family: 'Arial', sans-serif;
+
+  &.success {
+    background-color: #28a745;
+  }
+
+  &.error {
+    background-color: #dc3545;
+  }
+
+  fa-icon {
+    margin-right: 1rem;
+  }
+
+  .message-container {
+    @include properties-flex(column, normal, center);
+
+    &.image-side {
+      flex-direction: row;
+      align-items: center;
+
+      .notification-image {
+        margin-right: 1rem;
+      }
+    }
+
+    &.image-below {
+      flex-direction: column;
+
+      .notification-image {
+        margin-bottom: 1rem;
+      }
+    }
+  }
+
+  .notification-image {
+    max-width: 4rem;
+    max-height: 4rem;
+    border-radius: 0.4rem;
+  }
+
+  /* Animation for showing and hiding */
+  &.show {
+    transform: translateY(0);
+  }
+
+  &.hide {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+}

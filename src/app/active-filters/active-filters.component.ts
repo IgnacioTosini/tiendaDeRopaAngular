@@ -1,10 +1,10 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+
 @Component({
   selector: 'app-active-filters',
   standalone: true,
-  imports: [],
   templateUrl: './active-filters.component.html',
-  styleUrl: './active-filters.component.scss'
+  styleUrls: ['./active-filters.component.scss']
 })
 export class ActiveFiltersComponent {
   @Input() nameFilter: string = '';

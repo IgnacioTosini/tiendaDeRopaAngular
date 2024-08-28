@@ -75,7 +75,7 @@ export class AuthService {
       setTimeout(() => {
         let token = this.localStorageService.getItem("token");
         if (!token) {
-          reject('User ID not found in local storage');
+          console.info('User ID not found in local storage');
         } else {
           this.userService.getUserById(user.id).subscribe((user: any) => {
             if (user) {

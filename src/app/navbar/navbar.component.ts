@@ -29,28 +29,23 @@ export class NavbarComponent implements OnInit {
 
   async ngOnInit() {
     try {
-      const userId = localStorage.getItem('userId');
-      if (userId) {
-        this.user = await this.authService.UserData;
-        this.authService.isLoggedIn = this.authService.UserLogged;
-        this.authService.isAdmin();
+      this.user = await this.authService.UserData;
+      this.authService.isLoggedIn = this.authService.UserLogged;
+      this.authService.isAdmin();
 
-        if (this.authService.isLoggedIn !== false) {
-          this.cartItems = [];
+      if (this.authService.isLoggedIn !== false) {
+        this.cartItems = [];
 
-          // Load user and cart
-          this.cartService.loadUser(this.user.getEmail());
+        // Load user and cart
+        this.cartService.loadUser(this.user.getEmail());
 
-          // Subscribe to cart items
-          this.cartService.getItems().subscribe(items => {
-            this.cartItems = items;
-          });
-        }
-      } else {
-        console.warn('User ID not found in local storage');
+        // Subscribe to cart items
+        this.cartService.getItems().subscribe(items => {
+          this.cartItems = items;
+        });
       }
     } catch (error) {
-      console.error('Error getting user data:', error);
+      console.info('Error getting user data:', error);
     }
 
     try {

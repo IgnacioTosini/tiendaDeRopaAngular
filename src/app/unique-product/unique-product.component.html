@@ -42,22 +42,20 @@
 </section>
 
 @if (showNotification) {
-<section class="notification" [ngClass]="{'hide': !showNotification}">
-  <button class="closeNotification" (click)="closeNotification()">x</button>
-  <h3>Producto agregado</h3>
-  <section class="clotheInfo">
-    <img [src]="selectedProduct.getImages()[0]?.url" [alt]="selectedProduct.getName()">
-    <span>{{ selectedProduct.getName() }}</span>
-  </section>
-</section>
+  <app-toast-notification [message]="'Producto agregado al carrito'" [duration]="5000"
+  [imageUrl]="mainImage" [imagePosition]="'side'" [isSuccess]="true"></app-toast-notification>
 }
 
-@if (clickedButton) {
-<section class="notificationStock" [ngClass]="{'hide': !showNotification}">
-  <button class="closeNotification" (click)="closeNotification()">x</button>
-  <h3>Seleccione un Tamaño</h3>
-</section>
+@if (clickedButton && userLogged === false) {
+<app-toast-notification [message]="'Registrese para agregar un producto al carrito'" [duration]="5000"
+  [imageUrl]="" [imagePosition]="'side'" [isSuccess]="false"></app-toast-notification>
 }
+
+@if (clickedButton && selectedSize == '' && userLogged === true) {
+<app-toast-notification [message]="'Talle no seleccionado'" [duration]="5000"
+  [imageUrl]="" [imagePosition]="'side'" [isSuccess]="false"></app-toast-notification>
+}
+
 
 <section class="productDescription">
   <p>{{ product?.getDescription() }}</p>

@@ -1,0 +1,49 @@
+@import '../utilities/mixins';
+@import '../utilities/variables';
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1rem;
+
+  span {
+    font-size: 1rem;
+    margin-right: 0.625rem;
+
+    &.current {
+      font-weight: bold;
+    }
+  }
+
+  button {
+    padding: 0.625rem 1.25rem;
+    border: none;
+    border-radius: 0.3125rem;
+    background: $secondary-background;
+    color: white;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #9B8264;
+      filter: brightness(1.2);
+    }
+
+    &:not(:last-child) {
+      margin-right: 0.625rem;
+    }
+
+    &.previous,
+    &.next {
+      background-color: #F1B338;
+      height: fit-content;
+
+      &:hover {
+        background-color: #483924;
+        transform: scale(1.1);
+      }
+    }
+  }
+}

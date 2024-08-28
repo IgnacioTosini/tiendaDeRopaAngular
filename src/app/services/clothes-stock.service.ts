@@ -5,6 +5,7 @@ import { ClothesStock } from '../models/clothesStock.model';
 import { Image } from '../models/images.model';
 import { EMPTY } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,7 @@ export class ClothesStockService {
   private apiUrl = 'http://localhost:8080/api/clothes';
   clothesArray: Array<ClothesStock> = [];
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private userService: UserService) { }
 
   findAll(): Observable<ClothesStock[]> {
     return this.http.get<{ message: string, body: any[], status: number }>(`${this.apiUrl}`).pipe(
@@ -48,7 +49,8 @@ export class ClothesStockService {
 
   createUpdate(clothe: Object): Observable<any> {
     console.log('createUpdate', clothe);
-    return this.http.post<any>(`${this.apiUrl}`, clothe);
+    console.log('token', this.userService.getUserToken(''));
+    return this.http.post<any>(`${this.apiUrl}`, clothe, this.userService.getUserToken(''));
   }
 
   findByCode(code: string): Observable<ClothesStock[]> {
@@ -104,7 +106,7 @@ export class ClothesStockService {
         return this.clothesArray;
       }),
       catchError(error => {
-        console.error('Error fetching clothes:', error);
+        console.error(`Error fetching clothes:\nStatus: ${error.status}\nMessage: ${error.message}`);
         return EMPTY;
       })
     );

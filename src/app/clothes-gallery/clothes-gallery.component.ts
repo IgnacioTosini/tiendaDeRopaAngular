@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, OnInit } from '@angular/core';
 import { ClothesStockService } from './../services/clothes-stock.service';
 import { ClothesStock } from '../models/clothesStock.model';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -6,15 +6,18 @@ import { FormsModule } from '@angular/forms';
 import { ImageWrapperComponent } from '../image-wrapper/image-wrapper.component';
 import { FiltersComponent } from '../filters/filters.component';
 import { ActiveFiltersComponent } from '../active-filters/active-filters.component';
+import { PaginationComponent } from '../pagination/pagination.component';
 
 @Component({
   selector: 'app-clothes-gallery',
   standalone: true,
-  imports: [FormsModule, ImageWrapperComponent, FiltersComponent, ActiveFiltersComponent],
+  imports: [FormsModule, ImageWrapperComponent, FiltersComponent, ActiveFiltersComponent, PaginationComponent],
   templateUrl: './clothes-gallery.component.html',
   styleUrls: ['./clothes-gallery.component.scss']
 })
-export class ClothesGalleryComponent {
+export class ClothesGalleryComponent implements OnInit {
+  @ViewChild(FiltersComponent) filtersComponent!: FiltersComponent;
+
   clothes: ClothesStock[] = [];
   filteredClothes: ClothesStock[] = [];
   nameFilter: string = '';
@@ -35,6 +38,7 @@ export class ClothesGalleryComponent {
       this.typeFilter = params['type'];
       this.applyFilters();
     });
+    this.filtersComponent.filtersChanged.subscribe(() => this.handleFiltersChanged());
   }
 
   async loadClothes() {
@@ -53,99 +57,23 @@ export class ClothesGalleryComponent {
     }
 
     this.genericTypes = Object.keys(this.groupedTypes);
-  }
 
-  handleApplyFilters(filters: { nameFilter: string; minPriceFilter: number | null; maxPriceFilter: number | null; typeFilter: string; }) {
-    this.nameFilter = filters.nameFilter;
-    this.minPriceFilter = filters.minPriceFilter;
-    this.maxPriceFilter = filters.maxPriceFilter;
-    this.typeFilter = filters.typeFilter;
+    this.filtersComponent.clothes = this.clothes;
     this.applyFilters();
   }
 
   applyFilters() {
-    this.filteredClothes = [];
-
-    const params = this.getFilterParams();
-
-    this.ClothesStockService.findClothesByParameters(params).subscribe(
-      filteredClothes => {
-        this.processFilteredClothes(filteredClothes);
-      },
-      error => {
-        console.error('Error fetching clothes:', error);
-      }
-    );
+    this.filtersComponent.applyFilters();
   }
 
-  getFilterParams() {
-    return {
-      name: this.nameFilter,
-      type: this.typeFilter,
-      minPrice: this.minPriceFilter,
-      maxPrice: this.maxPriceFilter,
-      sortOrder: this.sortOrder,
-    };
-  }
-
-  filterByPrice(clothes: ClothesStock[]): ClothesStock[] {
-    return clothes.filter(clothe => {
-      let price = clothe.getPrice();
-      return (this.minPriceFilter == null || price >= this.minPriceFilter) &&
-        (this.maxPriceFilter == null || price <= this.maxPriceFilter);
-    });
-  }
-
-  processFilteredClothes(filteredClothes: ClothesStock[]) {
-    this.filteredClothes = this.removeDuplicates(filteredClothes);
-
-    if (this.typeFilter) {
-      this.filteredClothes = this.filterByType(this.filteredClothes);
-    }
-    if (this.minPriceFilter != null || this.maxPriceFilter != null) {
-      this.filteredClothes = this.filterByPrice(this.filteredClothes);
-    }
-    if (this.sortOrder) {
-      this.filteredClothes = this.sortClothes(this.filteredClothes);
-    }
-
+  handleFilteredClothes(filtered: ClothesStock[]) {
+    this.filteredClothes = filtered;
     this.adjustPageIndex();
-  }
-
-  removeDuplicates(clothes: ClothesStock[]): ClothesStock[] {
-    return Array.from(new Set(clothes.map((c: ClothesStock) => c.getName())))
-      .map((name: any) => {
-        return clothes.find((c: ClothesStock) => c.getName() === name);
-      })
-      .filter((c: ClothesStock | undefined) => c !== undefined) as ClothesStock[];
-  }
-
-  filterByType(clothes: ClothesStock[]): ClothesStock[] {
-    return clothes.filter((c: ClothesStock) => c.getGenericType() === this.typeFilter || c.getSpecificType() === this.typeFilter);
-  }
-
-  sortClothes(clothes: ClothesStock[]): ClothesStock[] {
-    return clothes.sort((a, b) => {
-      if (this.sortOrder === 'name') {
-        return a.getName().localeCompare(b.getName());
-      } else if (this.sortOrder === 'price') {
-        return a.getPrice() - b.getPrice();
-      } else if (this.sortOrder === 'price-desc') {
-        return b.getPrice() - a.getPrice();
-      }
-      return 0;
-    });
   }
 
   setSortOrder(order: 'name' | 'price' | 'price-desc') {
     this.sortOrder = order;
-    this.applyFilters();
-  }
-
-  getSizesForProduct(code: string): string[] {
-    return this.clothes
-      .filter(item => item.getCode() === code)
-      .map(item => item.getSize());
+    this.filtersComponent.setSortOrder(order);
   }
 
   adjustPageIndex() {
@@ -179,23 +107,7 @@ export class ClothesGalleryComponent {
   }
 
   handleResetFilter(filterName: string) {
-    switch (filterName) {
-      case 'name':
-        this.nameFilter = '';
-        break;
-      case 'minPrice':
-        this.minPriceFilter = null;
-        break;
-      case 'maxPrice':
-        this.maxPriceFilter = null;
-        break;
-      case 'type':
-        this.typeFilter = '';
-        break;
-      case 'sortOrder':
-        this.sortOrder = null;
-        break;
-    }
+    this.filtersComponent.resetFilter(filterName);
     this.applyFilters();
   }
 
@@ -207,5 +119,21 @@ export class ClothesGalleryComponent {
 
   setActiveImage(index: number, imageIndex: number) {
     this.clothes[index].currentImage = imageIndex;
+  }
+
+  trackByClothe(index: number, clothe: ClothesStock) {
+    return clothe.getCode();
+  }
+
+  getSizesForProduct(code: string): string {
+    const clothe = this.clothes.find(c => c.getCode() === code);
+    return clothe ? clothe.getSize() : '';
+  }
+
+  handleFiltersChanged() {
+    this.nameFilter = this.filtersComponent.nameFilter;
+    this.minPriceFilter = this.filtersComponent.minPriceFilter;
+    this.maxPriceFilter = this.filtersComponent.maxPriceFilter;
+    this.typeFilter = this.filtersComponent.typeFilter;
   }
 }

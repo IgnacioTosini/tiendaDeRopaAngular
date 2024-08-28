@@ -27,12 +27,7 @@ export class CartDetailComponent {
   }
 
   async ngOnInit() {
-    try {
-      this.user = await this.authService.UserData;
-    } catch (error) {
-      console.error('Error getting user data:', error);
-    }
-    console.log(this.user);
+    this.user = await this.authService.UserData;
   }
 
   goToProduct(clothe: ClothesStock) {

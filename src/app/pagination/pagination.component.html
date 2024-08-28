@@ -1,0 +1,7 @@
+<!DOCTYPE html>
+<section class="pagination">
+  <button class="previous" (click)="onPreviousPage()" [disabled]="pageIndex === 0">Página anterior</button>
+  <span>{{ pageIndex + 1 }} / {{ totalPages }}</span>
+  <button class="next" (click)="onNextPage()" [disabled]="(pageIndex + 1) * pageSize >= totalItems">Página
+    siguiente</button>
+</section>

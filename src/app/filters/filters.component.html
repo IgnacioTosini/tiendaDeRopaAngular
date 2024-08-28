@@ -13,12 +13,12 @@
   <label for="typeFilter">Categoría:</label>
   <select id="typeFilter" [(ngModel)]="typeFilter" (change)="applyFilters()">
     <option value="">Todas las Categorias</option>
-    @for (genericType of genericTypes; track $index) {
-    <optgroup label="{{genericType}}">
-      @for (specificType of groupedTypes[genericType]; track $index) {
-      <option>{{specificType}}</option>
-      }
-    </optgroup>
+    @for (genericType of genericTypes; track trackByGenericType($index, genericType)) {
+      <optgroup label="{{genericType}}">
+        @for (specificType of groupedTypes[genericType]; track trackBySpecificType($index, specificType)) {
+          <option>{{specificType}}</option>
+        }
+      </optgroup>
     }
   </select>
 

@@ -298,9 +298,9 @@ export class UserService {
     return http;
   }
 
-  getUserId(){
+  getUserId() {
     let user = this.localStorageService.getItem("user");
-    if(user){
+    if (user) {
       return JSON.parse(user).id;
     }
   }
