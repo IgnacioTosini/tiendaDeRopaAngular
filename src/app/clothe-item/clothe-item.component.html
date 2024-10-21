@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<li class="clothe-item" (click)="displayShowSubMenu.emit(clothe)">
+  <app-image-wrapper [clothe]="clothe" (changeImage)="changeImage.emit({ index: 1, change: $event })"
+    (setActiveImage)="setActiveImage.emit({ index: 1, imageIndex: $event })" [isAdminMode]="true"></app-image-wrapper>
+  <a (click)="goToProduct.emit(clothe)">
+    <section class="clothe-details">
+      <h2>{{ clothe.getName() }}</h2>
+      <p>Size: {{ getSizesForProduct() }}</p>
+      <p>${{ clothe.getPrice() }}</p>
+    </section>
+  </a>
+  @if (showSubMenu && selectedClothe === clothe) {}
+  <section class="admin-submenu" [class.visible]="isAdminMode" (click)="displayShowSubMenu.emit(clothe)">
+    <button (click)="viewProduct.emit(clothe)">Ver</button>
+    <button (click)="modifyProduct.emit(clothe)">Modificar</button>
+  </section>
+</li>

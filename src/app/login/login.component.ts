@@ -1,17 +1,22 @@
 import { AuthService } from './../services/auth.service';
-import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { UserService } from '../services/user.service';
+import { ToastNotificationComponent } from '../toast-notification/toast-notification.component';
+import { PasswordFieldComponent } from '../password-field/password-field.component';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, ToastNotificationComponent, PasswordFieldComponent],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.scss'
+  styleUrls: ['./login.component.scss']
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   loginForm: FormGroup = new FormGroup({});
+  showNotification: boolean = false;
+  notificationMessage: string = '';
+  notificationDuration: number = 5000; // Duración de la notificación en milisegundos
 
   constructor(private formBuilder: FormBuilder, private userService: UserService, private authService: AuthService) { }
 
@@ -24,7 +29,11 @@ export class LoginComponent {
 
   onSubmit(): void {
     if (!this.loginForm.valid) {
-      console.log('Invalid form data');
+      this.showNotification = true;
+      this.notificationMessage = this.getErrorMessage();
+      setTimeout(() => {
+        this.showNotification = false;
+      }, this.notificationDuration);
       return;
     }
 
@@ -41,7 +50,26 @@ export class LoginComponent {
         console.log('User not found');
       }
     }, error => {
+      this.showNotification = true;
+      this.notificationMessage = 'El correo electrónico o la contraseña son incorrectos.';
+      setTimeout(() => {
+        this.showNotification = false;
+      }, this.notificationDuration);
       console.error('Login error:', error);
     });
+  }
+
+  getErrorMessage(): string {
+    if (this.loginForm.controls['email'].errors) {
+      return 'El campo Correo Electrónico no está completo o es incorrecto';
+    }
+    if (this.loginForm.controls['password'].errors) {
+      return 'El campo Contraseña no está completo o es incorrecto';
+    }
+    return 'Por favor, complete todos los campos requeridos correctamente.';
+  }
+
+  get passwordControl(): FormControl {
+    return this.loginForm.get('password') as FormControl;
   }
 }

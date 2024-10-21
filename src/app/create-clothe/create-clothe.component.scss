@@ -1,61 +1,63 @@
 @import '../utilities/mixins';
+@import '../utilities/variables';
 
 form {
-  @include properties-flex(row, none, none);
-  flex-wrap: wrap;
+  @include properties-flex(column, flex-start, flex-start);
   gap: 1rem;
+  padding: 2rem;
+  background-color: $secondary-background;
+  border-radius: 0.5rem;
+  box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1);
 
-  section {
-    @include properties-flex(row, none, none);
+  .form-group {
+    @include properties-flex(column, flex-start, flex-start);
     gap: 0.5rem;
+    width: 100%;
 
     label {
-      width: 100%;
-      max-width: 10rem;
-      text-align: center;
-      border-radius: 0.25rem;
-      padding: 10px;
-      background-color: #4CAF50; // Color de fondo del botón
-      color: white; // Color del texto del botón
-      cursor: pointer; // Cambia el cursor a un puntero cuando se pasa por encima
-    }
-
-    label:hover {
-      background-color: #45a049; // Cambia el color de fondo del botón cuando se pasa el cursor por encima
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+      color: $text-color-black;
     }
 
     input {
       width: 100%;
-      max-width: 50rem;
-      padding: 0.5rem;
-      border: 1px solid #ccc;
+      padding: 0.75rem;
+      border: 1px solid $border-color;
       border-radius: 0.25rem;
       font-size: 1rem;
+    }
+
+    small.text-danger {
+      color: $error-button-background;
+      font-size: 0.875rem;
     }
   }
 
   .imageSection {
     @include properties-flex(row, center, center);
     gap: 0.5rem;
+    max-height: 10rem;
 
     .preview {
       width: 100%;
-      max-width: 5rem;
+      max-width: 10rem;
+      max-height: 10rem;
       opacity: 0.5;
     }
   }
 
   button {
-    padding: 0.5rem 1rem;
+    padding: 0.75rem 1.5rem;
     border: none;
     border-radius: 0.25rem;
-    background-color: #007BFF;
-    color: #fff;
+    background-color: $primary-button-background;
+    color: $primary-text-color-white;
     font-size: 1rem;
     transition: background-color 0.3s ease;
 
     &:hover {
-      background-color: #0056b3;
+      background-color: $secondary-button-background;
     }
   }
 }
@@ -65,15 +67,15 @@ button {
   width: 100%;
   max-width: 10rem;
   margin-top: 1rem;
-  padding: 0.5rem 1rem;
+  padding: 0.75rem 1.5rem;
   border: none;
   border-radius: 0.25rem;
-  background-color: #28a745;
-  color: #fff;
+  background-color: $success-button-background;
+  color: $primary-text-color-white;
   font-size: 1rem;
   transition: background-color 0.3s ease;
 
   &:hover {
-    background-color: #1e7e34;
+    background-color: $secondary-button-background;
   }
 }

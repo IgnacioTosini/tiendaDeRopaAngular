@@ -1,15 +1,16 @@
 import { ClothesStockService } from './../services/clothes-stock.service';
 import { ImageService } from './../services/image.service'; // Import the ImageService
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormArray, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpResponse } from '@angular/common/http';
 import { ClothesStock } from '../models/clothesStock.model';
 import { Image } from '../models/images.model';
+import { ToastNotificationComponent } from '../toast-notification/toast-notification.component'; // Import the ToastNotificationComponent
 
 @Component({
   selector: 'app-create-clothe',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, FormsModule, ToastNotificationComponent],
   templateUrl: './create-clothe.component.html',
   styleUrl: './create-clothe.component.scss'
 })
@@ -27,20 +28,33 @@ export class CreateClotheComponent implements OnInit {
     publicationDate: new FormControl('', Validators.required),
   });
   file: string[] = [];
-  clothes: ClothesStock[] = []; // Modificado para ser un arreglo de Clothes
+  clothes: ClothesStock[] = [];
   lastImageId: number = 0;
+  message: string = '';
+  subject: string = '';
+  showNotification: boolean = false;
+  notificationMessage: string = '';
+  typeOfNotification: boolean = false;
 
   constructor(private clothesStockService: ClothesStockService, private imageService: ImageService) { }
 
   async ngOnInit() {
-    await this.clothesStockService.findAll().toPromise();
+    await this.clothesStockService.findAll(0, 10).toPromise();
     this.clothes = this.clothesStockService.clothesArray;
+  }
+
+  private handleNotification(message: string, isSuccess: boolean): void {
+    this.notificationMessage = message;
+    this.typeOfNotification = isSuccess;
+    this.showNotification = true;
+    setTimeout(() => {
+      this.showNotification = false;
+    }, 5000);
   }
 
   getNextId(): string {
     const maxId = Math.max(...this.clothes.map(clothe => Number(clothe.getId())), 0);
-    maxId + 1;
-    return maxId.toString();
+    return (maxId + 1).toString();
   }
 
   getNextIdImage(): number {
@@ -60,7 +74,7 @@ export class CreateClotheComponent implements OnInit {
   createClothe() {
     // Check if the form is valid
     if (!this.clotheForm.valid) {
-      console.log('Invalid form data');
+      this.handleNotification('Por favor, complete todos los campos requeridos.', false);
       return;
     }
 
@@ -92,9 +106,20 @@ export class CreateClotheComponent implements OnInit {
       []
     );
 
-    this.clothesStockService.createUpdate(newClothe).subscribe(() => {
-      (response: HttpResponse<any>) => {
+    const finallyClothe = {
+      clothe: newClothe,
+      subject: this.subject,
+      message: this.message
+    }
+
+    this.clothesStockService.createUpdate(finallyClothe).subscribe({
+      next: (response: HttpResponse<any>) => {
         console.log(response.status);
+        this.handleNotification('Producto creado exitosamente.', true);
+      },
+      error: (err) => {
+        console.error('Error al crear el producto:', err);
+        this.handleNotification('Error al crear el producto.', false);
       }
     });
   }
@@ -119,10 +144,20 @@ export class CreateClotheComponent implements OnInit {
   }
 
   addImageField() {
-    const imagesControl = this.clotheForm.get('images');
-    if (imagesControl && imagesControl.value && imagesControl.value.length < 3) {
-      (imagesControl as FormArray).push(new FormControl(''));
+    const imagesControl = this.clotheForm.get('images') as FormArray;
+    if (imagesControl.length < 3) {
+      imagesControl.push(new FormControl(''));
       this.file.push('');
     }
+  }
+
+  removeImageField(index: number) {
+    const imagesControl = this.clotheForm.get('images') as FormArray;
+    imagesControl.removeAt(index);
+    this.file.splice(index, 1);
+  }
+
+  get imageControls() {
+    return (this.clotheForm.get('images') as FormArray).controls;
   }
 }

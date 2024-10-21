@@ -2,17 +2,20 @@ import { TaxService } from './../services/tax.service';
 import { ImageService } from './../services/image.service';
 import { UserService } from './../services/user.service';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators, AbstractControl, FormControl } from '@angular/forms';
 import { User } from '../models/user.model';
 import { Router } from '@angular/router';
 import { Tax } from '../models/tax.model';
 import { InvoiceComponent } from '../invoice/invoice.component';
+import { ToastNotificationComponent } from '../toast-notification/toast-notification.component';
+import { PasswordFieldComponent } from '../password-field/password-field.component';
+
 @Component({
   selector: 'app-user-profile',
   standalone: true,
-  imports: [ReactiveFormsModule, FormsModule, InvoiceComponent],
+  imports: [ReactiveFormsModule, FormsModule, InvoiceComponent, ToastNotificationComponent, PasswordFieldComponent],
   templateUrl: './user-profile.component.html',
-  styleUrl: './user-profile.component.scss'
+  styleUrls: ['./user-profile.component.scss']
 })
 export class UserProfileComponent implements OnInit {
   user: User = new User(0, '', '', '', '', '', [], [], '');
@@ -22,6 +25,9 @@ export class UserProfileComponent implements OnInit {
   imageOpen: boolean = false;
   invoices: Tax[] = [];
   selectedInvoiceId: string = '';
+  showNotification: boolean = false;
+  notificationMessage: string = '';
+  typeOfNotification: boolean = false;
 
   constructor(private fb: FormBuilder, private userService: UserService, private imageService: ImageService, private router: Router, private taxService: TaxService) {
     this.userForm = this.fb.group({
@@ -63,10 +69,26 @@ export class UserProfileComponent implements OnInit {
     );
   }
 
-  updateUserDetails() {
-    // Verificar si el formulario es válido
+  private handleNotification(message: string, isSuccess: boolean): void {
+    this.notificationMessage = message;
+    this.typeOfNotification = isSuccess;
+    this.showNotification = true;
+    setTimeout(() => {
+      this.showNotification = false;
+    }, 5000);
+  }
+
+  updateUserDetails(event: Event) {
+    event.preventDefault();
+
     if (this.userForm.invalid) {
-      console.error('El formulario no es válido');
+      this.handleNotification(this.getErrorMessage(), false);
+      return;
+    }
+
+    // Verificar si se han realizado cambios
+    if (!this.userForm.dirty) {
+      this.handleNotification('No se han realizado cambios.', false);
       return;
     }
 
@@ -94,19 +116,21 @@ export class UserProfileComponent implements OnInit {
         this.userService.updatePassword(String(this.user.getId()), newPassword).subscribe(
           (response: any) => {
             console.log(response);
+            this.handleNotification('Detalles del usuario actualizados exitosamente.', true);
+            this.userForm.markAsPristine(); // Marcar el formulario como no sucio
             this.router.navigate(["/user-profile"]).then(() => {
               window.location.reload();
             });
           },
           (error: any) => {
-            // Aquí puedes manejar el error como quieras. Por ejemplo, podrías mostrar un mensaje de error al usuario.
             console.error('Ocurrió un error al actualizar la contraseña:', error);
+            this.handleNotification('Ocurrió un error al actualizar la contraseña.', false);
           }
         );
       },
       (error: any) => {
-        // Aquí puedes manejar el error como quieras. Por ejemplo, podrías mostrar un mensaje de error al usuario.
         console.error('Ocurrió un error al actualizar el usuario:', error);
+        this.handleNotification('Ocurrió un error al actualizar el usuario.', false);
       }
     );
   }
@@ -116,11 +140,13 @@ export class UserProfileComponent implements OnInit {
       const file = event.target.files[0];
       if (!this.imageService.validateImage(file)) {
         console.error('File is not an image.');
+        this.handleNotification('El archivo no es una imagen válida.', false);
         return;
       }
 
       this.imageService.extractBase64(file).then((image: any) => {
         this.user?.setImage(image.base);
+        this.userForm.markAsDirty(); // Marcar el formulario como sucio
         this.userService.updateUser(this.user).subscribe(() => {
           this.router.navigate(["/user-profile"]).then(() => {
             window.location.reload();
@@ -132,18 +158,6 @@ export class UserProfileComponent implements OnInit {
 
   openImage() {
     this.imageOpen = !this.imageOpen;
-  }
-
-  selectInvoice(invoiceId: string) {
-    this.selectedInvoiceId = invoiceId;
-  }
-
-  verTodasLasFacturas() {
-    this.findAll();
-  }
-
-  verFacturaPorId() {
-    this.findByCode();
   }
 
   findByCode(): void {
@@ -161,7 +175,7 @@ export class UserProfileComponent implements OnInit {
   }
 
   findAll(): void {
-    this.taxService.findAllTaxUser(this.user.getId()).subscribe(
+    this.taxService.findAllTaxUser(this.user.getId(), 0, 10).subscribe(
       data => {
         console.log(data);
         this.invoices = data;
@@ -170,5 +184,25 @@ export class UserProfileComponent implements OnInit {
         console.error(error);
       }
     );
+  }
+
+  getErrorMessage(): string {
+    if (this.userForm.controls['email'].errors) {
+      return 'El campo Correo Electrónico no está completo o es incorrecto';
+    }
+    if (this.userForm.controls['password'].errors) {
+      return 'El campo Contraseña no está completo o es incorrecto';
+    }
+    if (this.userForm.controls['name'].errors) {
+      return 'El campo Nombre no está completo o es incorrecto';
+    }
+    if (this.userForm.controls['lastname'].errors) {
+      return 'El campo Apellido no está completo o es incorrecto';
+    }
+    return 'Por favor, complete todos los campos requeridos correctamente.';
+  }
+
+  get passwordControl(): FormControl {
+    return this.userForm.get('password') as FormControl;
   }
 }

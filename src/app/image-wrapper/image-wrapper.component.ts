@@ -4,11 +4,14 @@ import { Router } from '@angular/router';
 import { UserService } from '../services/user.service';
 import { User } from '../models/user.model';
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { slideInOutLeft, slideInOutRight, zoomInOut } from '../shared/animations/animation';
+import { ToastNotificationComponent } from '../toast-notification/toast-notification.component';
 
 @Component({
   selector: 'app-image-wrapper',
   standalone: true,
-  imports: [],
+  imports: [ToastNotificationComponent],
+  animations: [slideInOutLeft, slideInOutRight, zoomInOut],
   templateUrl: './image-wrapper.component.html',
   styleUrls: ['./image-wrapper.component.scss']
 })
@@ -16,6 +19,8 @@ export class ImageWrapperComponent implements OnInit {
   @Input() clothe: ClothesStock = new ClothesStock('', '', 0, '', '', [], '', '', '', '', 0, []);
   @Output() changeImage = new EventEmitter<number>();
   @Output() setActiveImage = new EventEmitter<number>();
+  @Input() isAdminMode: boolean = false;
+  @Output() productSelected = new EventEmitter<ClothesStock>();
   isFavorite: boolean = false;
   user: User = new User(0, '', '', '', '', '', [], [], '');
 
@@ -39,20 +44,10 @@ export class ImageWrapperComponent implements OnInit {
     });
   }
 
-  onPrevClick() {
-    this.changeImage.emit(-1);
-  }
-
-  onNextClick() {
-    this.changeImage.emit(1);
-  }
-
-  onDotClick(index: number) {
-    this.setActiveImage.emit(index);
-  }
-
   goToProduct(clothe: ClothesStock) {
-    this.router.navigate(['/product', clothe.getCode()]);
+    this.router.navigate(['/product', clothe.getCode()]).then(() => {
+      window.scrollTo(0, 0);
+    });
   }
 
   get isLogging(): Boolean {
@@ -69,12 +64,16 @@ export class ImageWrapperComponent implements OnInit {
         photo: clothe.getImages()[0]?.getUrl(),
       };
       this.userService.addToWisheList(this.user.getId(), newWish).subscribe({
-        next: (response) => console.log('Producto agregado a favoritos', response),
+        next: (response) => {
+          console.log('Producto agregado a favoritos', response);
+        },
         error: (error) => console.error('Error al agregar a favoritos', error)
       });
     } else {
       this.userService.removeFromWisheList(this.user.getId(), clothe.getId()).subscribe({
-        next: (response) => console.log('Producto removido de favoritos', response),
+        next: (response) => {
+          console.log('Producto removido de favoritos', response);
+        },
         error: (error) => console.error('Error al remover de favoritos', error)
       });
     }

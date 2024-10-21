@@ -32,7 +32,7 @@
         background: $secondary-background;
         cursor: pointer;
         transition: filter 0.5s ease-in-out;
-        @include properties-flex(column, center, center);
+        @include properties-flex(column, center, flex-start);
         padding: 1.25rem;
 
         &:hover {
@@ -40,6 +40,9 @@
         }
 
         .clothe-details {
+          min-height: 6.5rem;
+          min-width: 13rem;
+
           h2 {
             margin: 0.625rem 0;
             font-size: 1.125rem;

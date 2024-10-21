@@ -15,7 +15,7 @@
     z-index: -1;
     width: 100%;
     height: 100%;
-    background: linear-gradient(45deg, #9B8264, #8a7965, #645038, #786A54, #794200, #F1D638);
+    background: linear-gradient(45deg, $global-background, $secondary-background, $tertiary-background, $secondary-background, $tertiary-background, $tertiary-background);
     border-radius: 0.625rem;
     background-size: 800%; // Aumenta el tamaño del fondo para que se mueva más rápido
     filter: blur(0.125rem); // Añade un poco de desenfoque para un efecto de profundidad
@@ -32,7 +32,7 @@
     border: none;
     padding: 0.625rem;
     padding-right: 1.875rem; // Aumenta el padding a la derecha para hacer espacio para la lupa
-    background-color: #F1B338;
+    background-color: $tertiary-background;
     background-image: url('../../assets/photos/search.svg');
     background-repeat: no-repeat;
     background-position: right 0.625rem center;
@@ -40,7 +40,7 @@
     transition: all 0.5s ease;
 
     &[type="text"] {
-      color: #00000088;
+      color: $secondary-text-color;
     }
 
     &:hover {
@@ -84,10 +84,10 @@
       cursor: pointer;
       text-decoration: none;
       list-style: none;
-      color: #00000088;
+      color: $secondary-text-color;
       margin: 0; // Elimina los márgenes para un mejor control del espaciado
       padding: 0.625rem; // Añade un poco de padding vertical para separar los resultados
-      border-bottom: 1px solid #ddd; // Añade una línea divisoria entre los resultados
+      border-bottom: 1px solid $border-color; // Añade una línea divisoria entre los resultados
       transition: all 0.5s ease;
       border-radius: 0.625rem;
       z-index: 99;

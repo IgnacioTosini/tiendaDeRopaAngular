@@ -1,91 +1,109 @@
 <!DOCTYPE html>
 <form [formGroup]="clotheForm" (ngSubmit)="createClothe()">
-  <section>
+  <div class="form-group">
     <label for="name">Name:</label>
-    <input type="text" id="name" formControlName="name">
+    <input type="text" id="name" formControlName="name" placeholder="Nombre">
     @if (clotheForm.controls.name.invalid && (clotheForm.controls.name.dirty || clotheForm.controls.name.touched)) {
     <small class="text-danger">Name is required.</small>
     }
-  </section>
+  </div>
 
-  <section>
+  <div class="form-group">
     <label for="price">Price:</label>
-    <input type="number" id="price" formControlName="price">
+    <input type="number" id="price" formControlName="price" placeholder="Precio">
     @if (clotheForm.controls.price.invalid && (clotheForm.controls.price.dirty || clotheForm.controls.price.touched)) {
     <small class="text-danger">Price is required.</small>
     <small class="text-danger">Price must be at least 0.</small>
     }
-  </section>
+  </div>
 
-  <section>
+  <div class="form-group">
     <label for="stock">Stock:</label>
-    <input type="number" id="stock" formControlName="stock">
+    <input type="number" id="stock" formControlName="stock" placeholder="Stock">
     @if (clotheForm.controls.stock.invalid && (clotheForm.controls.stock.dirty || clotheForm.controls.stock.touched)) {
     <small class="text-danger">Stock is required.</small>
     <small class="text-danger">Stock must be at least 0.</small>
     }
-  </section>
+  </div>
 
-  <section>
+  <div class="form-group">
     <label for="code">Code:</label>
-    <input type="text" id="code" formControlName="code">
+    <input type="text" id="code" formControlName="code" placeholder="Codigo">
     @if (clotheForm.controls.code.invalid && (clotheForm.controls.code.dirty || clotheForm.controls.code.touched)) {
     <small class="text-danger">Code is required.</small>
     }
-  </section>
+  </div>
 
-  <section>
+  <div class="form-group">
     <label for="size">Size:</label>
-    <input type="text" id="size" formControlName="size">
+    <input type="text" id="size" formControlName="size" placeholder="Talle/Tamaño">
     @if (clotheForm.controls.size.invalid && (clotheForm.controls.size.dirty || clotheForm.controls.size.touched)) {
     <small class="text-danger">Size is required.</small>
     }
-  </section>
+  </div>
 
-  @for (image of clotheForm.get('images')?.value; track $index) {
-  <section formArrayName="images">
-    <input id="image" type="file" (change)="onFileChange($event, $index)">
-    @if (file[$index] !== undefined) {
-    <img class="preview" [src]='file[$index]' [alt]="file[$index]">
+  <div formArrayName="images">
+    @for (image of imageControls; track $index) {
+    <div class="form-group imageSection">
+      <input id="image-{{$index}}" type="file" (change)="onFileChange($event, $index)">
+      @if (file[$index] !== undefined) {
+      <img class="preview" [src]='file[$index]' [alt]="file[$index]">
+      <button type="button" (click)="removeImageField($index)">Remove</button>
+      }
+    </div>
     }
-  </section>
-  }
+  </div>
+  <button type="button" (click)="addImageField()" [disabled]="imageControls.length >= 3">Add Image</button>
 
-  <section>
+  <div class="form-group">
     <label for="description">Description:</label>
-    <input type="text" id="description" formControlName="description">
+    <input type="text" id="description" formControlName="description" placeholder="Descripcion">
     @if (clotheForm.controls.description.invalid && (clotheForm.controls.description.dirty ||
     clotheForm.controls.description.touched)) {
     <small class="text-danger">Description is required.</small>
     }
-  </section>
+  </div>
 
-  <section>
+  <div class="form-group">
     <label for="genericType">Generic Type:</label>
-    <input type="text" id="genericType" formControlName="genericType">
+    <input type="text" id="genericType" formControlName="genericType" placeholder="Tipo Generico">
     @if (clotheForm.controls.genericType.invalid && (clotheForm.controls.genericType.dirty ||
     clotheForm.controls.genericType.touched)) {
-    <small class="text-danger" *ngIf="clotheForm.controls.genericType.errors.required">Generic Type is required.</small>
+    <small class="text-danger">Generic Type is required.</small>
     }
-  </section>
+  </div>
 
-  <section>
+  <div class="form-group">
     <label for="specificType">Specific Type:</label>
-    <input type="text" id="specificType" formControlName="specificType">
+    <input type="text" id="specificType" formControlName="specificType" placeholder="Tipo Especifico">
     @if (clotheForm.controls.specificType.invalid && (clotheForm.controls.specificType.dirty ||
     clotheForm.controls.specificType.touched)) {
     <small class="text-danger">Specific Type is required.</small>
     }
-  </section>
+  </div>
 
-  <section>
+  <div class="form-group">
     <label for="publicationDate">Publication Date:</label>
     <input type="date" id="publicationDate" formControlName="publicationDate">
     @if (clotheForm.controls.publicationDate.invalid && (clotheForm.controls.publicationDate.dirty ||
     clotheForm.controls.publicationDate.touched)) {
     <small class="text-danger">Publication Date is required.</small>
     }
-  </section>
+  </div>
+
+  <div class="form-group">
+    <label for="subject">Asunto</label>
+    <input type="text" id="subject" [(ngModel)]="subject" [ngModelOptions]="{standalone: true}" placeholder="Asunto">
+  </div>
+
+  <div class="form-group">
+    <label for="message">Mensaje</label>
+    <input type="text" id="message" [(ngModel)]="message" [ngModelOptions]="{standalone: true}" placeholder="Mensaje">
+  </div>
 
   <button type="submit">Create Clothe</button>
 </form>
+@if (showNotification) {
+<app-toast-notification [message]="notificationMessage" [duration]="5000" [imagePosition]="'side'"
+  [isSuccess]="false"></app-toast-notification>
+}

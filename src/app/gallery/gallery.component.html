@@ -3,17 +3,11 @@
   <section class="gallery">
     <ul>
       @for (clothe of clothes; track $index) {
-      <li class="clothe-item">
-        <app-image-wrapper [clothe]="clothe" (changeImage)="changeImage($index, $event)"
-          (setActiveImage)="setActiveImage($index, $event)"></app-image-wrapper>
-        <a (click)="goToProduct(clothe)">
-          <section class="clothe-details">
-            <h2>{{clothe.getName()}}</h2>
-            <p>Size: {{ getSizesForProduct(clothe.getCode()).join(', ') }}</p>
-            <p>${{clothe.getPrice()}}</p>
-          </section>
-        </a>
-      </li>
+      <app-clothe-item [clothe]="clothe" [selectedClothe]="selectedClothe"
+        (changeImage)="changeImage($index, $event.change)"
+        (setActiveImage)="setActiveImage($index, $event.imageIndex)" (goToProduct)="goToProduct($event)"
+        (viewProduct)="viewProduct($event)">
+      </app-clothe-item>
       }
     </ul>
   </section>

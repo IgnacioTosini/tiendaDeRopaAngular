@@ -3,18 +3,23 @@ import { Router } from '@angular/router';
 import { Component, EventEmitter, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ClothesStock } from '../models/clothesStock.model';
+import { slideDownUp } from '../shared/animations/animation';
+import { ToastNotificationComponent } from '../toast-notification/toast-notification.component';
 
 @Component({
   selector: 'app-search',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, ToastNotificationComponent],
+  animations: [slideDownUp],
   templateUrl: './search.component.html',
-  styleUrl: './search.component.scss'
+  styleUrls: ['./search.component.scss']
 })
 export class SearchComponent {
   @Output() search = new EventEmitter<string>();
   searchQuery: string = '';
   searchResults: ClothesStock[] = [];
+  showNotification: boolean = false;
+  notificationMessage: string = '';
 
   constructor(private router: Router, private clothesStockService: ClothesStockService) { }
 
@@ -23,8 +28,8 @@ export class SearchComponent {
   async searchClothes() {
     if (this.searchQuery) {
       try {
-        const clothes = await this.clothesStockService.findAll().toPromise();
-        this.searchResults = clothes?.filter(clothe =>
+        const result = await this.clothesStockService.findAll(0, 10).toPromise();
+        this.searchResults = result?.clothes.filter(clothe =>
           clothe.getName().toLowerCase().includes(this.searchQuery.toLowerCase())
         ) || [];
       } catch (error) {
@@ -46,5 +51,16 @@ export class SearchComponent {
 
   goToProduct(clothe: ClothesStock) {
     this.router.navigate(['/product', clothe.getCode()]);
+  }
+
+  preventNumberInput(event: any) {
+    const pattern = /[0-9\.\ ]/;
+    let inputChar = String.fromCharCode(event.charCode);
+    if (pattern.test(inputChar)) {
+      this.showNotification = true;
+      this.notificationMessage = 'Por favor, ingrese solo letras en este campo.';
+      setTimeout(() => this.showNotification = false, 5000);
+      event.preventDefault();
+    }
   }
 }

@@ -11,14 +11,16 @@
     list-style: none;
   }
 
-  a {
+  a,
+  p {
+    cursor: pointer;
     text-decoration: none;
     color: #ffffff;
 
     &:hover {
-      color: #d47c00;
+      color: $warning-button-background;
       font-weight: 800;
-      filter: drop-shadow(0 0 1rem #d47c00) saturate(150%) contrast(120%);
+      filter: drop-shadow(0 0 1rem $warning-button-background) saturate(150%) contrast(120%);
     }
   }
 
@@ -31,21 +33,28 @@
     .menu-item {
       list-style: none;
       margin-left: 0.625rem;
-      color: #333;
+      color: $primary-text-color;
       font-weight: 600;
       font-size: 1.125rem;
       color: #ffffff;
 
       &:hover {
-        color: #d47c00;
+        color: $warning-button-background;
         font-weight: 800;
 
         .generic-list {
           visibility: visible;
           opacity: 1;
+          height: auto; // Ajusta la altura automáticamente
           transform: scaleY(1);
           border-top: 0.1rem solid #ffffff;
           z-index: 99;
+        }
+
+        .panelDeControl{
+          a{
+            font-size: 1.2rem
+          }
         }
       }
 
@@ -55,6 +64,7 @@
         gap: 0.625rem;
         visibility: hidden;
         opacity: 0;
+        height: 0; // Ocupa 0 cuando no está visible
         transform: scaleY(0);
         transform-origin: top;
         transition: all 0.3s ease;
@@ -63,7 +73,7 @@
         left: 0;
         right: 0;
         color: #ffffff;
-        background: $secondary-background;
+        background: $secondary-background-gradient;
         padding: 1rem;
         border-radius: 0 0 1rem 1rem;
 

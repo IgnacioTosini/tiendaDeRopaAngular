@@ -1,65 +1,106 @@
 import { Component, Input } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { Tax } from '../models/tax.model';
 import { TaxService } from '../services/tax.service';
-import { FormGroup } from '@angular/forms';
 import { UserService } from '../services/user.service';
+import { ToastNotificationComponent } from '../toast-notification/toast-notification.component';
+import { PaginationComponent } from '../pagination/pagination.component';
+import { Pagination } from '../models/pagination.model';
 
 @Component({
   selector: 'app-invoice',
   standalone: true,
-  imports: [],
+  imports: [FormsModule, ToastNotificationComponent, PaginationComponent],
   templateUrl: './invoice.component.html',
-  styleUrl: './invoice.component.scss'
+  styleUrls: ['./invoice.component.scss']
 })
 export class InvoiceComponent {
   @Input() invoices: Tax[] = [];
-  @Input() userForm: FormGroup = new FormGroup({});
+  invoiceCode: string = '';
+  invoiceDate: Date = new Date();
+  showNotification: boolean = false;
+  typeOfNotification: boolean = false;
+  notificationMessage: string = '';
+  pagination: Pagination | null = null;
+  currentPage: number = 0;
 
   constructor(private taxService: TaxService, private userService: UserService) { }
 
+  private handleNotification(message: string, isSuccess: boolean): void {
+    this.notificationMessage = message;
+    this.typeOfNotification = isSuccess;
+    this.showNotification = true;
+    setTimeout(() => {
+      this.showNotification = false;
+    }, 5000);
+  }
+
   verFacturaPorId(): void {
-    this.taxService.findByCode(this.userForm?.get('invoiceCode')?.value).subscribe(
+    const invoiceCode = this.invoiceCode;
+    console.log(invoiceCode);
+    if (invoiceCode === '') {
+      this.handleNotification('Por favor ingrese un código de factura.', false);
+      return;
+    }
+    this.taxService.findByCode(invoiceCode, this.currentPage, 10).subscribe(
       data => {
         console.log(data);
-        this.invoices = [data];
+        this.invoices = data;
+        this.pagination = data.pagination;
+        this.handleNotification('Factura/s encontrada/s', true);
       },
       error => {
-        console.error(error);
+        if (error.status === 404) {
+          this.handleNotification('No se encontraron facturas con el código proporcionado.', false);
+        } else {
+          console.error(error);
+        }
       }
     );
   }
 
   verTodasLasFacturas(): void {
-    this.taxService.findAllTaxUser(this.userService.getUserId()).subscribe(
+    this.taxService.findAllTaxUser(this.userService.getUserId(), this.currentPage, 10).subscribe(
       data => {
         console.log(data);
-        this.invoices = data;
+        this.invoices = data.invoice;
+        this.pagination = data.pagination;
+        this.handleNotification('Factura/s encontrada/s', true);
       },
       error => {
-        console.error(error);
+        if (error.status === 404) {
+          this.handleNotification('No se encontraron facturas para el usuario.', false);
+        } else {
+          console.error(error);
+        }
       }
     );
   }
 
-  /* startPaymentProcess(): void {
-    const mp = new MercadoPago('YOUR_ACCESS_TOKEN', {
-      locale: 'es-AR'
-    });
+  verTodasLasFacturaPorDate(): void {
+    if (!(this.invoiceDate instanceof Date)) {
+      this.invoiceDate = new Date(this.invoiceDate);
+    }
 
-    const preference = {
-      items: this.invoices.map(invoice => ({
-        title: `Factura ${invoice.getId()}`,
-        unit_price: invoice.getPrice(),
-        quantity: 1,
-      })),
-    };
+    this.taxService.findByDate(this.invoiceDate, this.currentPage, 10).subscribe(
+      data => {
+        console.log(data);
+        this.invoices = data.invoice;
+        this.pagination = data.pagination;
+        this.handleNotification('Factura/s encontrada/s', true);
+      },
+      error => {
+        if (error.status === 404) {
+          this.handleNotification('No se encontraron facturas para la fecha proporcionada.', false);
+        } else {
+          console.error(error);
+        }
+      }
+    );
+  }
 
-    mp.preferences.create(preference)
-      .then(response => {
-        window.open(response.body.init_point, '_blank');
-      })
-      .catch(error => {
-        console.error(error);
-      });
-  } */
+  onPageChange(page: number): void {
+    this.currentPage = page;
+    this.verTodasLasFacturas(); // O llama a la función adecuada según el contexto
+  }
 }

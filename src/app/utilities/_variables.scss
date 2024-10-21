@@ -1,3 +1,24 @@
-$global-background: linear-gradient(to right, #9B8264, #BAA892);
-$secondary-background: linear-gradient(to right, #483924, #786A54);
-$tertiary-background: linear-gradient(to right, #F1B338, #F1D638);
+// Paleta de colores en tonalidades de blanco, perla y azul mate
+$global-background: #014991; // Color sólido blanco
+$secondary-background: #1976D2; // Tono sólido de azul mate
+$secondary-background-gradient: #1976d2a9;
+$tertiary-background: #EAE0C8; // Tono sólido perla
+
+// Variables adicionales para botones y otros elementos
+$primary-button-background: #2196F3; // Azul sólido para botones primarios
+$secondary-button-background: #1E88E5; // Azul sólido para botones secundarios
+$success-button-background: #4FC3F7; // Azul claro para botones de éxito
+$warning-button-background: #FFE082; // Amarillo claro para botones de advertencia
+$error-button-background: #cecece; // Rojo claro para botones de error
+
+// Variables de color de texto
+$primary-text-color: #0D47A1; // Azul oscuro para texto primario
+$primary-text-color-white: #e0e0e0; // Color sólido blanco
+$secondary-text-color: #1976D2; // Azul medio para texto secundario
+$tertiary-text-color: #42A5F5; // Azul claro para texto terciario
+$text-color-black: #000000; // Color sólido negro para texto
+
+// Variables de color de borde y fondo
+$border-color: #BBDEFB; // Azul claro para bordes
+$hover-background: #E3F2FD; // Azul muy claro para fondos de hover
+$background-color-black: #000000; // Color sólido negro para fondos

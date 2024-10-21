@@ -4,24 +4,25 @@ import { Comment } from '../models/comment.model';
 import { CommentService } from '../services/comment.service';
 import { User } from '../models/user.model';
 import { ClothesStock } from '../models/clothesStock.model';
-import { Router } from '@angular/router';
+import { ToastNotificationComponent } from '../toast-notification/toast-notification.component';
 
 @Component({
   selector: 'app-product-review',
   standalone: true,
-  imports: [],
+  imports: [ToastNotificationComponent],
   templateUrl: './product-review.component.html',
   styleUrls: ['./product-review.component.scss']
 })
 export class ProductReviewComponent implements OnInit, OnChanges {
   @Input() reviews: any[] = [];
-  @Input() productId: string = ''; // Asume que cada producto tiene un ID único
-  @Input() userId: number = 0; // Asume que cada usuario tiene un ID único
+  @Input() productId: string = '';
+  @Input() userId: number = 0;
   @Output() reviewAdded = new EventEmitter<Comment>();
   @Input() product!: ClothesStock;
   user: User = new User(0, '', '', '', '', '', [], [], '');
+  notificationMessage: string = '';
 
-  constructor(private commentService: CommentService, private authService: AuthService, private router: Router) { }
+  constructor(private commentService: CommentService, private authService: AuthService) { }
 
   async ngOnInit() {
     this.user = await this.authService.UserData;
@@ -40,7 +41,7 @@ export class ProductReviewComponent implements OnInit, OnChanges {
   }
 
   loadComments() {
-    this.commentService.findComments(this.productId).subscribe({
+    this.commentService.findComments(this.productId, 0, 10).subscribe({
       next: (comments) => {
         if (comments.length > 0) {
           this.reviews = comments;
@@ -59,6 +60,10 @@ export class ProductReviewComponent implements OnInit, OnChanges {
 
     if (!this.userId || !this.productId) {
       console.error('El usuario o el producto no tienen un ID asignado.');
+      this.notificationMessage = 'Necesita estar logueado';
+      setTimeout(() => {
+        this.notificationMessage = '';
+      }, 5000);
       return;
     }
 
@@ -72,18 +77,12 @@ export class ProductReviewComponent implements OnInit, OnChanges {
       next: (comment) => {
         this.reviews.push(comment);
         this.reviewAdded.emit(comment);
-        this.reloadComponent();
+        this.loadComments();
       },
       error: (error) => {
         console.error('Error al agregar comentario:', error);
         console.log(error.error);
       }
-    });
-  }
-
-  reloadComponent() {
-    this.router.navigate([`/product/${this.product.getCode()}`]).then(() => {
-      window.location.reload();
     });
   }
 }

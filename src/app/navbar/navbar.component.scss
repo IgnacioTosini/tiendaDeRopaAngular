@@ -3,7 +3,6 @@
 
 header {
   nav {
-    @include properties-grid(1, 2);
     align-items: start;
     background: $global-background;
 
@@ -64,14 +63,13 @@ header {
         }
 
         .user-dropdown {
-          display: none;
+          display: none; // Cambiar a block para la animación
           position: absolute;
           top: 100%;
           right: 0;
           background: $tertiary-background;
           border-radius: 0.625rem;
           padding: 0.625rem;
-          transition: all 0.3s ease;
           max-height: 15rem;
           overflow-y: auto;
           width: 27rem;
@@ -87,7 +85,7 @@ header {
             li {
               @include properties-flex(row, none, center);
               gap: 0.625rem;
-              border: #000 solid 0rem 0rem 0.1rem 0rem;
+              border: $border-color solid 0rem 0rem 0.1rem 0rem;
 
               img {
                 width: 3.5rem;
@@ -105,7 +103,7 @@ header {
               span {
                 text-align: center;
                 font-size: 1rem;
-                color: #000;
+                color: $primary-text-color;
               }
 
               button {
@@ -132,7 +130,7 @@ header {
             a {
               width: 100%;
               max-width: 10rem;
-              color: #000;
+              color: $primary-text-color;
               font-size: 1rem;
               text-decoration: none;
               cursor: pointer;
@@ -143,7 +141,7 @@ header {
 
               &:hover {
                 color: #ffffff;
-                background-color: #906F48;
+                background-color: $secondary-background;
                 width: calc(100% + 1.25rem); // Ajustar el ancho para incluir el padding
                 position: relative;
                 left: -0.625rem; // Ajustar la posición para alinear con el borde del contenedor

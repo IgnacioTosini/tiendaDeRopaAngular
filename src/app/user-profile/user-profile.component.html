@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<form [formGroup]="userForm" class="userContainer">
+<form [formGroup]="userForm" class="userContainer" (ngSubmit)="updateUserDetails($event)">
   <section class="imageSection">
     <h2>Perfil de Usuario</h2>
     <picture>
@@ -33,13 +33,7 @@
     </section>
     <section>
       <label>Contraseña: </label>
-      <section class="password-field">
-        <input [type]="hidePassword ? 'password' : 'text'" formControlName="password">
-        <button class="customButtonEye" (click)="hidePassword = !hidePassword">
-          <img [src]="hidePassword ? '../../assets/photos/eye.svg' : '../../assets/photos/eye-off.svg'"
-            alt="Mostrar/Ocultar Contraseña">
-        </button>
-      </section>
+      <app-password-field [control]="passwordControl"></app-password-field>
       @if (userForm.get('password')?.invalid && userForm.get('password')?.touched) {
       @if (userForm.get('password')?.errors?.['required']) {
       <small class="text-danger">Contraseña es requerida</small>
@@ -49,7 +43,11 @@
       }
       }
     </section>
-    <button class="customButton" (click)="updateUserDetails()">Actualizar Detalles</button>
+    <button class="customButton" type="submit" [disabled]="userForm.pristine">Actualizar Detalles</button>
   </section>
+  <a href="/viewInvoicesPage">Ver Facturas</a>
 </form>
-<app-invoice [invoices]="invoices" [userForm]="userForm"></app-invoice>
+@if (showNotification) {
+<app-toast-notification [message]="notificationMessage" [duration]="5000" [imagePosition]="'side'"
+  [isSuccess]="false"></app-toast-notification>
+}

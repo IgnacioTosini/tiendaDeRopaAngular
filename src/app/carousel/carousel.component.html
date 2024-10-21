@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <section class="carousel">
   @for (item of clothes; track $index) {
-  <img [src]="item?.getImages()?.[0]?.getUrl()" [class.active]="$index === currentImageIndex"
-    [class.prev]="$index === (currentImageIndex - 1 + clothes.length) % clothes.length"
-    [class.next]="$index === (currentImageIndex + 1) % clothes.length" [alt]="item.getName()"
-    (click)="handleImageClick($index)" class="fade-in">
+    <img [src]="item?.getImages()?.[0]?.getUrl()" [class.active]="$index === currentImageIndex"
+      [class.prev]="$index === (currentImageIndex - 1 + clothes.length) % clothes.length"
+      [class.next]="$index === (currentImageIndex + 1) % clothes.length" [alt]="item.getName()"
+      (click)="handleImageClick($index)" (click)="goToProduct(item)" class="fade-in">
   }
   <button class="prev" (click)="previousImage()">&#10094;</button>
   <button class="next" (click)="nextImage()">&#10095;</button>

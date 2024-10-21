@@ -1,31 +1,50 @@
 <!DOCTYPE html>
-<section class="viewInvoices">
-  <h3>Facturas</h3>
-  <button (click)="verTodasLasFacturas()">Ver todas las facturas</button>
-  <button (click)="verFacturaPorId()">Ver factura por codigo:</button>
-  <input type="text" formControlName="invoiceCode">
-  <ul>
+<section class="view-invoices">
+  <section class="actions">
+    <h3>Facturas</h3>
+    <button (click)="verTodasLasFacturas()">Ver todas las facturas</button>
+    <section class="input-group">
+      <button (click)="verFacturaPorId()">Ver factura por código:</button>
+      <input type="text" [(ngModel)]="invoiceCode" placeholder="Ingrese el código">
+    </section>
+    <section class="input-group">
+      <button (click)="verTodasLasFacturaPorDate()">Ver factura por fecha:</button>
+      <input type="date" [(ngModel)]="invoiceDate">
+    </section>
+  </section>
+  <section class="pagination">
+  <ul class="invoice-list">
     @for (invoice of invoices; track $index) {
-    <li>
-      <p>ID: {{ invoice.getId() }}</p>
-      <p>Precio: {{ invoice.getPrice() }}</p>
-      <p>Código: {{ invoice.getCode() }}</p>
-      <p>Dirección: {{ invoice.getAdress() }}</p>
-      <p>Costo de envío: {{ invoice.gettravelCost() }}</p>
-      <p>Fecha: {{ invoice.getDate() }}</p>
+    <li class="invoice">
+      <section class="invoice-details">
+        <p><strong>ID:</strong> {{ invoice.getId() }}</p>
+        <p><strong>Precio:</strong> {{ invoice.getPrice() }}</p>
+        <p><strong>Código:</strong> {{ invoice.getCode() }}</p>
+        <p><strong>Dirección:</strong> {{ invoice.getAdress() }}</p>
+        <p><strong>Costo de envío:</strong> {{ invoice.gettravelCost() }}</p>
+        <p><strong>Fecha:</strong> {{ invoice.getDate() }}</p>
+      </section>
       <h4>Ropa vendida:</h4>
-      <ul>
+      <ul class="clothes-list">
         @for (clothe of invoice.getClothes(); track $index) {
         <li>
-          <p>Nombre: {{ clothe.getName() }}</p>
-          <p>Precio: {{ clothe.getPrice() }}</p>
-          <p>Código: {{ clothe.getCode() }}</p>
-          <p>Talla: {{ clothe.getSize() }}</p>
+          <section class="clothes-details">
+            <p><strong>Nombre:</strong> {{ clothe.getName() }}</p>
+            <p><strong>Precio:</strong> {{ clothe.getPrice() }}</p>
+            <p><strong>Código:</strong> {{ clothe.getCode() }}</p>
+            <p><strong>Talla:</strong> {{ clothe.getSize() }}</p>
+          </section>
         </li>
         }
       </ul>
     </li>
     }
   </ul>
-  <!-- <button (click)="startPaymentProcess()">Pagar con MercadoPago</button> -->
+  <app-pagination [pagination]="pagination" (previousPage)="onPageChange(currentPage - 1)"
+    (nextPage)="onPageChange(currentPage + 1)"></app-pagination>
+  </section>
 </section>
+@if (showNotification) {
+<app-toast-notification [message]="notificationMessage" [duration]="5000" [imagePosition]="'side'"
+  [isSuccess]="typeOfNotification"></app-toast-notification>
+}

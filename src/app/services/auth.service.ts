@@ -53,20 +53,22 @@ export class AuthService {
     });
   }
 
-  async isAdmin(): Promise<boolean> {
-    const role = await this.userService.getUserRole();
-    if (role === 'ROLE_ADMIN') {
-      this.isAdminIn = true;
-      return true;
-    } else {
+  async isAdmin(): Promise<Boolean> {
+    try {
+      const role = await this.userService.getUserRole();
+      this.isAdminIn = role === 'ROLE_ADMIN';
+      return this.isAdminIn;
+    } catch (error) {
+      console.error('Error fetching user role:', error);
       this.isAdminIn = false;
       return false;
     }
   }
 
-  get UserLogged(): boolean {
-    const log = this.localStorageService.getItem("log");
-    return log === 'true';
+  get UserLogged() {
+    let log = false;
+    log = this.localStorageService.getItem("log") === 'true';
+    return log;
   }
 
   get UserData(): Promise<User> {
@@ -75,7 +77,7 @@ export class AuthService {
       setTimeout(() => {
         let token = this.localStorageService.getItem("token");
         if (!token) {
-          console.info('User ID not found in local storage');
+          reject('User ID not found in local storage');
         } else {
           this.userService.getUserById(user.id).subscribe((user: any) => {
             if (user) {

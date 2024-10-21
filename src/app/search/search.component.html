@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <section class="search">
   <input type="text" [(ngModel)]="searchQuery" (input)="searchClothes()" (blur)="clearSearch()"
-    placeholder="Buscar Producto...">
+    (keypress)="preventNumberInput($event)" placeholder="Buscar Producto...">
   @if (searchResults.length > 0) {
-  <section class="search-results" (click)="$event.stopPropagation()">
+  <section class="search-results" (click)="$event.stopPropagation()" [@slideDownUp]>
     <ul>
       @for (item of searchResults; track $index) {
       <li>
@@ -15,8 +15,13 @@
     </ul>
   </section>
   } @else if(searchResults.length === 0 && searchQuery.length > 0){
-  <section class="search-results" (click)="$event.stopPropagation()">
+  <section class="search-results" (click)="$event.stopPropagation()" [@slideDownUp]>
     <p>No se encontraron resultados</p>
   </section>
   }
 </section>
+
+@if (showNotification) {
+<app-toast-notification [message]="notificationMessage" [duration]="5000" [imageUrl]="" [imagePosition]="'side'"
+  [isSuccess]="false"></app-toast-notification>
+}

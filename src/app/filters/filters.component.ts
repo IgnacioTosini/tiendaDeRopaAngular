@@ -1,11 +1,12 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ClothesStock } from '../models/clothesStock.model';
+import { ToastNotificationComponent } from '../toast-notification/toast-notification.component';
 
 @Component({
   selector: 'app-filters',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, ToastNotificationComponent],
   templateUrl: './filters.component.html',
   styleUrls: ['./filters.component.scss']
 })
@@ -20,6 +21,9 @@ export class FiltersComponent {
   @Output() filteredClothes = new EventEmitter<ClothesStock[]>();
   @Output() sortOrderChanged = new EventEmitter<'name' | 'price' | 'price-desc'>();
   @Output() filtersChanged = new EventEmitter<void>();
+
+  showNotification: boolean = false;
+  notificationMessage: string = '';
 
   private currentSortOrder: 'name' | 'price' | 'price-desc' | null = null;
 
@@ -39,7 +43,13 @@ export class FiltersComponent {
     }
 
     if (this.typeFilter && this.typeFilter !== 'Todas las Categorias') {
-      filtered = filtered.filter(clothe => clothe.getSpecificType() === this.typeFilter);
+      if (this.genericTypes.includes(this.typeFilter)) {
+        // Filtrar por genericType y todos sus specificTypes
+        filtered = filtered.filter(clothe => clothe.getGenericType() === this.typeFilter || this.groupedTypes[this.typeFilter].includes(clothe.getSpecificType()));
+      } else {
+        // Filtrar por specificType
+        filtered = filtered.filter(clothe => clothe.getSpecificType() === this.typeFilter);
+      }
     }
 
     if (this.currentSortOrder) {
@@ -97,6 +107,9 @@ export class FiltersComponent {
     const pattern = /[0-9\.\ ]/;
     let inputChar = String.fromCharCode(event.charCode);
     if (pattern.test(inputChar)) {
+      this.showNotification = true;
+      this.notificationMessage = 'Por favor, ingrese solo letras en este campo.';
+      setTimeout(() => this.showNotification = false, 5000);
       event.preventDefault();
     }
   }
@@ -105,6 +118,9 @@ export class FiltersComponent {
     const maxLength = 5;
     let inputField = event.target;
     if (inputField.value.length >= maxLength) {
+      this.showNotification = true;
+      this.notificationMessage = 'El número máximo de caracteres permitidos es 5.';
+      setTimeout(() => this.showNotification = false, 5000);
       event.preventDefault();
     }
   }

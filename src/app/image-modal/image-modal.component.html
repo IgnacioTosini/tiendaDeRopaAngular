@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<section class="modalBackground" (click)="close()">
+  <button class="closeButton" (click)="close()">×</button>
+  <section class="modalContent" (click)="$event.stopPropagation()">
+    <img [src]="smallImages[currentIndex]" class="mainImage" alt="Main Image">
+    <section class="navigation">
+      <button class="navButton" (click)="previousImage()" [disabled]="currentIndex === 0">←</button>
+      <section class="smallImages">
+        @for (image of smallImages; track $index) {
+        <img [src]="image" alt="Small Image" [class.selected]="$index === currentIndex" (click)="currentIndex = $index">
+        }
+      </section>
+      <button class="navButton" (click)="nextImage()" [disabled]="currentIndex === smallImages.length - 1">→</button>
+    </section>
+  </section>
+</section>

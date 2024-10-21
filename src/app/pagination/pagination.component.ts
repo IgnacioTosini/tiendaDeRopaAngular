@@ -1,4 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Pagination } from '../models/pagination.model';
 
 @Component({
   selector: 'app-pagination',
@@ -7,25 +8,19 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
   styleUrls: ['./pagination.component.scss']
 })
 export class PaginationComponent {
-  @Input() pageIndex: number = 0;
-  @Input() pageSize: number = 0;
-  @Input() totalItems: number = 0;
+  @Input() pagination: Pagination | null = null;
 
   @Output() previousPage = new EventEmitter<void>();
   @Output() nextPage = new EventEmitter<void>();
 
-  get totalPages(): number {
-    return Math.ceil(this.totalItems / this.pageSize);
-  }
-
   onPreviousPage() {
-    if (this.pageIndex > 0) {
+    if (this.pagination && this.pagination.getNumber() > 0) {
       this.previousPage.emit();
     }
   }
 
   onNextPage() {
-    if ((this.pageIndex + 1) * this.pageSize < this.totalItems) {
+    if (this.pagination && !this.pagination.isLast()) {
       this.nextPage.emit();
     }
   }

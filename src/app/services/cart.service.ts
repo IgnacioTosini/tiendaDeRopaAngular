@@ -102,8 +102,8 @@ export class CartService {
     if (storedCart) {
       let itemsJson = JSON.parse(storedCart);
       for (let item of itemsJson) {
-        this.clothesStockService.findByCode(item.productCode).subscribe(clothes => {
-          let product = clothes[0];
+        this.clothesStockService.findByCode(item.productCode, 0, 1).subscribe((clothes):any => {
+          let product = clothes.clothes[0];
           this.items.push({ product: product, quantity: item.quantity });
         });
       }

@@ -66,11 +66,6 @@
     <label for="image">Image:</label>
     <input id="image" type="file" (change)="onFileChange($event)">
     <img class="preview" [src]='file' [alt]="file">
-    @if (userForm.controls['image'].invalid && userForm.controls['image'].touched) {
-    <section>
-      <small class="text-danger">Image is required</small>
-    </section>
-    }
   </section>
 
   <section>
@@ -89,3 +84,8 @@
   </section>
   <button type="submit">Create User</button>
 </form>
+
+@if (showNotification) {
+<app-toast-notification [message]="notificationMessage" [duration]="5000" [imagePosition]="'side'"
+  [isSuccess]="false"></app-toast-notification>
+}

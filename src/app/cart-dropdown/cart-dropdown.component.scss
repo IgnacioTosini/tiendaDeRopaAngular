@@ -117,6 +117,13 @@ picture {
         &:hover {
           background-color: #db9b1a;
         }
+
+        .name{
+          width: 100%;
+          max-height: 3rem;
+          overflow: auto;
+          scrollbar-width: none;
+        }
       }
     }
   }

@@ -16,7 +16,7 @@
   </section>
   <section>
     <label for="password">Password:</label>
-    <input id="password" type="password" formControlName="password">
+    <app-password-field [control]="passwordControl"></app-password-field>
     @if (loginForm.controls['password'].errors?.['required'] && loginForm.controls['password'].touched) {
     <small>
       Password is required
@@ -24,4 +24,9 @@
     }
   </section>
   <button type="submit">Login</button>
+
+  @if (showNotification) {
+  <app-toast-notification [message]="notificationMessage" [duration]="notificationDuration" [imagePosition]="'side'"
+    [isSuccess]="false"></app-toast-notification>
+  }
 </form>

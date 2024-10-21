@@ -1,0 +1,59 @@
+@import '../utilities/mixins';
+@import '../utilities/variables';
+
+.cart-actions {
+  @include properties-flex(row, space-between, flex-end);
+  position: relative;
+
+  section {
+    @include properties-flex(column, center, center);
+  }
+
+  span {
+    color: #ffffff;
+    font-size: 1.25rem;
+    margin: 1.625rem 0rem;
+    border-bottom: 0.0625rem solid #ddd;
+  }
+
+  button {
+    padding: 0.625rem 1.25rem;
+    border: none;
+    background: #007bff;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.3s;
+    border-radius: 0.3125rem;
+    box-shadow: 0 0.125rem 0.3125rem rgba(0, 0, 0, 0.1);
+    margin-bottom: 0.625rem;
+
+    &:hover {
+      background: #0056b3;
+    }
+  }
+
+  .pays-actions {
+    @include properties-flex(column, center, center);
+
+    .submenu {
+      @include properties-flex(row, center, flex-start);
+      gap: 1rem;
+      width: 100%;
+
+      button {
+        padding: 0.625rem 1.25rem;
+        border: none;
+        background: #007bff;
+        color: #fff;
+        cursor: pointer;
+        transition: background 0.3s;
+        border-radius: 0.3125rem;
+        box-shadow: 0 0.125rem 0.3125rem rgba(0, 0, 0, 0.1);
+
+        &:hover {
+          background: #0056b3;
+        }
+      }
+    }
+  }
+}

@@ -1,24 +1,24 @@
 <!DOCTYPE html>
-<picture>
+<picture (mouseenter)="showCartDropdown()" (mouseleave)="hideCartDropdown()">
   <a href="cart-detail">
     <img src="../../assets/photos/shopping-cart.svg" alt="">
   </a>
-  <section class="cart-dropdown">
+  @if (isCartDropdownVisible) {
+  <section class="cart-dropdown" [@slideDownUp]>
     <ul>
       @if (cartItems.length > 0) {
       @for (item of cartItems; track $index) {
-      <li class="productCart">
-        <img [src]="item.product.getImages()[0]?.url" [alt]="item.product.getName()"
-          (click)="goToProduct(item.product)">
-        <span>{{ item.product.getName() }}</span>
+      <li class="productCart" (click)="goToProduct(item.product)">
+        <img [src]="item.product.getImages()[0]?.url" [alt]="item.product.getName()">
+        <span class="name">{{ item.product.getName() }}</span>
         <span>
           Tamaño:
           {{item.product.getSize().toUpperCase()}}
         </span>
-        <span>Precio total: ${{ getTotalPriceForProduct(item.product, item.quantity) }}</span>
+        <span>Precio: ${{ getTotalPriceForProduct(item.product, item.quantity) }}</span>
         <span>Cantidad: {{ item.quantity }}</span>
         <button (click)="removeItem(item)">
-          <img src="../../assets/photos/trash.svg" alt="Thash Icon">
+          <img src="../../assets/photos/trash.svg" alt="Trash Icon">
         </button>
       </li>
       }
@@ -29,4 +29,5 @@
       }
     </ul>
   </section>
+  }
 </picture>

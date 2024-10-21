@@ -8,36 +8,30 @@
       <app-search (search)="searchClothes($event)"></app-search>
       <section class="icons">
         <app-cart-dropdown [cartItems]="cartItems" [isLogging]="isLogging"></app-cart-dropdown>
-        <picture>
+        <picture (mouseenter)="showUserDropdown()" (mouseleave)="hideUserDropdown()">
           @if (!isLogging) {
           <img src="../../assets/photos/user.svg" alt="">
           }@else {
           <img [src]="user.getImage()" class="userImage" alt="">
           }
-          <section class="cart-dropdown user-dropdown">
+          @if (isUserDropdownVisible) {
+          <section class="cart-dropdown user-dropdown" [@slideDownUp]>
             <ul class="subMenuUser">
               @if (!isLogging) {
               <li><a href="/create-user">Crear usuario</a></li>
               <li><a href="/login">Loguearse</a></li>
               }
               @else {
-              @if (isAdminIn) {
-              <li><a href="/admin">Panel de Control</a></li>
               <li><a href="/user-profile">Perfil de Usuario</a></li>
               <li><a href="/favorites">Favoritos</a></li>
               <li><a (click)="logOut()">Cerrar Sesión</a></li>
-              } @else {
-              <li><a href="/user-profile">Perfil de Usuario</a></li>
-              <li><a href="/favorites">Favoritos</a></li>
-              <li><a (click)="logOut()">Cerrar Sesión</a></li>
-              }
               }
             </ul>
           </section>
+        }
         </picture>
       </section>
     </section>
-    <app-drop-down-menu-products [groupedClothes]="groupedClothes" [isLogging]="isLogging"
-      [isAdminIn]="isAdminIn"></app-drop-down-menu-products>
+    <app-drop-down-menu-products [groupedClothes]="groupedClothes"></app-drop-down-menu-products>
   </nav>
 </header>

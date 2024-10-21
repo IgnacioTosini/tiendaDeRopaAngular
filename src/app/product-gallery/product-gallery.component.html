@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<section class="uniqueProductGalleryImage">
+  <section class="smallImages">
+    <picture class="smallImage">
+      @for (smallImage of smallImages; track $index) {
+      <img [src]="smallImage" alt="" (click)="changeMainImage(smallImage)" [class.selected]="smallImage === mainImage"
+        [class.notSelected]="smallImage !== mainImage">
+      }
+    </picture>
+  </section>
+  <section class="mainImage" #mainImageDiv (click)="openImageModal()">
+    <img [src]="mainImage" [alt]="productName">
+  </section>
+</section>

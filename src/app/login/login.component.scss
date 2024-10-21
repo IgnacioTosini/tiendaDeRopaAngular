@@ -1,30 +1,41 @@
 @import '../utilities/mixins';
+@import '../utilities/variables';
 
 form {
   @include properties-flex(column, center, center);
   padding: 2rem;
-  border: 1px solid #ccc;
+  border: 1px solid $border-color;
   border-radius: 0.5rem;
   max-width: 400px;
   margin: 0 auto;
+  background-color: $tertiary-background;
 
   section {
-    @include properties-flex(column, center, none);
+    @include properties-flex(column, flex-start, none);
     margin-bottom: 1rem;
     width: 100%;
 
     label {
       margin-bottom: 0.5rem;
+      color: $primary-text-color;
+      font-weight: bold;
     }
 
     input {
       padding: 0.5rem;
-      border: 1px solid #ccc;
+      border: 1px solid $border-color;
       border-radius: 0.25rem;
+      width: 100%;
+      transition: border-color 0.3s ease;
+
+      &:focus {
+        border-color: $secondary-background;
+        outline: none;
+      }
     }
 
-    section {
-      color: red;
+    small {
+      color: $error-button-background;
       margin-top: 0.25rem;
     }
   }
@@ -33,13 +44,13 @@ form {
     padding: 0.5rem 1rem;
     border: none;
     border-radius: 0.25rem;
-    background-color: #007bff;
-    color: white;
+    background-color: $primary-button-background;
+    color: $primary-text-color-white;
     cursor: pointer;
     transition: background-color 0.3s ease;
 
     &:hover {
-      background-color: #0056b3;
+      background-color: $secondary-button-background;
     }
   }
 }

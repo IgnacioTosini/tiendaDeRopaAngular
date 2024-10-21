@@ -21,9 +21,10 @@ export class CommentService {
     return this.http.put(`${this.baseUrl}/delete/${id}`, this.userService.getUserToken(''));
   }
 
-  findComments(idClothe: string): Observable<Comment[]> {
-    return this.http.get<any>(`${this.baseUrl}/find/${idClothe}`, this.userService.getUserToken('')).pipe(
+  findComments(idClothe: string, page: number, cant: number): Observable<Comment[]> {
+    return this.http.get<any>(`${this.baseUrl}/find/${idClothe}?page=${page}&cant=${cant}`, this.userService.getUserToken('')).pipe(
       map(response => {
+        console.log('Response:', response);
         if (response.body) {
           const comments = response.body;
           return comments.map((item: any) => ({

@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<section class="container">
-  <app-filters [clothes]="clothes" [nameFilter]="nameFilter" [minPriceFilter]="minPriceFilter" [maxPriceFilter]="maxPriceFilter"
-      [typeFilter]="typeFilter" [genericTypes]="genericTypes" [groupedTypes]="groupedTypes"
-      (filteredClothes)="handleFilteredClothes($event)" (sortOrderChanged)="setSortOrder($event)">
+<section class="container" #gallery>
+  <app-filters [clothes]="clothes" [nameFilter]="nameFilter" [minPriceFilter]="minPriceFilter"
+    [maxPriceFilter]="maxPriceFilter" [typeFilter]="typeFilter" [genericTypes]="genericTypes"
+    [groupedTypes]="groupedTypes" (filteredClothes)="handleFilteredClothes($event)"
+    (sortOrderChanged)="setSortOrder($event)">
   </app-filters>
 
   <section class="filters-gallery-container">
@@ -10,28 +11,24 @@
       [typeFilter]="typeFilter" [sortOrder]="sortOrder" (resetFilterEvent)="handleResetFilter($event)">
     </app-active-filters>
     <section class="gallery">
-      <ul>
-        @if (currentPageItems.length > 0) {
-        @for (clothe of currentPageItems; track $index) {
-        <li class="clothe-item">
-          <app-image-wrapper [clothe]="clothe" (changeImage)="changeImage($index, $event)"
-            (setActiveImage)="setActiveImage($index, $event)"></app-image-wrapper>
-          <a (click)="goToProduct(clothe)">
-            <section class="clothe-details">
-              <h2>{{clothe.getName()}}</h2>
-              <p>Size: {{ getSizesForProduct(clothe.getCode()).split(', ').join(', ') }}</p>
-              <p>${{clothe.getPrice()}}</p>
-            </section>
-          </a>
-        </li>
-        }
-        } @else {
-        <section class="empty-message">No hay productos para esos filtros.</section>
-        }
-      </ul>
-      <app-pagination [pageIndex]="pageIndex" [pageSize]="pageSize" [totalItems]="filteredClothes.length"
-        (previousPage)="previousPage()" (nextPage)="nextPage()">
-      </app-pagination>
+      <section class="gallery-content">
+        <ul>
+          @if (filteredClothes.length > 0) {
+          @for (clothe of filteredClothes; track $index) {
+          <app-clothe-item [clothe]="clothe" [isAdminMode]="isAdminMode" [showSubMenu]="showSubMenu"
+            [selectedClothe]="selectedClothe" (displayShowSubMenu)="displayShowSubMenu($event)"
+            (changeImage)="changeImage($index, $event.change)"
+            (setActiveImage)="setActiveImage($index, $event.imageIndex)" (goToProduct)="goToProduct($event)"
+            (viewProduct)="viewProduct($event)" (modifyProduct)="modifyProduct($event)">
+          </app-clothe-item>
+          }
+          } @else {
+          <section class="empty-message">No hay productos para esos filtros.</section>
+          }
+        </ul>
+      </section>
+      <app-pagination [pagination]="pagination" (previousPage)="onPageChange(currentPage - 1)"
+        (nextPage)="onPageChange(currentPage + 1)"></app-pagination>
     </section>
   </section>
 </section>

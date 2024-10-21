@@ -1,22 +1,26 @@
-import { Component, ViewChild, OnInit } from '@angular/core';
+import { Component, ViewChild, OnInit, Input, Output, EventEmitter, HostListener, ElementRef } from '@angular/core';
 import { ClothesStockService } from './../services/clothes-stock.service';
 import { ClothesStock } from '../models/clothesStock.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { ImageWrapperComponent } from '../image-wrapper/image-wrapper.component';
 import { FiltersComponent } from '../filters/filters.component';
 import { ActiveFiltersComponent } from '../active-filters/active-filters.component';
 import { PaginationComponent } from '../pagination/pagination.component';
+import { ToastNotificationComponent } from '../toast-notification/toast-notification.component';
+import { ClotheItemComponent } from '../clothe-item/clothe-item.component';
+import { Pagination } from '../models/pagination.model';
 
 @Component({
   selector: 'app-clothes-gallery',
   standalone: true,
-  imports: [FormsModule, ImageWrapperComponent, FiltersComponent, ActiveFiltersComponent, PaginationComponent],
+  imports: [FormsModule, FiltersComponent, ActiveFiltersComponent, PaginationComponent, ToastNotificationComponent, ClotheItemComponent],
   templateUrl: './clothes-gallery.component.html',
   styleUrls: ['./clothes-gallery.component.scss']
 })
 export class ClothesGalleryComponent implements OnInit {
   @ViewChild(FiltersComponent) filtersComponent!: FiltersComponent;
+  @Input() isAdminMode: boolean = false;
+  @Output() productSelected = new EventEmitter<ClothesStock>();
 
   clothes: ClothesStock[] = [];
   filteredClothes: ClothesStock[] = [];
@@ -27,48 +31,85 @@ export class ClothesGalleryComponent implements OnInit {
   typeFilter: string = '';
   groupedTypes: { [key: string]: string[] } = {};
   genericTypes: string[] = [];
+  currentPage: number = 0;
   pageSize: number = 8;
-  pageIndex: number = 0;
+  pagination: Pagination | null = null;
+  selectedClothe: ClothesStock | null = null;
+  showSubMenu: boolean = false;
 
-  constructor(private ClothesStockService: ClothesStockService, private router: Router, private route: ActivatedRoute) { }
+  @ViewChild('gallery') gallery!: ElementRef;
+
+  constructor(private clothesStockService: ClothesStockService, private router: Router, private route: ActivatedRoute) { }
 
   async ngOnInit() {
     await this.loadClothes();
     this.route.params.subscribe(params => {
-      this.typeFilter = params['type'];
+      this.typeFilter = params['type'] || 'Todas las Categorias';
       this.applyFilters();
     });
     this.filtersComponent.filtersChanged.subscribe(() => this.handleFiltersChanged());
   }
 
-  async loadClothes() {
-    await this.ClothesStockService.findAll().toPromise();
-    this.clothes = this.ClothesStockService.clothesArray;
-    this.groupedTypes = this.clothes.reduce((acc: { [key: string]: string[] }, curr) => {
-      if (!acc[curr.getGenericType()]) {
-        acc[curr.getGenericType()] = [];
+  async loadClothes(page: number = 0) {
+    try {
+      const response = await this.clothesStockService.findAll(page, this.pageSize).toPromise();
+      if (response) {
+        this.clothes = this.groupClothesByCode(response.clothes);
+        this.pagination = response.pagination;
       }
-      acc[curr.getGenericType()].push(curr.getSpecificType());
-      return acc;
-    }, {});
+      this.groupedTypes = this.clothes.reduce((acc: { [key: string]: string[] }, curr) => {
+        if (!acc[curr.getGenericType()]) {
+          acc[curr.getGenericType()] = [];
+        }
+        acc[curr.getGenericType()].push(curr.getSpecificType());
+        return acc;
+      }, {});
 
-    for (let genericType in this.groupedTypes) {
-      this.groupedTypes[genericType] = Array.from(new Set(this.groupedTypes[genericType]));
+      for (let genericType in this.groupedTypes) {
+        this.groupedTypes[genericType] = Array.from(new Set(this.groupedTypes[genericType]));
+      }
+
+      this.genericTypes = Object.keys(this.groupedTypes);
+
+      this.filtersComponent.clothes = this.clothes;
+      this.applyFilters();
+    } catch (error) {
+      console.error('Error loading clothes:', error);
     }
+  }
 
-    this.genericTypes = Object.keys(this.groupedTypes);
+  groupClothesByCode(clothes: ClothesStock[]): ClothesStock[] {
+    const grouped: { [key: string]: ClothesStock } = {};
 
-    this.filtersComponent.clothes = this.clothes;
-    this.applyFilters();
+    clothes.forEach(clothe => {
+      const code = clothe.getCode();
+      if (!grouped[code]) {
+        grouped[code] = clothe;
+      } else {
+        const existingClothe = grouped[code];
+        const newSize = clothe.getSize();
+        const existingSizes = existingClothe.getSize().split(', ');
+        if (!existingSizes.includes(newSize)) {
+          existingClothe.setSize(existingSizes.concat(newSize).join(', '));
+        }
+      }
+    });
+
+    return Object.values(grouped);
+  }
+
+  onPageChange(page: number) {
+    this.currentPage = page;
+    this.loadClothes(page);
   }
 
   applyFilters() {
+    this.filtersComponent.typeFilter = this.typeFilter;
     this.filtersComponent.applyFilters();
   }
 
   handleFilteredClothes(filtered: ClothesStock[]) {
     this.filteredClothes = filtered;
-    this.adjustPageIndex();
   }
 
   setSortOrder(order: 'name' | 'price' | 'price-desc') {
@@ -76,34 +117,25 @@ export class ClothesGalleryComponent implements OnInit {
     this.filtersComponent.setSortOrder(order);
   }
 
-  adjustPageIndex() {
-    const start = this.pageIndex * this.pageSize;
-    const end = start + this.pageSize;
-    if (this.filteredClothes.slice(start, end).length === 0) {
-      this.pageIndex = 0;
-    }
-  }
-
   goToProduct(clothe: ClothesStock) {
-    this.router.navigate(['/product', clothe.getCode()]);
-  }
-
-  get currentPageItems(): ClothesStock[] {
-    const start = this.pageIndex * this.pageSize;
-    const end = start + this.pageSize;
-    return this.filteredClothes.slice(start, end);
-  }
-
-  nextPage() {
-    if ((this.pageIndex + 1) * this.pageSize < this.filteredClothes.length) {
-      this.pageIndex++;
+    if (this.isAdminMode) {
+      this.selectedClothe = this.selectedClothe === clothe ? null : clothe;
+    } else {
+      this.router.navigate(['/product', clothe.getCode()]).then(() => {
+        window.scrollTo(0, 0);
+      });
     }
   }
 
-  previousPage() {
-    if (this.pageIndex > 0) {
-      this.pageIndex--;
-    }
+  viewProduct(clothe: ClothesStock) {
+    this.router.navigate(['/product', clothe.getCode()]).then(() => {
+      window.scrollTo(0, 0);
+    });
+  }
+
+  modifyProduct(clothe: ClothesStock) {
+    console.log(clothe);
+    this.productSelected.emit(clothe);
   }
 
   handleResetFilter(filterName: string) {
@@ -121,19 +153,28 @@ export class ClothesGalleryComponent implements OnInit {
     this.clothes[index].currentImage = imageIndex;
   }
 
-  trackByClothe(index: number, clothe: ClothesStock) {
-    return clothe.getCode();
-  }
-
-  getSizesForProduct(code: string): string {
-    const clothe = this.clothes.find(c => c.getCode() === code);
-    return clothe ? clothe.getSize() : '';
-  }
-
   handleFiltersChanged() {
     this.nameFilter = this.filtersComponent.nameFilter;
     this.minPriceFilter = this.filtersComponent.minPriceFilter;
     this.maxPriceFilter = this.filtersComponent.maxPriceFilter;
     this.typeFilter = this.filtersComponent.typeFilter;
+  }
+
+  displayShowSubMenu(clothe: ClothesStock) {
+    if (this.selectedClothe === clothe) {
+      this.showSubMenu = !this.showSubMenu;
+    } else {
+      this.selectedClothe = clothe;
+      this.showSubMenu = true;
+    }
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.clothe-item')) {
+      this.showSubMenu = false;
+      this.selectedClothe = null;
+    }
   }
 }

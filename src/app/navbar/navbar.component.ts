@@ -9,11 +9,13 @@ import { User } from '../models/user.model';
 import { SearchComponent } from '../search/search.component';
 import { CartDropdownComponent } from '../cart-dropdown/cart-dropdown.component';
 import { DropDownMenuProductsComponent } from '../drop-down-menu-products/drop-down-menu-products.component';
+import { slideDownUp } from '../shared/animations/animation';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
   imports: [FormsModule, SearchComponent, CartDropdownComponent, DropDownMenuProductsComponent],
+  animations: [slideDownUp],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss'
 })
@@ -24,41 +26,41 @@ export class NavbarComponent implements OnInit {
   clothes: ClothesStock[] = [];
   searchResults: ClothesStock[] = [];
   groupedClothes: { [genericType: string]: string[] } = {};
+  isUserDropdownVisible = false;
 
   constructor(protected cartService: CartService, private clothesStockService: ClothesStockService, private authService: AuthService, private router: Router) { }
 
-  async ngOnInit() {
-    try {
-      this.user = await this.authService.UserData;
-      this.authService.isLoggedIn = this.authService.UserLogged;
-      this.authService.isAdmin();
+    async ngOnInit() {
+      try {
+        this.user = await this.authService.UserData;
+        this.authService.isLoggedIn = this.authService.UserLogged;
+        this.authService.isAdmin();
 
-      if (this.authService.isLoggedIn !== false) {
-        this.cartItems = [];
+        if (this.authService.isLoggedIn !== false) {
+          this.cartItems = [];
 
-        // Load user and cart
-        this.cartService.loadUser(this.user.getEmail());
+          // Load user and cart
+          this.cartService.loadUser(this.user.getEmail());
 
-        // Subscribe to cart items
-        this.cartService.getItems().subscribe(items => {
-          this.cartItems = items;
-        });
+          // Subscribe to cart items
+          this.cartService.getItems().subscribe(items => {
+            this.cartItems = items;
+          });
+        }
+      } catch (error) {
+        console.info('Error getting user data:', error);
       }
-    } catch (error) {
-      console.info('Error getting user data:', error);
-    }
 
-    try {
-      // Load clothes regardless of user login status
-      const clothes = await this.clothesStockService.findAll().toPromise();
-      this.clothes = clothes || [];
+      try {
+        const response = await this.clothesStockService.findAll(0, 10).toPromise();
+        this.clothes = response?.clothes || [];
 
-      // Group clothes by genericType and specificType
-      this.groupedClothes = this.groupByTypes(this.clothes);
-    } catch (error) {
-      console.error('Error loading clothes data:', error);
+        // Group clothes by genericType and specificType
+        this.groupedClothes = this.groupByTypes(this.clothes);
+      } catch (error) {
+        console.error('Error loading clothes:', error);
+      }
     }
-  }
 
   groupByTypes(clothes: ClothesStock[]) {
     const grouped: { [key: string]: string[] } = {};
@@ -98,5 +100,13 @@ export class NavbarComponent implements OnInit {
     this.searchResults = this.clothes.filter(clothesItem =>
       clothesItem.getName().toLowerCase().includes(query.toLowerCase())
     );
+  }
+
+  showUserDropdown() {
+    this.isUserDropdownVisible = true;
+  }
+
+  hideUserDropdown() {
+    this.isUserDropdownVisible = false;
   }
 }

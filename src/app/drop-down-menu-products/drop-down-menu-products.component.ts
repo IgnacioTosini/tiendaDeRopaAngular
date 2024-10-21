@@ -1,4 +1,5 @@
-import { Component, Input } from '@angular/core';
+import { AuthService } from './../services/auth.service';
+import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -6,16 +7,25 @@ import { Router } from '@angular/router';
   standalone: true,
   imports: [],
   templateUrl: './drop-down-menu-products.component.html',
-  styleUrl: './drop-down-menu-products.component.scss'
+  styleUrls: ['./drop-down-menu-products.component.scss']
 })
-export class DropDownMenuProductsComponent {
+export class DropDownMenuProductsComponent implements OnInit {
   @Input() groupedClothes: { [genericType: string]: string[] } = {};
-  @Input() isLogging: Boolean = false;
-  @Input() isAdminIn: Boolean = false;
+  isAdminMode: Boolean = false;
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private authService: AuthService) { }
 
-  ngOnInit(): void { }
+  async ngOnInit() {
+    try {
+      this.isAdminMode = await this.authService.isAdmin();
+    } catch (error) {
+      console.error('Error checking admin status:', error);
+    }
+  }
+
+  get isLogging(): Boolean {
+    return this.authService.isLoggedIn;
+  }
 
   getGenericTypes() {
     return Object.keys(this.groupedClothes);

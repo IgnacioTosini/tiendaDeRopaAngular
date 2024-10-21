@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<section class="userViewSection">
+  <section class="filterSection">
+    <form class="formItem" (ngSubmit)="onGetUsers()" #allUsersForm="ngForm">
+      <button class="formButton" type="submit">Get All Users</button>
+    </form>
+    <form class="formItem" (ngSubmit)="onGetUserById(id.value)" #idForm="ngForm">
+      <button class="formButton" type="submit">Get User by ID</button>
+      <input class="formInput" type="text" ngModel #id="ngModel" name="id" placeholder="ID">
+    </form>
+    <form class="formItem" (ngSubmit)="onGetUserByEmail(email.value)" #emailForm="ngForm">
+      <button class="formButton" type="submit">Get User by Email</button>
+      <input class="formInput" type="text" ngModel #email="ngModel" name="email" placeholder="Email">
+    </form>
+  </section>
+  <app-user-list [users]="users" [roles]="roles"></app-user-list>
+  <section class="paginationSection">
+    <app-pagination [pagination]="pagination" (previousPage)="onPageChange(currentPage - 1)"
+      (nextPage)="onPageChange(currentPage + 1)"></app-pagination>
+  </section>
+  @if (showNotification) {
+  <app-toast-notification [message]="notificationMessage" [duration]="5000" [imagePosition]="'side'"
+    [isSuccess]="false"></app-toast-notification>
+  }
+</section>

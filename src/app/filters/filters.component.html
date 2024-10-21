@@ -15,8 +15,9 @@
     <option value="">Todas las Categorias</option>
     @for (genericType of genericTypes; track trackByGenericType($index, genericType)) {
       <optgroup label="{{genericType}}">
+        <option value="{{genericType}}">{{genericType}} (Todos)</option>
         @for (specificType of groupedTypes[genericType]; track trackBySpecificType($index, specificType)) {
-          <option>{{specificType}}</option>
+          <option value="{{specificType}}">{{specificType}}</option>
         }
       </optgroup>
     }
@@ -27,4 +28,9 @@
     <button (click)="setSortOrder('price')">Ordenar por precio (ascendente)</button>
     <button (click)="setSortOrder('price-desc')">Ordenar por precio (descendente)</button>
   </section>
+
+  @if (showNotification) {
+    <app-toast-notification [message]="notificationMessage" [duration]="5000" [imageUrl]="" [imagePosition]="'side'"
+      [isSuccess]="false"></app-toast-notification>
+  }
 </section>

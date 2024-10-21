@@ -2,22 +2,23 @@ import { ClothesStockService } from './../services/clothes-stock.service';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { ClothesStock } from '../models/clothesStock.model';
-import { ImageWrapperComponent } from '../image-wrapper/image-wrapper.component';
+import { ClotheItemComponent } from '../clothe-item/clothe-item.component';
 
 @Component({
   selector: 'app-gallery',
   standalone: true,
-  imports: [ImageWrapperComponent],
+  imports: [ClotheItemComponent],
   templateUrl: './gallery.component.html',
   styleUrl: './gallery.component.scss'
 })
 export class GalleryComponent {
   clothes: ClothesStock[] = [];
+  selectedClothe: ClothesStock | null = null;
 
   constructor(private router: Router, private ClothesStockService: ClothesStockService) { }
 
   async ngOnInit() {
-    await this.ClothesStockService.findAll().toPromise();
+    await this.ClothesStockService.findAll(0, 3).toPromise();
     this.clothes = this.ClothesStockService.clothesArray;
     for (let i = this.clothes.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -51,5 +52,11 @@ export class GalleryComponent {
     return this.clothes
       .filter(item => item.getCode() === code)
       .map(item => item.getSize());
+  }
+
+  viewProduct(clothe: ClothesStock) {
+    this.router.navigate(['/product', clothe.getCode()]).then(() => {
+      window.scrollTo(0, 0);
+    });
   }
 }

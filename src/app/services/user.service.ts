@@ -6,6 +6,7 @@ import { Observable, map, of, throwError } from 'rxjs';
 import { User } from '../models/user.model';
 import { catchError, tap } from 'rxjs/operators';
 import { Comment } from '../models/comment.model';
+import { Pagination } from '../models/pagination.model';
 
 @Injectable({
   providedIn: 'root'
@@ -29,11 +30,12 @@ export class UserService {
 
   constructor(private http: HttpClient, private localStorageService: LocalStorageService) { }
 
-  getUsers(): Observable<User[]> {
-    return this.http.get<{ message: string, body: any[], status: number }>(`${this.apiUrl}`, this.getUserToken('')).pipe(
+  getUsers(page: number, cant: number): Observable<{ users: User[], pagination: Pagination }> {
+    return this.http.get<any>(`${this.apiUrl}?page=${page}&cant=${cant}`, this.getUserToken('')).pipe(
       map(response => {
         this.usersArray = [];
-        response.body.forEach(item => {
+        console.log(response);
+        response.body.content.forEach((item: any) => {
           const existingUser = this.usersArray.find(u => u instanceof User && u.getId() === item.id);
           if (!existingUser) {
             const userwisheList = item.wisheList.map((wishItem: any) => new Wish(wishItem.id, wishItem.url, wishItem.name, wishItem.photo, wishItem.users));
@@ -53,7 +55,18 @@ export class UserService {
             this.setPassword(item.password);
           }
         });
-        return this.usersArray;
+
+        const pagination = new Pagination(
+          response.body.totalElements,
+          response.body.totalPages,
+          response.body.size,
+          response.body.number,
+          response.body.first,
+          response.body.last,
+          response.body.numberOfElements
+        );
+
+        return { users: this.usersArray, pagination };
       }),
       catchError(error => {
         console.error('Error fetching users:', error);
@@ -74,9 +87,6 @@ export class UserService {
       comments: user.comments,
       vip: false,
     };
-
-    console.log('Creating user with data:', newUser);
-    console.log('HTTP Options:', this.httpOptions);
 
     return this.http.post<any>(`${this.apiUrl}/register/${password}`, newUser, { headers: this.headers }).pipe(
       tap(response => console.log('Response:', response)),
@@ -112,7 +122,6 @@ export class UserService {
     console.log(user)
     return this.http.put(`${this.apiUrl}/update`, user).pipe(
       catchError(error => {
-        // Aquí puedes manejar el error como quieras. Por ejemplo, podrías mostrar un mensaje de error al usuario.
         console.error('Ocurrió un error al actualizar el usuario:', error);
         return throwError(error);
       })
@@ -120,12 +129,7 @@ export class UserService {
   }
 
   getUserById(id: string): Observable<any> {
-    const token = this.localStorageService.getItem("token");
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
-    });
-
-    return this.http.get<{ message: string, body: any, status: number }>(`${this.apiUrl}/id/${id}`, { headers }).pipe(
+    return this.http.get<any>(`${this.apiUrl}/id/${id}`, this.getUserToken('')).pipe(
       map(response => {
         const data = response.body;
         let user = this.usersArray.find(u => u instanceof User && u.getId() === data.id);
@@ -175,9 +179,12 @@ export class UserService {
   }
 
   getUserByEmail(email: string, token: string): Observable<any> {
-    return this.http.get<{ message: string, body: any, status: number }>(`${this.apiUrl}/email/${email}`, this.getUserToken(token)).pipe(
+    return this.http.get<any>(`${this.apiUrl}/email/${email}`, this.getUserToken(token)).pipe(
       map(response => {
-        const data = response.body; // Accede a la propiedad body de la respuesta
+        const data = response.body;
+        if (!data) {
+          throw new Error('Response body is empty');
+        }
         let user = this.usersArray.find(u => u instanceof User && u.getId() === data.id);
         if (!user) {
           const userwisheList = data.wisheList.map((wishItem: any) => new Wish(wishItem.id, wishItem.url, wishItem.name, wishItem.photo, wishItem.users));
@@ -197,7 +204,7 @@ export class UserService {
         }
         this.setRole(data.roles[0].name);
         this.setPassword(data.password);
-        this.usersArray.sort((a, b) => Number(a.getId()) - Number(b.getId())); // Se ordena por ID
+        this.usersArray.sort((a, b) => Number(a.getId()) - Number(b.getId()));
         this.localStorageService.setItem("user", JSON.stringify(user));
         return this.usersArray.find(u => u instanceof User && u.getId() === data.id) || new User(0, '', '', '', '', '', [], [], '');
       }),
@@ -208,9 +215,32 @@ export class UserService {
     );
   }
 
-  // Método para obtener el rol del usuario
-  getUserRole(): string {
-    return this.userRole;
+  async getUserRole(): Promise<string> {
+    if (this.userRole) {
+      return this.userRole;
+    }
+
+    const userId = this.getUserId();
+    if (!userId) {
+      return Promise.reject('User ID not found');
+    }
+
+    return new Promise((resolve, reject) => {
+      const interval = setInterval(() => {
+        if (this.userRole) {
+          clearInterval(interval);
+          resolve(this.userRole);
+        }
+      }, 100); // Verifica cada 100ms si el rol está disponible
+
+      // Timeout después de 5 segundos si no se obtiene el rol
+      setTimeout(() => {
+        clearInterval(interval);
+        if (!this.userRole) {
+          reject('User role not found');
+        }
+      }, 5000);
+    });
   }
 
   getUserRoles(): string[] {
@@ -221,11 +251,11 @@ export class UserService {
     return this.userPassword;
   }
 
-  getUsersByLastname(lastname: string): Observable<any> {
-    return this.http.get<{ message: string, body: any[], status: number }>(`${this.apiUrl}/lastname/${lastname}`, this.getUserToken('')).pipe(
+  getUsersByLastname(lastname: string, page: number, size: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/lastname/${lastname}?page=${page}&size=${size}`, this.getUserToken('')).pipe(
       map(response => {
-        const users = response.body; // Asume que la respuesta es un array de usuarios
-        users.forEach(data => {
+        const users = response.body;
+        users.forEach((data: any) => {
           const existingUser = this.usersArray.find(u => u instanceof User && u.getLastname() === data.lastname);
           if (!existingUser) {
             const userwisheList = data.wisheList.map((wishItem: any) => new Wish(wishItem.id, wishItem.url, wishItem.name, wishItem.photo, wishItem.users));
@@ -243,7 +273,7 @@ export class UserService {
             ));
           }
         });
-        this.usersArray.sort((a, b) => a instanceof User && b instanceof User ? Number(a.getId()) - Number(b.getId()) : 0); // Se ordena por ID
+        this.usersArray.sort((a, b) => a instanceof User && b instanceof User ? Number(a.getId()) - Number(b.getId()) : 0);
         return this.usersArray;
       }),
       catchError(error => {
@@ -253,7 +283,6 @@ export class UserService {
     );
   }
 
-  // Método para agregar a favoritos un producto
   addToWisheList(code: number, wish: any): Observable<any> {
     console.log(wish);
     return this.http.put(`${this.apiUrl}/wish/${code}`, wish, this.getUserToken('')).pipe(
@@ -261,7 +290,6 @@ export class UserService {
     );
   }
 
-  // Método para remover un producto de favoritos
   removeFromWisheList(userId: number, clotheId: string): Observable<any> {
     return this.http.delete(`${this.apiUrl}/wish/delete/${userId}/${clotheId}`, this.getUserToken('')).pipe(
       catchError(error => throwError(() => new Error('Error al remover de favoritos: ' + error.message)))
@@ -273,7 +301,7 @@ export class UserService {
       console.error('Invalid user ID or wish ID', 'id user', idUser, 'id wish', idWish);
       return throwError('Invalid user ID or wish ID');
     }
-    return this.http.get<{ message: string, body: boolean, status: number }>(`${this.apiUrl}/detectWish/${idUser}/${idWish}`, this.getUserToken('')).pipe(
+    return this.http.get<any>(`${this.apiUrl}/detectWish/${idUser}/${idWish}`, this.getUserToken('')).pipe(
       map(response => response.body),
       catchError(error => {
         console.error('Error occurred:', error);

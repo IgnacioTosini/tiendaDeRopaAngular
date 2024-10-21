@@ -21,7 +21,6 @@
       border-bottom: 0.0625rem solid #ddd;
       padding: 0.625rem;
       transition: background-color 0.3s ease;
-      cursor: pointer;
 
       &:hover {
         background-color: #795e39;
@@ -66,12 +65,18 @@
   }
 
   .cart-actions {
-    @include properties-flex(row, space-between, center);
-    margin-top: 0.625rem;
+    @include properties-flex(row, space-between, flex-end);
+    position: relative;
 
-    span{
+    section{
+      @include properties-flex(column, center, center);
+    }
+
+    span {
       color: #ffffff;
       font-size: 1.25rem;
+      margin-bottom: 1.625rem;
+      border-bottom: 0.0625rem solid #ddd;
     }
 
     button {
@@ -83,9 +88,35 @@
       transition: background 0.3s;
       border-radius: 0.3125rem;
       box-shadow: 0 0.125rem 0.3125rem rgba(0, 0, 0, 0.1);
+      margin-bottom: 0.625rem;
 
       &:hover {
         background: #0056b3;
+      }
+    }
+
+    .pays-actions {
+      @include properties-flex(column, center, center);
+
+      .submenu {
+        @include properties-flex(row, center, flex-start);
+        gap: 1rem;
+        width: 100%;
+
+        button {
+          padding: 0.625rem 1.25rem;
+          border: none;
+          background: #007bff;
+          color: #fff;
+          cursor: pointer;
+          transition: background 0.3s;
+          border-radius: 0.3125rem;
+          box-shadow: 0 0.125rem 0.3125rem rgba(0, 0, 0, 0.1);
+
+          &:hover {
+            background: #0056b3;
+          }
+        }
       }
     }
   }

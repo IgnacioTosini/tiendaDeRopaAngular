@@ -1,7 +1,12 @@
 <!DOCTYPE html>
+@if (pagination) {
 <section class="pagination">
-  <button class="previous" (click)="onPreviousPage()" [disabled]="pageIndex === 0">Página anterior</button>
-  <span>{{ pageIndex + 1 }} / {{ totalPages }}</span>
-  <button class="next" (click)="onNextPage()" [disabled]="(pageIndex + 1) * pageSize >= totalItems">Página
-    siguiente</button>
+  @if (!pagination.isFirst()) {
+  <button type="button" class="previous" (click)="onPreviousPage()" [disabled]="pagination.isFirst()">Página anterior</button>
+  }
+  <span>{{ pagination.getNumber() + 1 }} / {{ pagination.getTotalPages() }}</span>
+  @if (!pagination.isLast()) {
+  <button type="button" class="next" (click)="onNextPage()" [disabled]="pagination.isLast()">Página siguiente</button>
+  }
 </section>
+}

@@ -1,62 +1,30 @@
 <!DOCTYPE html>
 <section class="uniqueProduct">
-  <section class="uniqueProductGalleryImage">
-    <section class="smallImages">
-      <picture class="smallImage">
-        @for (smallImage of smallImages; track $index) {
-        <img [src]="smallImage" alt="" (click)="changeMainImage(smallImage)" [class.selected]="smallImage === mainImage"
-          [class.notSelected]="smallImage !== mainImage">
-        }
-      </picture>
-    </section>
-    <section class="mainImage" #mainImageDiv>
-      <img [src]="mainImage" alt="" (mousemove)="zoomImage($event)" (mouseout)="resetZoom()">
-    </section>
-    <div class="zoomResult" #zoomResultDiv #zoomLensDiv></div>
-  </section>
+  <app-product-gallery [smallImages]="smallImages" [mainImage]="mainImage" [productName]="product.getName()"
+    (imageChange)="changeMainImage($event)" (openModal)="openModal()"></app-product-gallery>
 
-  <section class="uniqueProductInfo">
-    <h1>{{ product?.getName() }}</h1>
-    <p>$ {{ product?.getPrice() }}</p>
-
-    <label for="sizes">Tamaño</label>
-    <section id="sizes" class="sizes">
-      @for (size of ['XS', 'S', 'M', 'L', 'XL']; track $index) {
-      <button [disabled]="!sizesAvailable.includes(size)" (click)="selectSize(size)"
-        [class.selected]="selectedSize === size"
-        [title]="!sizesAvailable.includes(size) ? 'Tamaño no disponible' : ''">{{size}}</button>
-      }
-    </section>
-
-    <section class="addToCartContainer">
-      <label for="quantityContainer">Cantidad</label>
-      <section id="quantityContainer" class="quantityContainer">
-        <button class="quantityButton" (click)="subtractQuantity()">-</button>
-        <span>{{ quantity }}</span>
-        <button class="quantityButton" (click)="sumAmount()">+</button>
-      </section>
-      <button class="addToCartButton" (click)="addToCart()"
-        [title]="!selectedSize ? 'Selecciona un tamaño para agregar este producto al carrito' : ''">Agregar</button>
-    </section>
-  </section>
+  <app-product-info [product]="product" [sizesAvailable]="sizesAvailable" [sizeQuantities]="sizeQuantities" [selectedSize]="selectedSize"
+    [quantity]="quantity" (sizeSelect)="selectSize($event)" (quantityChange)="updateQuantity($event)"
+    (addToCart)="addToCart()"></app-product-info>
 </section>
 
 @if (showNotification) {
-  <app-toast-notification [message]="'Producto agregado al carrito'" [duration]="5000"
-  [imageUrl]="mainImage" [imagePosition]="'side'" [isSuccess]="true"></app-toast-notification>
+<app-toast-notification [message]="'Producto agregado al carrito'" [duration]="5000" [imageUrl]="mainImage"
+  [imagePosition]="'side'" [isSuccess]="true"></app-toast-notification>
 }
 
 @if (clickedButton && userLogged === false) {
-<app-toast-notification [message]="'Registrese para agregar un producto al carrito'" [duration]="5000"
-  [imageUrl]="" [imagePosition]="'side'" [isSuccess]="false"></app-toast-notification>
+<app-toast-notification [message]="'Registrese para agregar un producto al carrito'" [duration]="5000" [imageUrl]=""
+  [imagePosition]="'side'" [isSuccess]="false"></app-toast-notification>
 }
 
 @if (clickedButton && selectedSize == '' && userLogged === true) {
-<app-toast-notification [message]="'Talle no seleccionado'" [duration]="5000"
-  [imageUrl]="" [imagePosition]="'side'" [isSuccess]="false"></app-toast-notification>
+<app-toast-notification [message]="'Talle no seleccionado'" [duration]="5000" [imageUrl]="" [imagePosition]="'side'"
+  [isSuccess]="false"></app-toast-notification>
 }
-
-
+@if (showModal) {
+  <app-image-modal [mainImage]="mainImage" [smallImages]="smallImages" (closeModal)="closeModal()"></app-image-modal>
+}
 <section class="productDescription">
   <p>{{ product?.getDescription() }}</p>
 </section>
