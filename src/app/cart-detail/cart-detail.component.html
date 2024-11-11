@@ -2,7 +2,7 @@
 <section class="cart-detail">
   <ul>
     @for (item of cartItems; track $index) {
-      <app-cart-item [item]="item" (remove)="removeItem(item)" (goToProduct)="goToProduct(item.product)"></app-cart-item>
+      <app-cart-item [item]="item" (remove)="removeItem(item)" (goToProduct)="viewProduct(item.product)"></app-cart-item>
     }
   </ul>
   <app-cart-actions [totalPrice]="cartService.getTotalPrice()" [showSubmenu]="showSubmenu" [userId]="user.getId()"

@@ -7,8 +7,10 @@
     <ul>
       @for (item of searchResults; track $index) {
       <li>
-        <a (click)="goToProduct(item)">
-          <img src="{{ item.getImages()[0]?.getUrl() }}" alt="{{ item.getName() }}">{{ item.getName() }}
+        <a (click)="viewProduct(item)">
+          <img [@zoomInOut] [src]="item.getImages()[item.currentImage].getUrl()" [alt]="item.getName()"
+            (error)="onImageError($event)">
+          {{ item.getName() }}
         </a>
       </li>
       }

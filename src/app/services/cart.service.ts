@@ -17,6 +17,7 @@ export class CartService {
   constructor(private localStorageService: LocalStorageService, private userService: UserService, private clothesStockService: ClothesStockService) { }
 
   addToCart(product: ClothesStock, quantity: number, size: string | null) {
+    console.log(size)
     size = size ?? ''; // Provide a default value for size if it is null
     // Create a copy of the product with the correct size
     let productCopy = new ClothesStock(
@@ -33,7 +34,10 @@ export class CartService {
       product.getStock(),
       product.getComments()
     );
-    let item = this.items.find(i => i.product.getCode() === productCopy.getCode() && i.product.getSize() === size);
+    let item = this.items.find(i => i.product.getName() === productCopy.getName() && i.product.getSize() === size);
+    console.log(this.items);
+    console.log(productCopy);
+    console.log(item);
     if (item) {
       // Update the quantity
       item.quantity = quantity;
@@ -89,6 +93,7 @@ export class CartService {
     this.userId = this.userService.usersArray[0].getId();
     let simpleItems = this.items.map(item => ({
       productId: item.product.getId(),
+      productName: item.product.getName(),
       quantity: item.quantity,
       size: item.product.getSize(),
       productCode: item.product.getCode(),
@@ -102,7 +107,8 @@ export class CartService {
     if (storedCart) {
       let itemsJson = JSON.parse(storedCart);
       for (let item of itemsJson) {
-        this.clothesStockService.findByCode(item.productCode, 0, 1).subscribe((clothes):any => {
+        const searchParams = { name: item.productName, size: item.size };
+        this.clothesStockService.findClothesByParameters(searchParams, 0, 1).subscribe((clothes):any => {
           let product = clothes.clothes[0];
           this.items.push({ product: product, quantity: item.quantity });
         });

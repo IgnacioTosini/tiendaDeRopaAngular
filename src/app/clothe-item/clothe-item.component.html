@@ -9,9 +9,10 @@
       <p>${{ clothe.getPrice() }}</p>
     </section>
   </a>
-  @if (showSubMenu && selectedClothe === clothe) {}
-  <section class="admin-submenu" [class.visible]="isAdminMode" (click)="displayShowSubMenu.emit(clothe)">
-    <button (click)="viewProduct.emit(clothe)">Ver</button>
-    <button (click)="modifyProduct.emit(clothe)">Modificar</button>
-  </section>
+  @if (showSubMenu && selectedClothe === clothe) {
+    <section class="admin-submenu" [class.visible]="isAdminMode" (click)="displayShowSubMenu.emit(clothe)">
+      <button (click)="viewProduct.emit(clothe)">Ver</button>
+      <button (click)="modifyProduct.emit(clothe)">Modificar</button>
+    </section>
+  }
 </li>

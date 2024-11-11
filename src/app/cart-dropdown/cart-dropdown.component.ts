@@ -24,8 +24,10 @@ export class CartDropdownComponent {
     return totalPrice.toFixed(2);
   }
 
-  goToProduct(clothe: ClothesStock) {
-    this.router.navigate(['/product', clothe.getCode()]);
+  viewProduct(clothe: ClothesStock): void {
+    this.router.navigate(['/product', clothe.getCode()], { state: { name: clothe.getName() } }).then(() => {
+      window.scrollTo(0, 0);
+    });
   }
 
   removeItem(item: { product: ClothesStock }) {

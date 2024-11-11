@@ -108,40 +108,49 @@ export class ClothesStockService {
     );
   }
 
-  findClothesByParameters(params: any, page: number, size: number): Observable<ClothesStock[]> {
+  findClothesByParameters(params: any, page: number, size: number): Observable<{ clothes: ClothesStock[], pagination: Pagination }> {
     const pageData = { page, cant: size };
-    const queryParams = new URLSearchParams({ ...params, ...pageData }).toString();
+    const allParams = { ...params, ...pageData };
+    const queryParams = Object.keys(allParams)
+      .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(allParams[key])}`)
+      .join('&');
     return this.http.get<any>(`${this.apiUrl}/find?${queryParams}`, this.userService.getUserToken('')).pipe(
       map(response => {
-        this.clothesArray = [];
-        response.body.content.forEach((item: any) => {
-          const existingClothes = this.clothesArray.find(clothes => clothes.getId() === item.id);
-          if (!existingClothes) {
-            const images = (Array.isArray(item.images) ? item.images : [item.images]).map((image: any) => new Image(image.id, image.url));
-            const newClothes = new ClothesStock(
-              item.id,
-              item.name,
-              item.price,
-              item.code,
-              item.size.toUpperCase(),
-              images,
-              item.description,
-              item.genericType,
-              item.specificType,
-              item.publication,
-              item.stock,
-              item.comments
-            );
-            this.clothesArray.push(newClothes);
-          }
+        const clothes = response.body.content.map((item: any) => {
+          const images = (Array.isArray(item.images) ? item.images : [item.images]).map((image: any) => new Image(image.id, image.url));
+          return new ClothesStock(
+            item.id,
+            item.name,
+            item.price,
+            item.code,
+            item.size.toUpperCase(),
+            images,
+            item.description,
+            item.genericType,
+            item.specificType,
+            item.publication,
+            item.stock,
+            item.comments
+          );
         });
-        this.clothesArray.sort((a, b) => Number(a.getId()) - Number(b.getId())); // Se ordena por ID
-        return this.clothesArray;
+
+        const pagination = new Pagination(
+          response.body.totalElements,
+          response.body.totalPages,
+          response.body.size,
+          response.body.number,
+          response.body.first,
+          response.body.last,
+          response.body.numberOfElements
+        );
+
+        console.log(clothes);
+
+        return { clothes, pagination };
       }),
       catchError(error => {
         console.error(`Error al cargar la ropa:\nEstado: ${error.status}\nMensaje: ${error.message}`);
         return EMPTY;
       })
     );
-  }
-}
+  }}

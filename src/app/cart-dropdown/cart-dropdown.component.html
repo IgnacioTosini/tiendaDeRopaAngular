@@ -8,7 +8,7 @@
     <ul>
       @if (cartItems.length > 0) {
       @for (item of cartItems; track $index) {
-      <li class="productCart" (click)="goToProduct(item.product)">
+      <li class="productCart" (click)="viewProduct(item.product)">
         <img [src]="item.product.getImages()[0]?.url" [alt]="item.product.getName()">
         <span class="name">{{ item.product.getName() }}</span>
         <span>

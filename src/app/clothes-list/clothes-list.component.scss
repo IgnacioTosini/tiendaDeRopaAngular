@@ -3,12 +3,16 @@
 
 .container {
   @include properties-flex(row, flex-start, normal);
-  width: 80vw;
   gap: 2rem;
   margin-top: 1rem;
 
   @media screen and (max-width: 930px) {
     flex-wrap: wrap;
+    justify-content: center;
+
+    .containerProductCard{
+      flex:0;
+    }
   }
 
   .containerProductCard {
@@ -21,6 +25,10 @@
     padding: 1rem;
     background-color: $secondary-background;
     box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1);
+
+    @media screen and (max-width: 930px) {
+      flex: 0 0 90%;
+    }
 
     .product-card {
       @include properties-flex(row, normal, normal);
@@ -89,6 +97,10 @@
     border-radius: 0.5rem;
     box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1);
     flex: 0 0 46%;
+
+    @media screen and (max-width: 930px) {
+      flex: 0 0 90%;
+    }
 
     section {
       @include properties-flex(column, flex-start, flex-start);

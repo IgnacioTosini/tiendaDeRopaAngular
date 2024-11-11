@@ -13,11 +13,11 @@
     <tbody>
       @for (user of users; track $index) {
       <tr>
-        <td><img src="{{ user.getImage() }}" alt=""></td>
-        <td>{{ user.getId() }}</td>
-        <td>{{ user.getName() }}</td>
-        <td>{{ user.getEmail() }}</td>
-        <td>{{ roles[$index] }}</td>
+        <td data-label="Imagen"><img src="{{ user.getImage() }}" alt=""></td>
+        <td data-label="ID">{{ user.getId() }}</td>
+        <td data-label="Nombre">{{ user.getName() }}</td>
+        <td data-label="Email">{{ user.getEmail() }}</td>
+        <td data-label="Rol">{{ roles[$index] }}</td>
       </tr>
       }
     </tbody>

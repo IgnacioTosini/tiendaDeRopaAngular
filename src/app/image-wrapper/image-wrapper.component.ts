@@ -1,3 +1,4 @@
+import { ImageService } from './../services/image.service';
 import { AuthService } from './../services/auth.service';
 import { ClothesStock } from '../models/clothesStock.model';
 import { Router } from '@angular/router';
@@ -5,12 +6,11 @@ import { UserService } from '../services/user.service';
 import { User } from '../models/user.model';
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { slideInOutLeft, slideInOutRight, zoomInOut } from '../shared/animations/animation';
-import { ToastNotificationComponent } from '../toast-notification/toast-notification.component';
 
 @Component({
   selector: 'app-image-wrapper',
   standalone: true,
-  imports: [ToastNotificationComponent],
+  imports: [],
   animations: [slideInOutLeft, slideInOutRight, zoomInOut],
   templateUrl: './image-wrapper.component.html',
   styleUrls: ['./image-wrapper.component.scss']
@@ -24,7 +24,7 @@ export class ImageWrapperComponent implements OnInit {
   isFavorite: boolean = false;
   user: User = new User(0, '', '', '', '', '', [], [], '');
 
-  constructor(private router: Router, private userService: UserService, private authService: AuthService) { }
+  constructor(private router: Router, private userService: UserService, private authService: AuthService, private imageService: ImageService) { }
 
   async ngOnInit() {
     this.user = await this.authService.UserData;
@@ -44,8 +44,8 @@ export class ImageWrapperComponent implements OnInit {
     });
   }
 
-  goToProduct(clothe: ClothesStock) {
-    this.router.navigate(['/product', clothe.getCode()]).then(() => {
+  viewProduct(clothe: ClothesStock): void {
+    this.router.navigate(['/product', clothe.getCode()], { state: { name: clothe.getName() } }).then(() => {
       window.scrollTo(0, 0);
     });
   }
@@ -77,5 +77,13 @@ export class ImageWrapperComponent implements OnInit {
         error: (error) => console.error('Error al remover de favoritos', error)
       });
     }
+  }
+
+  onImageError(event: Event) {
+    this.imageService.handleImageError(event);
+  }
+
+  onImageClick() {
+    this.viewProduct(this.clothe);
   }
 }

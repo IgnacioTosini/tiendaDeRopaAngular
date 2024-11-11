@@ -4,7 +4,8 @@
     @for (clothes of clothesList; track $index) {
     <section class="product-card">
       <section class="product-image-container">
-        <img [src]="clothes.getImages()[0].getUrl()" alt="{{ clothes.getName() }}" class="product-image">
+        <img [@zoomInOut] [src]="clothes.getImages()[clothes.currentImage].getUrl()" [alt]="clothes.getName()"
+      (error)="onImageError($event)" class="product-image">
       </section>
       <section class="product-info" [@zoomInOut]>
         <p class="product-name">{{ clothes.getName() }}</p>
@@ -94,7 +95,7 @@
         @for (image of selectedClothes.getImages(); track $index) {
         @if (selectedImage !== image.getUrl() || previewImage) {
         <section class="image-container">
-          <img [src]="selectedImage === image.getUrl() ? previewImage : image.getUrl()"
+          <img [src]="selectedImage === image.getUrl() ? previewImage : image.getUrl()" (error)="onImageError($event)"
             [class.selected]="selectedImage === image.getUrl()" (click)="onImageClick(image.getUrl())" />
           @if (selectedClothes.getImages().length > 1) {
           <button type="button" (click)="deleteImage(image.getUrl())">Eliminar</button>
@@ -109,7 +110,7 @@
       @if (selectedImage) {
       <section class="selected-image-container" [@zoomInOut]>
         <p class="image-label">Imagen seleccionada</p>
-        <img [src]="selectedImage" />
+        <img [src]="selectedImage" (error)="onImageError($event)"/>
         <button type="button" (click)="selectedImage = ''">Sacar</button>
       </section>
       }
@@ -117,7 +118,7 @@
       @if (previewImage) {
       <section class="preview-image-container" [@zoomInOut]>
         <p class="image-label">Imagen previsualizada</p>
-        <img [src]="previewImage" />
+        <img [src]="previewImage" (error)="onImageError($event)"/>
       </section>
       }
     </section>

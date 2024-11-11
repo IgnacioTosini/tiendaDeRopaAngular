@@ -3,6 +3,7 @@
 
 .view-invoices {
   @include properties-flex(row, normal, flex-start);
+  flex-wrap: wrap;
   font-family: Arial, sans-serif;
   color: $text-color-black;
   background: $secondary-background-gradient;
@@ -10,6 +11,10 @@
   gap: 1rem;
   border-radius: 1%;
   box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1);
+
+  @media (max-width: 768px) {
+    justify-content: center;
+  }
 
   h3 {
     font-size: 1.75rem;
@@ -137,6 +142,10 @@
           }
         }
       }
+    }
+
+    @media (max-width: 768px) {
+      justify-content: center;
     }
   }
 }

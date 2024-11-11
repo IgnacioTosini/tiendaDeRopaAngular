@@ -1,3 +1,4 @@
+import { ImageService } from './../services/image.service';
 import { ClothesStockService } from './../services/clothes-stock.service';
 import { Router } from '@angular/router';
 import { Component, EventEmitter, Output } from '@angular/core';
@@ -21,7 +22,7 @@ export class SearchComponent {
   showNotification: boolean = false;
   notificationMessage: string = '';
 
-  constructor(private router: Router, private clothesStockService: ClothesStockService) { }
+  constructor(private router: Router, private clothesStockService: ClothesStockService, private imageService: ImageService) { }
 
   ngOnInit() { }
 
@@ -49,8 +50,10 @@ export class SearchComponent {
     }, 100);
   }
 
-  goToProduct(clothe: ClothesStock) {
-    this.router.navigate(['/product', clothe.getCode()]);
+  viewProduct(clothe: ClothesStock): void {
+    this.router.navigate(['/product', clothe.getCode()], { state: { name: clothe.getName() } }).then(() => {
+      window.scrollTo(0, 0);
+    });
   }
 
   preventNumberInput(event: any) {
@@ -62,5 +65,9 @@ export class SearchComponent {
       setTimeout(() => this.showNotification = false, 5000);
       event.preventDefault();
     }
+  }
+
+  onImageError(event: Event) {
+    this.imageService.handleImageError(event);
   }
 }

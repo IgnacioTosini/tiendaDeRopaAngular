@@ -34,4 +34,9 @@ export class ImageService {
       }
     });
   }
+
+  handleImageError(event: Event, fallbackUrl: string = '../assets/photos/t-shirtChelsea.jpeg') {
+    const target = event.target as HTMLImageElement;
+    target.src = fallbackUrl;
+  }
 }

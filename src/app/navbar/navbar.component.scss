@@ -57,22 +57,26 @@ header {
             object-fit: cover;
           }
 
-          &:hover .cart-dropdown {
-            display: block;
+          &:hover .user-dropdown {
+            max-height: 15rem;
+            opacity: 1;
+            transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
           }
         }
 
         .user-dropdown {
-          display: none; // Cambiar a block para la animación
+          display: block;
           position: absolute;
           top: 100%;
           right: 0;
           background: $tertiary-background;
           border-radius: 0.625rem;
           padding: 0.625rem;
-          max-height: 15rem;
-          overflow-y: auto;
+          max-height: 0;
+          overflow: hidden;
+          opacity: 0;
           width: 27rem;
+          transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
 
           ul {
             display: flex;

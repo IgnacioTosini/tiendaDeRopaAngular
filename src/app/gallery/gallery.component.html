@@ -4,10 +4,8 @@
     <ul>
       @for (clothe of clothes; track $index) {
       <app-clothe-item [clothe]="clothe" [selectedClothe]="selectedClothe"
-        (changeImage)="changeImage($index, $event.change)"
-        (setActiveImage)="setActiveImage($index, $event.imageIndex)" (goToProduct)="goToProduct($event)"
-        (viewProduct)="viewProduct($event)">
-      </app-clothe-item>
+        (changeImage)="changeImage($index, $event.change)" (setActiveImage)="setActiveImage($index, $event.imageIndex)"
+        (goToProduct)="goToProduct($event)"></app-clothe-item>
       }
     </ul>
   </section>

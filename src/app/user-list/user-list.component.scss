@@ -57,4 +57,38 @@
     width: fit-content;
     text-align: center;
   }
+
+  @media (max-width: 768px) {
+    table, thead, tbody, th, td, tr {
+      display: block;
+    }
+
+    thead {
+      display: none;
+    }
+
+    tr {
+      margin-bottom: 1rem;
+    }
+
+    td {
+      position: relative;
+      padding-left: 1rem;
+      text-align: left;
+      border: none;
+      border-bottom: 1px solid #dee2e6;
+    }
+
+    td::before {
+      content: attr(data-label);
+      display: block;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
+
+    td img {
+      width: 3rem;
+      height: 3rem;
+    }
+  }
 }

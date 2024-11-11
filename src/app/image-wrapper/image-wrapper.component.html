@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <section class="image-wrapper">
-  <a (click)="goToProduct(clothe)">
-    <img [@zoomInOut] [src]="clothe.getImages()[clothe.currentImage]?.getUrl()" alt="{{clothe?.getName()}}">
+  <a (click)="onImageClick()">
+    <img [@zoomInOut] [src]="clothe.getImages()[clothe.currentImage].getUrl()" [alt]="clothe.getName()"
+      (error)="onImageError($event)">
   </a>
   @if (isLogging) {
-    <button class="favorite" (click)="toggleFavorite(clothe)" [class.filled]="isFavorite">&#9733;</button>
+  <button class="favorite" (click)="toggleFavorite(clothe)" [class.filled]="isFavorite">&#9733;</button>
   }
   <section class="image-controls">
     <button class="prev" (click)="clothe.changeImage(-1)">&#10094;</button>
@@ -12,7 +13,7 @@
   </section>
   <section class="image-dots">
     @for (image of clothe.getImages(); track $index) {
-      <span (click)="clothe.setActiveImage($index)" [class.active]="$index === clothe.currentImage"></span>
+    <span (click)="clothe.setActiveImage($index)" [class.active]="$index === clothe.currentImage"></span>
     }
   </section>
 </section>

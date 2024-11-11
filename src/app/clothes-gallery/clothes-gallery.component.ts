@@ -1,3 +1,4 @@
+import { NavigationService } from './../services/navigation-service.service';
 import { Component, ViewChild, OnInit, Input, Output, EventEmitter, HostListener, ElementRef } from '@angular/core';
 import { ClothesStockService } from './../services/clothes-stock.service';
 import { ClothesStock } from '../models/clothesStock.model';
@@ -13,7 +14,7 @@ import { Pagination } from '../models/pagination.model';
 @Component({
   selector: 'app-clothes-gallery',
   standalone: true,
-  imports: [FormsModule, FiltersComponent, ActiveFiltersComponent, PaginationComponent, ToastNotificationComponent, ClotheItemComponent],
+  imports: [FormsModule, FiltersComponent, ActiveFiltersComponent, PaginationComponent, ClotheItemComponent],
   templateUrl: './clothes-gallery.component.html',
   styleUrls: ['./clothes-gallery.component.scss']
 })
@@ -39,7 +40,7 @@ export class ClothesGalleryComponent implements OnInit {
 
   @ViewChild('gallery') gallery!: ElementRef;
 
-  constructor(private clothesStockService: ClothesStockService, private router: Router, private route: ActivatedRoute) { }
+  constructor(private clothesStockService: ClothesStockService, private router: Router, private route: ActivatedRoute, private navigationService: NavigationService) { }
 
   async ngOnInit() {
     await this.loadClothes();
@@ -82,7 +83,7 @@ export class ClothesGalleryComponent implements OnInit {
     const grouped: { [key: string]: ClothesStock } = {};
 
     clothes.forEach(clothe => {
-      const code = clothe.getCode();
+      const code = clothe.getName();
       if (!grouped[code]) {
         grouped[code] = clothe;
       } else {
@@ -118,19 +119,11 @@ export class ClothesGalleryComponent implements OnInit {
   }
 
   goToProduct(clothe: ClothesStock) {
-    if (this.isAdminMode) {
-      this.selectedClothe = this.selectedClothe === clothe ? null : clothe;
-    } else {
-      this.router.navigate(['/product', clothe.getCode()]).then(() => {
-        window.scrollTo(0, 0);
-      });
-    }
+    this.selectedClothe = this.navigationService.goToProductAdminMode(clothe, this.isAdminMode, this.selectedClothe);
   }
 
   viewProduct(clothe: ClothesStock) {
-    this.router.navigate(['/product', clothe.getCode()]).then(() => {
-      window.scrollTo(0, 0);
-    });
+    this.navigationService.viewProduct(clothe);
   }
 
   modifyProduct(clothe: ClothesStock) {

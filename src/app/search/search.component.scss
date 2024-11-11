@@ -10,16 +10,18 @@
   &::before {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     z-index: -1;
     width: 100%;
+    max-width: 30rem;
     height: 100%;
     background: linear-gradient(45deg, $global-background, $secondary-background, $tertiary-background, $secondary-background, $tertiary-background, $tertiary-background);
     border-radius: 0.625rem;
     background-size: 800%; // Aumenta el tamaño del fondo para que se mueva más rápido
     filter: blur(0.125rem); // Añade un poco de desenfoque para un efecto de profundidad
-    animation: color-shift 20s linear infinite;
+    animation: color-shift 15s linear infinite;
   }
 
   input {

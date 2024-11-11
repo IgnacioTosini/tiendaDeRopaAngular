@@ -1,3 +1,4 @@
+import { NavigationService } from './../services/navigation-service.service';
 import { ClothesStockService } from './../services/clothes-stock.service';
 import { Component, HostListener } from '@angular/core';
 import { ClothesStock } from '../models/clothesStock.model';
@@ -17,7 +18,7 @@ export class CarouselComponent {
   isDragging = false;
   selectedClothe: ClothesStock | null = null;
 
-  constructor(private ClothesStockService: ClothesStockService, private router: Router) { }
+  constructor(private ClothesStockService: ClothesStockService, private router: Router, private navigationService: NavigationService) { }
 
   async ngOnInit() {
     await this.ClothesStockService.findAll(0, 5).toPromise();
@@ -65,12 +66,9 @@ export class CarouselComponent {
     this.isDragging = false;
   }
 
-  goToProduct(clothe: ClothesStock) {
-    this.router.navigate(['/product', clothe.getCode()]).then(() => {
-      window.location.reload();
-      setTimeout(() => {
-        window.scrollTo(0, 0); // Desplazar hacia la parte superior de la página
-      }, 0);
+  viewProduct(clothe: ClothesStock): void {
+    this.router.navigate(['/product', clothe.getCode()], { state: { name: clothe.getName() } }).then(() => {
+      window.scrollTo(0, 0);
     });
   }
 }

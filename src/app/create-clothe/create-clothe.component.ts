@@ -12,7 +12,7 @@ import { ToastNotificationComponent } from '../toast-notification/toast-notifica
   standalone: true,
   imports: [ReactiveFormsModule, FormsModule, ToastNotificationComponent],
   templateUrl: './create-clothe.component.html',
-  styleUrl: './create-clothe.component.scss'
+  styleUrls: ['./create-clothe.component.scss']
 })
 export class CreateClotheComponent implements OnInit {
   clotheForm = new FormGroup({
@@ -87,7 +87,7 @@ export class CreateClotheComponent implements OnInit {
     const images = (this.clotheForm.value.images || []).map((imageUrl: any) => {
       const image = new Image('', '');
       image.setId(`${this.getNextIdImage()}`);
-      image.setUrl(imageUrl?.url + '' || '');
+      image.setUrl(imageUrl?.url + '' || '../assets/photos/t-shirtChelsea.jpeg'); // Use default image if URL is empty
       return image;
     });
 
@@ -127,19 +127,24 @@ export class CreateClotheComponent implements OnInit {
   // Esta función se llama cuando el usuario selecciona un archivo
   onFileChange(event: any, index: number) {
     if (event.target.files && event.target.files.length) {
-      this.imageService.extractBase64(event.target.files[0]).then((image: any) => { // Use the ImageService to extract the base64
-        // Crear una nueva instancia de Image
-        const newImage = new Image('', '');
-        // Establecer el id y la url de la imagen
-        newImage.setId(`image-${index}`);
-        newImage.setUrl(image.base);
-        // Guardar la imagen en el campo 'images' del formulario
-        let imagesControl = (this.clotheForm.get('images') as FormArray).controls[index];
-        if (imagesControl) {
-          imagesControl.patchValue(newImage);
-        }
-        this.file[index] = image.base;
-      })
+      const file = event.target.files[0];
+      if (this.imageService.validateImage(file)) {
+        this.imageService.extractBase64(file).then((image: any) => { // Use the ImageService to extract the base64
+          // Crear una nueva instancia de Image
+          const newImage = new Image('', '');
+          // Establecer el id y la url de la imagen
+          newImage.setId(`image-${index}`);
+          newImage.setUrl(image.base);
+          // Guardar la imagen en el campo 'images' del formulario
+          let imagesControl = (this.clotheForm.get('images') as FormArray).controls[index];
+          if (imagesControl) {
+            imagesControl.patchValue(newImage);
+          }
+          this.file[index] = image.base;
+        });
+      } else {
+        this.imageService.handleImageError(event); // Handle invalid image format
+      }
     }
   }
 

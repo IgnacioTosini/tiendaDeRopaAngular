@@ -95,11 +95,11 @@ export const zoomInOut = trigger('zoomInOut', [
 // Slide Down/Up
 export const slideDownUp = trigger('slideDownUp', [
   transition(':enter', [
-    style({ height: '0', overflow: 'hidden' }), // Empieza con altura 0
+    style({ height: '0' }), // Empieza con altura 0
     animate('0.5s ease', style({ height: '*' })) // Anima hacia la altura original
   ]),
   transition(':leave', [
-    animate('0.5s ease', style({ height: '0', overflow: 'hidden' })) // Anima hacia altura 0
+    animate('0.5s ease', style({ height: '0' })) // Anima hacia altura 0
   ])
 ]);
 

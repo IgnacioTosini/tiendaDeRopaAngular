@@ -49,6 +49,7 @@ export class CartDetailComponent {
     try {
       this.user = await this.authService.UserData;
       console.log('User data:', this.user);
+      console.log(this.cartItems);
     } catch (error) {
       console.error('Error fetching user data:', error);
       console.log(this.user);
@@ -75,8 +76,10 @@ export class CartDetailComponent {
     }, 5000);
   }
 
-  goToProduct(clothe: ClothesStock) {
-    this.router.navigate(['/product', clothe.getCode()]);
+  viewProduct(clothe: ClothesStock): void {
+    this.router.navigate(['/product', clothe.getCode()], { state: { name: clothe.getName() } }).then(() => {
+      window.scrollTo(0, 0);
+    });
   }
 
   removeItem(item: { product: ClothesStock }) {
@@ -170,6 +173,23 @@ export class CartDetailComponent {
     this.showSubmenu = !this.showSubmenu;
   }
 
+  private createClothesSoldFromResponse(response: any): ClothesSold[] {
+    return response.body.clothes.map((item: any) => {
+      return new ClothesSold(
+        item.id,
+        item.name,
+        item.price,
+        item.code,
+        item.size,
+        item.description,
+        item.genericType,
+        item.specificType,
+        item.publication,
+        item.cant
+      );
+    });
+  }
+
   async payInCash() {
     const randomCode = this.generateRandomCode();
     const clothesSoldItems = this.createClothesSoldItems();
@@ -178,12 +198,15 @@ export class CartDetailComponent {
 
     // Guardar la factura en el backend
     this.taxService.create(this.user.getId().toString(), tax).subscribe({
-      next: () => {
-        console.log('Factura creada:', tax);
+      next: (response: any) => {
+        console.log('Factura creada:', response);
         this.localStorageService.setItem('invoiceCode', JSON.stringify(randomCode));
         console.log('Código de factura guardado:', randomCode);
 
-        const updatedClothesStockItems = this.updateClothesStock(clothesSoldItems);
+        const arrayClothesSoldItems = this.createClothesSoldFromResponse(response);
+        console.log(arrayClothesSoldItems);
+
+        const updatedClothesStockItems = this.updateClothesStock(arrayClothesSoldItems);
 
         updatedClothesStockItems.forEach(item => {
           this.clothesStockService.createUpdate(item).subscribe({
@@ -245,7 +268,10 @@ export class CartDetailComponent {
 
   private updateClothesStock(clothesSoldItems: ClothesSold[]): { clothe: ClothesStock, subject: string, message: string }[] {
     return clothesSoldItems.map(soldItem => {
-      const stockItem = this.cartItems.find(item => item.product.getId() === soldItem.getId())?.product;
+      console.log(soldItem)
+      console.log(this.cartItems)
+      const stockItem = this.cartItems.find(item => item.product.getCode() === soldItem.getCode() && item.product.getSize() === soldItem.getSize())?.product;
+      console.log(stockItem)
       if (stockItem) {
         const updatedStock = stockItem.getStock() - soldItem.getcant();
         const updatedClothe = new ClothesStock(

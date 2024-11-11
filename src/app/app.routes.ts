@@ -27,11 +27,11 @@ export const routes: Routes = [
   { path: 'modifyProductPage', component: ViewModifyProductPageComponent, canActivate: [AdminGuard, AuthGuard] },
   { path: 'admin', component: AdminComponent, canActivate: [AdminGuard, AuthGuard] },
   { path: 'clothes-gallery', component: ClothesGalleryComponent },
-  { path: 'product/:code', component: UniqueProductComponent },
+    { path: 'product/:code', component: UniqueProductComponent },
   { path: 'login', component: LoginComponent },
   { path: 'cart-detail', component: CartDetailComponent },
   { path: 'invoice', component: InvoiceComponent },
-  { path: 'favorites', component: FavoritesComponent, canActivate: [AuthGuard]  },
+  { path: 'favorites', component: FavoritesComponent, canActivate: [AuthGuard] },
   { path: 'refresh', component: HomeComponent }, // Ruta temporal para forzar la recarga
   { path: '**', redirectTo: '/home', pathMatch: 'full' },
 ];

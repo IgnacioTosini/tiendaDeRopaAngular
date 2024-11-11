@@ -1,3 +1,4 @@
+import { NavigationService } from './../services/navigation-service.service';
 import { AuthService } from './../services/auth.service';
 import { Component, OnInit } from '@angular/core';
 import { User } from '../models/user.model';
@@ -19,14 +20,15 @@ export class FavoritesComponent implements OnInit {
     private authService: AuthService,
     private router: Router,
     private userService: UserService,
+    private navigationService: NavigationService
   ) { }
 
   async ngOnInit() {
     this.user = await this.authService.UserData;
   }
 
-  goToProduct(favorite: Wish) {
-    this.router.navigate(['/product', favorite.getUrl()]);
+  goToFavoriteProduct(favorite: Wish) {
+    this.navigationService.goToProductFromWish(favorite);
   }
 
   removeFavorite(wish: Wish) {

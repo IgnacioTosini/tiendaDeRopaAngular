@@ -87,11 +87,6 @@ export class NavbarComponent implements OnInit {
   get isAdminIn(): Boolean {
     return this.authService.isAdminIn;
   }
-
-  goToProduct(clothe: ClothesStock) {
-    this.router.navigate(['/product', clothe.getCode()]);
-  }
-
   logOut() {
     this.authService.logOut();
   }

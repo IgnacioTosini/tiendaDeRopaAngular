@@ -209,6 +209,10 @@ export class ClothesListComponent implements OnInit, OnChanges {
     return specificType;
   }
 
+  onImageError(event: Event) {
+    this.imageService.handleImageError(event);
+  }
+
   /*   deleteClothe(clothe: ClothesStock): void {
       this.clothesService.deleteClothe(clothe).subscribe(() => {
         this.selectedClothes = null;

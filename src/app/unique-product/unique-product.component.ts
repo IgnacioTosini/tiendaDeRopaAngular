@@ -7,10 +7,10 @@ import { AuthService } from '../services/auth.service';
 import { CartService } from '../services/cart.service';
 import { ClothesStock } from '../models/clothesStock.model';
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { EMPTY, catchError } from 'rxjs';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { ImageModalComponent } from '../image-modal/image-modal.component';
 import { ProductGalleryComponent } from '../product-gallery/product-gallery.component';
 import { ProductInfoComponent } from '../product-info/product-info.component';
@@ -51,15 +51,21 @@ export class UniqueProductComponent {
     private CartService: CartService,
     private route: ActivatedRoute,
     private clothesStockService: ClothesStockService,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router,
+    private location: Location
   ) { }
 
-  ngOnInit() {
+    ngOnInit() {
     this.route.params.subscribe(params => {
       this.smallImages = [];
       const code = params['code'];
+      const state = this.location.getState() as { [key: string]: any };
+      const name = state['name'];
+      console.log(name);
       if (code !== null) {
-        this.clothesStockService.findByCode(code, 0, 10).pipe(
+        const searchParams = { name: name }; // Crear un objeto con los parámetros necesarios
+        this.clothesStockService.findClothesByParameters(searchParams, 0, 10).pipe(
           catchError(error => {
             console.error('Error fetching product:', error);
             return EMPTY;
