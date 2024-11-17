@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 @if (pagination) {
-<section class="pagination">
+<section class="pagination" aria-label="Pagination Navigation">
   @if (!pagination.isFirst()) {
-  <button type="button" class="previous" (click)="onPreviousPage()" [disabled]="pagination.isFirst()">Página anterior</button>
+  <button type="button" class="previous" (click)="onPreviousPage()" [disabled]="pagination.isFirst()"
+    aria-label="Previous Page">Página anterior</button>
   }
-  <span>{{ pagination.getNumber() + 1 }} / {{ pagination.getTotalPages() }}</span>
+  <span aria-live="polite">{{ pagination.getNumber() + 1 }} / {{ pagination.getTotalPages() }}</span>
   @if (!pagination.isLast()) {
-  <button type="button" class="next" (click)="onNextPage()" [disabled]="pagination.isLast()">Página siguiente</button>
+  <button type="button" class="next" (click)="onNextPage()" [disabled]="pagination.isLast()"
+    aria-label="Next Page">Página siguiente</button>
   }
 </section>
 }

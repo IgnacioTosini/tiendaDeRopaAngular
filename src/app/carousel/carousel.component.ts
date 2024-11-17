@@ -3,6 +3,7 @@ import { ClothesStockService } from './../services/clothes-stock.service';
 import { Component, HostListener } from '@angular/core';
 import { ClothesStock } from '../models/clothesStock.model';
 import { Router } from '@angular/router';
+import { Meta, Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-carousel',
@@ -18,9 +19,14 @@ export class CarouselComponent {
   isDragging = false;
   selectedClothe: ClothesStock | null = null;
 
-  constructor(private ClothesStockService: ClothesStockService, private router: Router, private navigationService: NavigationService) { }
+  constructor(private ClothesStockService: ClothesStockService, private router: Router, private navigationService: NavigationService, private meta: Meta, private titleService: Title) { }
 
   async ngOnInit() {
+    this.titleService.setTitle('Clothes Carousel - Best Fashion Collection');
+    this.meta.addTags([
+      { name: 'description', content: 'Discover the best fashion collection in our clothes carousel. Find the latest trends and styles.' },
+      { name: 'keywords', content: 'fashion, clothes, carousel, trends, styles' }
+    ]);
     await this.ClothesStockService.findAll(0, 5).toPromise();
     this.clothes = this.ClothesStockService.clothesArray;
   }

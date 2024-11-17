@@ -1,12 +1,24 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
+import { Title, Meta } from '@angular/platform-browser';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AdminGuard implements CanActivate {
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(
+    private authService: AuthService, 
+    private router: Router,
+    private titleService: Title,
+    private metaService: Meta
+  ) {
+    this.titleService.setTitle('Admin - Your App Name');
+    this.metaService.addTags([
+      { name: 'description', content: 'Admin access to manage and oversee the platform.' },
+      { name: 'keywords', content: 'admin, management, platform, your app name' }
+    ]);
+  }
 
   async canActivate(): Promise<boolean> {
     return new Promise((resolve, reject) => {

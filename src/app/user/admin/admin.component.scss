@@ -1,0 +1,7 @@
+@import '../../utilities/mixins';
+@import '../../utilities/variables';
+
+.generalContainer {
+  @include properties-flex(column, space-between, center);
+  padding: 2rem;
+}

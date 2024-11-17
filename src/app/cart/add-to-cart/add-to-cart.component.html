@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<section class="addToCartContainer">
+  <h1>Add to Cart</h1>
+  <label for="quantityContainer">Quantity</label>
+  <section id="quantityContainer" class="quantityContainer" aria-label="Product quantity">
+    <button class="quantityButton" (click)="subtractQuantity()" aria-label="Decrease quantity">-</button>
+    <span>{{ quantity }}</span>
+    <button class="quantityButton" (click)="sumAmount()" aria-label="Increase quantity">+</button>
+  </section>
+  <button class="addToCartButton" (click)="addProductToCart()"
+    [title]="!selectedSize ? 'Select a size to add this product to the cart' : ''"
+    [attr.aria-disabled]="!selectedSize ? 'true' : null">Add to Cart</button>
+</section>

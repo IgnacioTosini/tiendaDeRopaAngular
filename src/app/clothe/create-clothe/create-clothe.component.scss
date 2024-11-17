@@ -1,0 +1,95 @@
+@import '../../utilities/mixins';
+@import '../../utilities/variables';
+
+form {
+  @include properties-flex(column, flex-start, flex-start);
+  gap: 1rem;
+  padding: 2rem;
+  background-color: $secondary-background;
+  border-radius: 0.5rem;
+  box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1);
+
+  fieldset {
+    border: none;
+    padding: 0;
+
+    legend {
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+      color: $text-color-black;
+    }
+
+    .form-group {
+      @include properties-flex(column, flex-start, flex-start);
+      gap: 0.5rem;
+      width: 100%;
+
+      label {
+        font-weight: bold;
+        margin-top: 0.5rem;
+        color: $text-color-black;
+        width: 100%;
+      }
+
+      input,
+      textarea {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid $border-color;
+        border-radius: 0.25rem;
+        font-size: 1rem;
+      }
+
+      small.text-danger {
+        color: $error-button-background;
+        font-size: 0.875rem;
+      }
+    }
+
+    .imageSection {
+      @include properties-flex(row, center, center);
+      gap: 0.5rem;
+      max-height: 10rem;
+
+      .preview {
+        width: 100%;
+        max-width: 10rem;
+        max-height: 10rem;
+        opacity: 0.5;
+      }
+    }
+
+    button {
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 0.25rem;
+      background-color: $primary-button-background;
+      color: $primary-text-color-white;
+      font-size: 1rem;
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        background-color: $secondary-button-background;
+      }
+    }
+  }
+}
+
+// Estilos para los botones fuera del formulario
+button {
+  width: 100%;
+  max-width: 10rem;
+  margin-top: 1rem;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 0.25rem;
+  background-color: $success-button-background;
+  color: $primary-text-color-white;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: $secondary-button-background;
+  }
+}

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<picture (mouseenter)="showCartDropdown()" (mouseleave)="hideCartDropdown()">
+  <a href="cart-detail">
+    <img src="../../assets/photos/shopping-cart.svg" alt="Shopping cart">
+  </a>
+  @if (isCartDropdownVisible) {
+  <section class="cart-dropdown" [@slideDownUp]>
+    <ul>
+      @if (!isLoading) {
+      @if (cartItems.length > 0) {
+      @for (item of cartItems; track $index) {
+      <li class="productCart" (click)="viewProduct(item.product)">
+        <img [src]="item.product.getImages()[0].url" [alt]="item.product.getName() + ' image'">
+        <span class="name">{{ item.product.getName() }}</span>
+        <span>
+          Tamaño:
+          {{item.product.getSize().toUpperCase()}}
+        </span>
+        <span>Precio: ${{ getTotalPriceForProduct(item.product, item.quantity) }}</span>
+        <span>Cantidad: {{ item.quantity }}</span>
+        <button (click)="removeItem(item)" aria-label="Remove product from cart">
+          <img src="../../assets/photos/trash.svg" alt="Remove product icon">
+        </button>
+      </li>
+      }
+      } @else {
+      <li>
+        <p>No hay productos en el carrito.</p>
+      </li>
+      }
+      } @else {
+      @for (skeleton of skeletonItems; track $index) {
+      <li class="skeleton" aria-hidden="true"></li>
+      }
+      }
+    </ul>
+  </section>
+  }
+</picture>

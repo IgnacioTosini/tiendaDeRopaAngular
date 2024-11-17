@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<section class="uniqueProduct">
+  <app-product-gallery [smallImages]="smallImages" [mainImage]="mainImage" [productName]="product.getName()"
+    [isLoadingImages]="isLoadingImages" (imageChange)="changeMainImage($event)" (openModal)="openModal()"></app-product-gallery>
+
+  <app-product-info [product]="product" [sizesAvailable]="sizesAvailable" [sizeQuantities]="sizeQuantities"
+    [selectedSize]="selectedSize" [quantity]="quantity" (sizeSelect)="selectSize($event)"
+    (quantityChange)="updateQuantity($event)" (addToCart)="addToCart()"></app-product-info>
+</section>
+
+@if (showNotification && notificationType === 'success') {
+<app-toast-notification [message]="'Producto agregado al carrito'" [duration]="5000" [imageUrl]="mainImage"
+  [imagePosition]="'side'" [isSuccess]="true"></app-toast-notification>
+}
+
+@if (clickedButton && userLogged === false) {
+<app-toast-notification [message]="'Registrese para agregar un producto al carrito'" [duration]="5000"
+  [imagePosition]="'side'" [isSuccess]="false"></app-toast-notification>
+}
+
+@if (clickedButton && selectedSize == '' && userLogged === true) {
+<app-toast-notification [message]="'Talle no seleccionado'" [duration]="5000" [imagePosition]="'side'"
+  [isSuccess]="false"></app-toast-notification>
+}
+@if (showModal) {
+<app-image-modal [mainImage]="mainImage" [smallImages]="smallImages" (closeModal)="closeModal()"></app-image-modal>
+}
+<section class="productDescription">
+  <h1>{{ product?.getName() }}</h1>
+  <p>{{ product?.getDescription() }}</p>
+</section>
+
+<app-product-review [product]="product"></app-product-review>
+<app-gallery></app-gallery>

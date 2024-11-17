@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Tax } from '../models/tax.model';
 import { TaxService } from '../services/tax.service';
@@ -6,6 +6,8 @@ import { UserService } from '../services/user.service';
 import { ToastNotificationComponent } from '../toast-notification/toast-notification.component';
 import { PaginationComponent } from '../pagination/pagination.component';
 import { Pagination } from '../models/pagination.model';
+import { NotificationService } from '../services/notification.service';
+import { Meta, Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-invoice',
@@ -14,7 +16,7 @@ import { Pagination } from '../models/pagination.model';
   templateUrl: './invoice.component.html',
   styleUrls: ['./invoice.component.scss']
 })
-export class InvoiceComponent {
+export class InvoiceComponent implements OnInit {
   @Input() invoices: Tax[] = [];
   invoiceCode: string = '';
   invoiceDate: Date = new Date();
@@ -24,15 +26,25 @@ export class InvoiceComponent {
   pagination: Pagination | null = null;
   currentPage: number = 0;
 
-  constructor(private taxService: TaxService, private userService: UserService) { }
+  constructor(
+    private taxService: TaxService,
+    private userService: UserService,
+    public notificationService: NotificationService,
+    private meta: Meta,
+    private title: Title
+  ) { }
+
+  ngOnInit(): void {
+    this.title.setTitle('Invoice Management - Your Store');
+    this.meta.addTags([
+      { name: 'description', content: 'Manage your invoices efficiently with our invoice management system.' },
+      { name: 'keywords', content: 'invoices, invoice management, tax, store, online store' },
+      { name: 'author', content: 'Your Store' }
+    ]);
+  }
 
   private handleNotification(message: string, isSuccess: boolean): void {
-    this.notificationMessage = message;
-    this.typeOfNotification = isSuccess;
-    this.showNotification = true;
-    setTimeout(() => {
-      this.showNotification = false;
-    }, 5000);
+    this.notificationService.handleNotification(message, isSuccess);
   }
 
   verFacturaPorId(): void {

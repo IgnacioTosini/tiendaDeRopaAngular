@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+<form [formGroup]="loginForm" (ngSubmit)="onSubmit()" aria-labelledby="loginFormTitle">
   <section>
     <label for="email">Email:</label>
-    <input id="email" type="email" formControlName="email">
+    <input id="email" type="email" formControlName="email" aria-required="true" aria-describedby="emailError">
     @if (loginForm.controls['email'].errors?.['required'] && loginForm.controls['email'].touched) {
-    <small>
+    <small id="emailError">
       Email is required
     </small>
     }
@@ -16,17 +16,17 @@
   </section>
   <section>
     <label for="password">Password:</label>
-    <app-password-field [control]="passwordControl"></app-password-field>
+    <app-password-field [control]="passwordControl" aria-required="true" aria-describedby="passwordError"></app-password-field>
     @if (loginForm.controls['password'].errors?.['required'] && loginForm.controls['password'].touched) {
-    <small>
+    <small id="passwordError">
       Password is required
     </small>
     }
   </section>
-  <button type="submit">Login</button>
+  <button type="submit" aria-label="Login">Login</button>
 
-  @if (showNotification) {
-  <app-toast-notification [message]="notificationMessage" [duration]="notificationDuration" [imagePosition]="'side'"
-    [isSuccess]="false"></app-toast-notification>
+  @if (notificationService.showNotification) {
+  <app-toast-notification [message]="notificationService.notificationMessage" [duration]="5000" [imageUrl]=""
+    [imagePosition]="'side'" [isSuccess]="notificationService.typeOfNotification"></app-toast-notification>
   }
 </form>

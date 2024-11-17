@@ -4,6 +4,8 @@ import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } 
 import { UserService } from '../services/user.service';
 import { ToastNotificationComponent } from '../toast-notification/toast-notification.component';
 import { PasswordFieldComponent } from '../password-field/password-field.component';
+import { NotificationService } from '../services/notification.service';
+import { Meta, Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-login',
@@ -18,9 +20,15 @@ export class LoginComponent implements OnInit {
   notificationMessage: string = '';
   notificationDuration: number = 5000; // Duración de la notificación en milisegundos
 
-  constructor(private formBuilder: FormBuilder, private userService: UserService, private authService: AuthService) { }
+  constructor(private formBuilder: FormBuilder, private userService: UserService, private authService: AuthService, public notificationService: NotificationService, private meta: Meta, private title: Title) { }
 
   ngOnInit(): void {
+    this.title.setTitle('Login - Your Store Name');
+    this.meta.addTags([
+      { name: 'description', content: 'Login to access your account and start shopping at Store.' },
+      { name: 'keywords', content: 'login, user login, account access' },
+      { name: 'robots', content: 'index, follow' }
+    ]);
     this.loginForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required]
@@ -29,11 +37,7 @@ export class LoginComponent implements OnInit {
 
   onSubmit(): void {
     if (!this.loginForm.valid) {
-      this.showNotification = true;
-      this.notificationMessage = this.getErrorMessage();
-      setTimeout(() => {
-        this.showNotification = false;
-      }, this.notificationDuration);
+      this.notificationService.handleNotification(this.getErrorMessage(), false);
       return;
     }
 

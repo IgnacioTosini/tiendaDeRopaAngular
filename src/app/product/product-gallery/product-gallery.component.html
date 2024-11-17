@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<section class="uniqueProductGalleryImage">
+  <section class="smallImages">
+    <picture class="smallImage">
+      @if (isLoadingImages) {
+      <div class="skeleton"></div>
+      } @else {
+      @for (smallImage of smallImages; track $index) {
+      <img [src]="smallImage" [alt]="altText || 'Product image'" (click)="changeMainImage(smallImage)"
+        [class.selected]="smallImage === mainImage" [class.notselected]="smallImage !== mainImage"
+        [attr.aria-label]="imageDescriptions[$index] || 'Small product image'">
+      }
+      }
+    </picture>
+  </section>
+  <section class="mainImage" #mainimagediv (click)="openImageModal()">
+    @if (isLoadingImages) {
+    <div class="skeletonMain"></div>
+    } @else {
+    <img [src]="mainImage" [alt]="productName || 'Main product image'" [attr.aria-label]="productName">
+    }
+  </section>
+</section>

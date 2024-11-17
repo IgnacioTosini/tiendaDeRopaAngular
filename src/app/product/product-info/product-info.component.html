@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<section class="uniqueProductInfo">
+  <h1>{{ product?.getName() }}</h1>
+  <p>$ {{ product?.getPrice() }}</p>
+
+  <label for="sizes">Tamaño</label>
+  <section id="sizes" class="sizes">
+    @for (size of ['XS', 'S', 'M', 'L', 'XL']; track $index) {
+    <button [disabled]="!sizesAvailable.includes(size)" (click)="selectSize(size)"
+      [class.selected]="selectedSize === size" [title]="!sizesAvailable.includes(size) ? 'Tamaño no disponible' : ''">
+      {{size}} ({{sizeQuantities[size] || 0}})
+    </button>
+    }
+  </section>
+  <app-add-to-cart [quantity]="quantity" [selectedSize]="selectedSize" [product]="product"
+    [sizeQuantities]="sizeQuantities" (quantityChange)="updateQuantity($event)"
+    (addToCart)="addProductToCart()"></app-add-to-cart>
+</section>

@@ -1,50 +1,52 @@
 <!DOCTYPE html>
 <section class="view-invoices">
   <section class="actions">
-    <h3>Facturas</h3>
-    <button (click)="verTodasLasFacturas()">Ver todas las facturas</button>
+    <h1>Invoice Management</h1>
+    <button (click)="verTodasLasFacturas()">View All Invoices</button>
     <section class="input-group">
-      <button (click)="verFacturaPorId()">Ver factura por código:</button>
-      <input type="text" [(ngModel)]="invoiceCode" placeholder="Ingrese el código">
+      <label for="invoiceCode">View Invoice by Code:</label>
+      <input id="invoiceCode" type="text" [(ngModel)]="invoiceCode" placeholder="Enter code">
+      <button (click)="verFacturaPorId()">Search</button>
     </section>
     <section class="input-group">
-      <button (click)="verTodasLasFacturaPorDate()">Ver factura por fecha:</button>
-      <input type="date" [(ngModel)]="invoiceDate">
+      <label for="invoiceDate">View Invoice by Date:</label>
+      <input id="invoiceDate" type="date" [(ngModel)]="invoiceDate">
+      <button (click)="verTodasLasFacturaPorDate()">Search</button>
     </section>
   </section>
   <section class="pagination">
-  <ul class="invoice-list">
-    @for (invoice of invoices; track $index) {
-    <li class="invoice">
-      <section class="invoice-details">
-        <p><strong>ID:</strong> {{ invoice.getId() }}</p>
-        <p><strong>Precio:</strong> {{ invoice.getPrice() }}</p>
-        <p><strong>Código:</strong> {{ invoice.getCode() }}</p>
-        <p><strong>Dirección:</strong> {{ invoice.getAdress() }}</p>
-        <p><strong>Costo de envío:</strong> {{ invoice.gettravelCost() }}</p>
-        <p><strong>Fecha:</strong> {{ invoice.getDate() }}</p>
-      </section>
-      <h4>Ropa vendida:</h4>
-      <ul class="clothes-list">
-        @for (clothe of invoice.getClothes(); track $index) {
-        <li>
-          <section class="clothes-details">
-            <p><strong>Nombre:</strong> {{ clothe.getName() }}</p>
-            <p><strong>Precio:</strong> {{ clothe.getPrice() }}</p>
-            <p><strong>Código:</strong> {{ clothe.getCode() }}</p>
-            <p><strong>Talla:</strong> {{ clothe.getSize() }}</p>
-          </section>
-        </li>
-        }
-      </ul>
-    </li>
-    }
-  </ul>
-  <app-pagination [pagination]="pagination" (previousPage)="onPageChange(currentPage - 1)"
-    (nextPage)="onPageChange(currentPage + 1)"></app-pagination>
+    <ul class="invoice-list">
+      @for (invoice of invoices; track $index) {
+      <li class="invoice">
+        <section class="invoice-details">
+          <p><strong>ID:</strong> {{ invoice.getId() }}</p>
+          <p><strong>Precio:</strong> {{ invoice.getPrice() }}</p>
+          <p><strong>Código:</strong> {{ invoice.getCode() }}</p>
+          <p><strong>Dirección:</strong> {{ invoice.getAdress() }}</p>
+          <p><strong>Costo de envío:</strong> {{ invoice.gettravelCost() }}</p>
+          <p><strong>Fecha:</strong> {{ invoice.getDate() }}</p>
+        </section>
+        <h4>Ropa vendida:</h4>
+        <ul class="clothes-list">
+          @for (clothe of invoice.getClothes(); track $index) {
+          <li>
+            <section class="clothes-details">
+              <p><strong>Nombre:</strong> {{ clothe.getName() }}</p>
+              <p><strong>Precio:</strong> {{ clothe.getPrice() }}</p>
+              <p><strong>Código:</strong> {{ clothe.getCode() }}</p>
+              <p><strong>Talla:</strong> {{ clothe.getSize() }}</p>
+            </section>
+          </li>
+          }
+        </ul>
+      </li>
+      }
+    </ul>
+    <app-pagination [pagination]="pagination" (previousPage)="onPageChange(currentPage - 1)"
+      (nextPage)="onPageChange(currentPage + 1)"></app-pagination>
   </section>
 </section>
-@if (showNotification) {
-<app-toast-notification [message]="notificationMessage" [duration]="5000" [imagePosition]="'side'"
-  [isSuccess]="typeOfNotification"></app-toast-notification>
+@if (notificationService.showNotification) {
+<app-toast-notification [message]="notificationService.notificationMessage" [duration]="5000" [imageUrl]=""
+  [imagePosition]="'side'" [isSuccess]="notificationService.typeOfNotification"></app-toast-notification>
 }

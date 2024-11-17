@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<section class="visualUsers">
+  <h1>User List</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>Image</th>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Role</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (user of users; track $index) {
+      <tr>
+        <td data-label="Image"><img src="{{ user.getImage() }}" alt="{{ user.getName() }}'s profile picture"></td>
+        <td data-label="ID">{{ user.getId() }}</td>
+        <td data-label="Name">{{ user.getName() }}</td>
+        <td data-label="Email">{{ user.getEmail() }}</td>
+        <td data-label="Role">{{ roles[$index] }}</td>
+      </tr>
+      }
+    </tbody>
+  </table>
+</section>

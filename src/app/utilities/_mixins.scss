@@ -1,12 +1,43 @@
 @mixin properties-flex($direction, $justify, $align) {
-    display: flex;
-    flex-direction: $direction;
-    justify-content: $justify;
-    align-items: $align;
+  display: flex;
+  flex-direction: $direction;
+  justify-content: $justify;
+  align-items: $align;
 }
 
-@mixin properties-grid($columns, $row){
-    display: grid;
-    grid-template-columns: repeat($columns, 1fr);
-    grid-template-rows: repeat($row, 1fr);
+@mixin properties-grid($columns, $row) {
+  display: grid;
+  grid-template-columns: repeat($columns, 1fr);
+  grid-template-rows: repeat($row, 1fr);
+}
+
+@mixin skeleton-loader($width: 100%, $height: 100%) {
+  background: linear-gradient(90deg, rgba(224, 224, 224, 0.3) 25%, rgba(240, 240, 240, 0.5) 50%, rgba(224, 224, 224, 0.3) 75%);
+  background-size: 200% 100%;
+  border-radius: 5%;
+  width: $width;
+  height: $height;
+  animation: shimmer 1.5s infinite linear;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0) 100%);
+    animation: shimmer 1.5s infinite linear;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
 }

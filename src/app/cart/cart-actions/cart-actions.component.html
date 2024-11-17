@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<section class="cart-actions">
+  <section>
+    <h2>Total: ${{ totalPrice }}</h2>
+    <button (click)="clear()" aria-label="Clear cart">Clear cart</button>
+  </section>
+  <section class="pays-actions">
+    <button (click)="toggle()" aria-label="Confirm purchase">Confirm purchase</button>
+    @if (showSubmenu && userId != 0) {
+    <section class="submenu">
+      <button (click)="payCash()" aria-label="Pay in cash">Pay in cash</button>
+      <button (click)="payMercadoPago()" aria-label="Pay with Mercado Pago">Pay with Mercado Pago</button>
+    </section>
+    }
+  </section>
+</section>

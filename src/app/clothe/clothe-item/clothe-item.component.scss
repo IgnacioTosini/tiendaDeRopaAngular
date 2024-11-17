@@ -1,0 +1,89 @@
+@import '../../utilities/mixins';
+@import '../../utilities/variables';
+
+.clothe-item {
+  @include properties-flex(column, normal, normal);
+  list-style: none;
+  text-decoration: none;
+  width: 15rem;
+  height: 23rem;
+  margin-bottom: 1.25rem;
+  border-radius: 0.5rem;
+  background: $secondary-background;
+  transition: filter 0.5s ease-in-out;
+  position: relative;
+  overflow: hidden; /* Asegura que el contenido no sobresalga */
+  cursor: pointer;
+  content-visibility: auto;
+
+  &:hover {
+    filter: drop-shadow(0 0 0.625rem rgba(0, 0, 0, 0.788)) brightness(1.2);
+  }
+
+  .clothe-details {
+    @include properties-flex(column, center, center);
+    padding: 0rem 0rem 0rem 1rem;
+    max-height: 10rem;
+    max-width: 13rem;
+    overflow: hidden;
+
+    h2 {
+      font-size: 1rem;
+      margin: 0.625rem 0;
+      font-size: clamp(1rem, 2.5vw, 1.125rem); /* Ajusta dinámicamente el tamaño de la fuente */
+      color: #dadada;
+      text-align: center;
+      overflow: scroll;
+      height: 3rem;
+      scrollbar-width: none;
+    }
+
+    p {
+      margin: 0;
+      color: #dadada;
+      font-size: clamp(0.875rem, 2vw, 1rem); /* Ajusta dinámicamente el tamaño de la fuente */
+      text-align: center;
+    }
+  }
+
+  .admin-submenu {
+    @include properties-flex(column, center, center);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    border-radius: 0.5rem;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    z-index: 999;
+
+    &.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    button {
+      margin: 0.5rem 0;
+      padding: 0.625rem 1.25rem;
+      border: none;
+      border-radius: 0.3125rem;
+      background: $secondary-background;
+      color: white;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      cursor: pointer;
+
+      &:hover {
+        background-color: #9B8264;
+        filter: brightness(1.2);
+      }
+    }
+  }
+}
+
+.skeleton {
+  @include skeleton-loader(15rem, 23rem);
+}

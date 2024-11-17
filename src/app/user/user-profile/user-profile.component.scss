@@ -1,0 +1,160 @@
+@import '../../utilities/mixins';
+@import '../../utilities/variables';
+
+.userContainer {
+  @include properties-flex(row, space-evenly, center);
+  flex-wrap: wrap;
+
+  h2 {
+    text-align: center;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    color: $text-color-black;
+  }
+
+  .imageSection {
+    @include properties-flex(column, center, center);
+    gap: 1rem;
+
+    picture {
+      padding: 0.5rem;
+      transition: all 0.5s ease-in-out;
+
+      &:hover {
+        transform: scale(1.1);
+        transition: 0.5s;
+      }
+
+      img {
+        border: 1px solid $border-color;
+        border-radius: 50%;
+        object-fit: cover;
+        cursor: pointer;
+        width: 10rem;
+        height: 10rem;
+        transition: all 0.5s ease-in-out;
+
+        &.open {
+          width: 15rem;
+          height: 15rem;
+          border-radius: 0%;
+        }
+      }
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+
+    label {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      color: $text-color-black;
+      background-color: $secondary-background-gradient;
+      border-radius: 0.625rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        background-color: $secondary-background;
+      }
+    }
+  }
+
+  .dataSection {
+    @include properties-flex(column, center, center);
+    gap: 1rem;
+
+    section {
+      @include properties-flex(column, center, center);
+
+      label {
+        font-size: 1rem;
+        color: $text-color-black;
+        margin: 1rem;
+      }
+
+      input {
+        padding: 0.5rem;
+        border: 1px solid $border-color;
+        border-radius: 0.25rem;
+        font-size: 1rem;
+        width: 20rem;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.5s ease-in-out;
+
+        &:hover {
+          transform: scale(1.05);
+          transition: 0.5s;
+          background-color: $hover-background;
+          color: $text-color-black;
+          border: 1px solid $text-color-black;
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+      }
+    }
+  }
+
+  .customButton {
+    padding: 0.5rem;
+    border: 1px solid $border-color;
+    border-radius: 0.25rem;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.5s ease-in-out;
+
+    &:hover {
+      transform: scale(1.1);
+      transition: 0.5s;
+      background-color: $hover-background;
+      color: $text-color-black;
+      border: 1px solid $text-color-black;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    }
+  }
+
+  a {
+    display: inline-block;
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    color: $text-color-black;
+    background-color: $secondary-background-gradient;
+    border-radius: 0.625rem;
+    text-decoration: none;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+
+    &:hover {
+      background-color: $secondary-background;
+      transform: scale(1.05);
+    }
+  }
+
+  @media (max-width: 650px) {
+    flex-direction: column;
+
+    .imageSection {
+      picture {
+        img {
+          width: 8rem;
+          height: 8rem;
+        }
+      }
+    }
+
+    .dataSection {
+      section {
+        @include properties-flex(row, center, center);
+        flex-wrap: wrap;
+
+        input {
+          @media (max-width: 600px) {
+            width: 15rem;
+          }
+        }
+      }
+    }
+  }
+}

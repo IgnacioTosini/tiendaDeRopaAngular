@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<section class="cart-detail" role="main" aria-labelledby="cart-detail-title">
+  <h1 id="cart-detail-title">Shopping Cart Details</h1>
+  <ul>
+    @if (!isLoading) {
+    @for (item of cartItems; track $index) {
+    <app-cart-item [item]="item" (remove)="removeItem(item)" (goToProduct)="viewProduct(item.product)"></app-cart-item>
+    }
+    } @else {
+    @for (skeleton of skeletonItems; track $index) {
+    <li class="skeleton"></li>
+    }
+    }
+  </ul>
+  <app-cart-actions [totalPrice]="cartService.getTotalPrice()" [showSubmenu]="showSubmenu" [userId]="user.getId()"
+    (clearCart)="clearCart()" (toggleSubmenu)="toggleSubmenu()" (payInCash)="payInCash()"
+    (payWithMercadoPago)="payWithMercadoPago()" role="complementary" aria-label="Cart actions"></app-cart-actions>
+</section>
+@if (notificationService.showNotification) {
+<app-toast-notification [message]="notificationService.notificationMessage" [duration]="5000" [imagePosition]="'side'"
+  [isSuccess]="notificationService.typeOfNotification" role="alert" aria-live="assertive"></app-toast-notification>
+}

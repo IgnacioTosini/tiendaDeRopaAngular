@@ -1,0 +1,36 @@
+@import '../../utilities/mixins';
+@import '../../utilities/variables';
+@import '../../utilities/keyFrames';
+
+.uniqueProduct {
+  @include properties-flex(column, space-between, center);
+  padding: 1.25rem;
+  gap: 1.25rem;
+
+  @media (min-width: 48rem) {
+    flex-direction: row;
+  }
+}
+
+.productDescription {
+  width: 100%;
+  padding: 1.25rem;
+  border: 1px solid $border-color;
+  color: $primary-text-color-white;
+  background-color: $secondary-background;
+  border-radius: 0.3125rem;
+  box-shadow: 0 0 0.625rem rgba(0, 0, 0, 0.1);
+  margin: 1.25rem 0;
+
+  p {
+    margin-bottom: 0.625rem;
+    font-size: 1.2em;
+    text-align: justify; // Justificar el texto de la descripción
+  }
+}
+
+label {
+  @include properties-flex(row, center, center);
+  position: relative;
+  margin: 1rem 0;
+}

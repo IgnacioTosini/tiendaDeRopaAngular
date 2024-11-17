@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<section class="comments-section">
+  <h2>Comments</h2>
+  @for (review of reviews; track $index) {
+  <article class="comment">
+    <img class="user-image" [src]="review.image" alt="User Image">
+    <div class="comment-text">
+      <strong>{{ review.fullname }}</strong>: {{ review.comment }}
+    </div>
+  </article>
+  }
+  <div class="comment-input">
+    <input #reviewInput type="text" placeholder="Add a comment">
+    <button (click)="addReview(reviewInput.value); reviewInput.value=''">Submit</button>
+  </div>
+</section>
+
+@if (notificationService.showNotification) {
+<app-toast-notification [message]="notificationService.notificationMessage" [duration]="5000" [imageUrl]=""
+  [imagePosition]="'side'" [isSuccess]="notificationService.typeOfNotification"></app-toast-notification>
+}

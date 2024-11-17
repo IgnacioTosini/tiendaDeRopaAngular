@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<section class="container" #gallery>
+  <app-filters [clothes]="clothes" [nameFilter]="nameFilter" [minPriceFilter]="minPriceFilter"
+    [maxPriceFilter]="maxPriceFilter" [typeFilter]="typeFilter" [genericTypes]="genericTypes"
+    [groupedTypes]="groupedTypes" (filteredClothes)="handleFilteredClothes($event)"
+    (sortOrderChanged)="setSortOrder($event)">
+  </app-filters>
+
+  <section class="filters-gallery-container">
+    <app-active-filters [nameFilter]="nameFilter" [minPriceFilter]="minPriceFilter" [maxPriceFilter]="maxPriceFilter"
+      [typeFilter]="typeFilter" [sortOrder]="sortOrder" (resetFilterEvent)="handleResetFilter($event)">
+    </app-active-filters>
+    <section class="gallery">
+      <section class="gallery-content">
+        <ul>
+          @if (filteredClothes.length > 0) {
+          @for (clothe of filteredClothes; track $index) {
+          <app-clothe-item [clothe]="clothe" [isAdminMode]="isAdminMode" [showSubMenu]="showSubMenu"
+            [selectedClothe]="selectedClothe" (displayShowSubMenu)="displayShowSubMenu($event)"
+            (changeImage)="changeImage($index, $event.change)"
+            (setActiveImage)="setActiveImage($index, $event.imageIndex)" (goToProduct)="goToProduct($event)"
+            (viewProduct)="viewProduct($event)" (modifyProduct)="modifyProduct($event)">
+          </app-clothe-item>
+          }
+          } @else {
+          <section class="empty-message">No products found for these filters.</section>
+          }
+        </ul>
+      </section>
+      <app-pagination [pagination]="pagination" (previousPage)="onPageChange(currentPage - 1)"
+        (nextPage)="onPageChange(currentPage + 1)"></app-pagination>
+    </section>
+  </section>
+</section>

@@ -5,7 +5,11 @@ import { Pagination } from '../models/pagination.model';
   selector: 'app-pagination',
   standalone: true,
   templateUrl: './pagination.component.html',
-  styleUrls: ['./pagination.component.scss']
+  styleUrls: ['./pagination.component.scss'],
+  host: {
+    'role': 'navigation',
+    'aria-label': 'Pagination Navigation'
+  }
 })
 export class PaginationComponent {
   @Input() pagination: Pagination | null = null;

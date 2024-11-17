@@ -1,0 +1,175 @@
+@import '../../utilities/mixins';
+@import '../../utilities/variables';
+
+header {
+  nav {
+    align-items: start;
+    background: $global-background;
+
+    .container {
+      @include properties-grid(3, 1);
+      gap: 0.625rem;
+      padding: 0.625rem;
+      align-items: center;
+
+      .logo {
+        @include properties-flex(row, flex-start, center);
+
+        img {
+          width: 6rem;
+        }
+      }
+
+      .icons {
+        @include properties-flex(row, flex-end, center);
+        z-index: 99;
+
+        .user {
+          width: 100%;
+          min-width: 11rem;
+        }
+
+        picture {
+          @include properties-flex(row, center, center);
+          background: $tertiary-background;
+          border-radius: 2rem;
+          width: 3rem;
+          height: 3rem;
+          cursor: pointer;
+          margin: 0.3125rem;
+          position: relative;
+
+          .userImage {
+            border-radius: 50%;
+            padding: 0%;
+            height: 2.5rem;
+
+            &:hover {
+              transform: scale(1.1);
+              transition: 0.5s;
+            }
+          }
+
+          img {
+            width: 2.5rem;
+            padding: 0.3125rem;
+            cursor: pointer;
+            object-fit: cover;
+          }
+
+          &:hover .user-dropdown {
+            max-height: 15rem;
+            opacity: 1;
+            transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
+          }
+        }
+
+        .user-dropdown {
+          display: block;
+          position: absolute;
+          top: 100%;
+          right: 0;
+          background: $tertiary-background;
+          border-radius: 0.625rem;
+          padding: 0.625rem;
+          max-height: 0;
+          overflow: hidden;
+          opacity: 0;
+          width: 27rem;
+          transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
+
+          ul {
+            display: flex;
+            flex-direction: column;
+            gap: 0.625rem;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+
+            li {
+              @include properties-flex(row, none, center);
+              gap: 0.625rem;
+              border: $border-color solid 0rem 0rem 0.1rem 0rem;
+
+              img {
+                width: 3.5rem;
+                height: 3.5rem;
+                border-radius: 0.625rem;
+
+                &:hover {
+                  opacity: 0.7;
+                  transition: all 0.3s ease;
+                  cursor: pointer;
+                  transform: scale(1.1);
+                }
+              }
+
+              span {
+                text-align: center;
+                font-size: 1rem;
+                color: $primary-text-color;
+              }
+
+              button {
+                @include properties-flex(row, center, center);
+                cursor: pointer;
+                background-color: transparent;
+                border: none;
+
+                img {
+                  width: 2rem;
+                  height: 2rem;
+                }
+              }
+            }
+          }
+
+          .subMenuUser {
+            display: flex;
+            flex-direction: column;
+            gap: 0.625rem;
+            padding: 0;
+            max-width: 10rem;
+
+            a {
+              width: 100%;
+              max-width: 10rem;
+              color: $primary-text-color;
+              font-size: 1rem;
+              text-decoration: none;
+              cursor: pointer;
+              padding: 0.625rem;
+              box-sizing: border-box; // Asegurarse de que el padding se incluya en el ancho
+              white-space: nowrap;
+              transition: all 1s ease;
+
+              &:hover {
+                color: #ffffff;
+                background-color: $secondary-background;
+                width: calc(100% + 1.25rem); // Ajustar el ancho para incluir el padding
+                position: relative;
+                left: -0.625rem; // Ajustar la posición para alinear con el borde del contenedor
+                transition: all 1s ease;
+              }
+            }
+          }
+
+          @media screen and (max-width: 48rem) {
+            width: 80%;
+            left: -8rem;
+          }
+        }
+
+        .user-dropdown {
+          width: 100%;
+          min-width: 10.5rem;
+        }
+      }
+
+      @media screen and (max-width: 48rem) {
+        @include properties-flex(row, center, center);
+        flex-wrap: wrap;
+      }
+    }
+  }
+}

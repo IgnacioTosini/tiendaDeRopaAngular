@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<form [formGroup]="userForm" (ngSubmit)="createNewUser()">
+<form [formGroup]="userForm" (ngSubmit)="createNewUser()" aria-label="User Registration Form">
   <section>
     <label for="name">Name:</label>
-    <input id="name" type="text" formControlName="name">
+    <input id="name" type="text" formControlName="name" aria-required="true" aria-describedby="nameError">
     @if (userForm.controls['name'].invalid && userForm.controls['name'].touched) {
     <section>
       @if (userForm.controls['name'].errors?.['required']) {
@@ -17,7 +17,7 @@
 
   <section>
     <label for="lastname">Last Name:</label>
-    <input id="lastname" type="text" formControlName="lastname">
+    <input id="lastname" type="text" formControlName="lastname" aria-required="true" aria-describedby="lastnameError">
     @if (userForm.controls['lastname'].invalid && userForm.controls['lastname'].touched) {
     <section>
       @if (userForm.controls['lastname'].errors?.['required']) {
@@ -33,7 +33,7 @@
 
   <section>
     <label for="email">Email:</label>
-    <input id="email" type="email" formControlName="email">
+    <input id="email" type="email" formControlName="email" aria-required="true" aria-describedby="emailError">
     @if (userForm.controls['email'].invalid && userForm.controls['email'].touched) {
     <section>
       @if (userForm.controls['email'].errors?.['required']) {
@@ -48,7 +48,7 @@
 
   <section>
     <label for="password">Password:</label>
-    <input id="password" type="password" formControlName="password">
+    <input id="password" type="password" formControlName="password" aria-required="true" aria-describedby="passwordError">
     @if (userForm.controls['password'].invalid && userForm.controls['password'].touched) {
     <section>
       @if (userForm.controls['password'].errors?.['required']) {
@@ -64,13 +64,13 @@
 
   <section class="imageSection">
     <label for="image">Image:</label>
-    <input id="image" type="file" (change)="onFileChange($event)">
+    <input id="image" type="file" (change)="onFileChange($event)" aria-describedby="imageError">
     <img class="preview" [src]='file' [alt]="file">
   </section>
 
   <section>
     <label for="tel">Cellphone:</label>
-    <input id="tel" type="text" formControlName="tel">
+    <input id="tel" type="text" formControlName="tel" aria-required="true" aria-describedby="telError">
     @if (userForm.controls['tel'].invalid && userForm.controls['tel'].touched) {
     <section>
       @if (userForm.controls['tel'].errors?.['required']) {
@@ -85,7 +85,7 @@
   <button type="submit">Create User</button>
 </form>
 
-@if (showNotification) {
-<app-toast-notification [message]="notificationMessage" [duration]="5000" [imagePosition]="'side'"
-  [isSuccess]="false"></app-toast-notification>
+@if (notificationService.showNotification) {
+<app-toast-notification [message]="notificationService.notificationMessage" [duration]="5000" [imageUrl]=""
+  [imagePosition]="'side'" [isSuccess]="notificationService.typeOfNotification"></app-toast-notification>
 }

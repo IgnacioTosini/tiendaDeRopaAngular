@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<header>
+  <nav>
+    <section class="container">
+      <section class="logo">
+        <a href="/home"><img src="../../assets/photos/logoGeneric.png" alt="Store Logo"></a>
+      </section>
+      <app-search (search)="searchClothes($event)"></app-search>
+      <section class="icons">
+        <app-cart-dropdown [cartItems]="cartItems" [isLogging]="isLogging"></app-cart-dropdown>
+        <picture (mouseenter)="showUserDropdown()" (mouseleave)="hideUserDropdown()">
+          @if (!isLogging) {
+          <img src="../../assets/photos/user.svg" alt="User Icon">
+          }@else {
+          <img [src]="user.getImage()" class="userImage" alt="User Profile Image">
+          }
+          @if (isUserDropdownVisible) {
+          <section class="cart-dropdown user-dropdown" [@slideDownUp]>
+            <ul class="subMenuUser">
+              @if (!isLogging) {
+              <li><a href="/create-user">Create User</a></li>
+              <li><a href="/login">Login</a></li>
+              }
+              @else {
+              <li><a href="/user-profile">User Profile</a></li>
+              <li><a href="/favorites">Favorites</a></li>
+              <li><a (click)="logOut()">Log Out</a></li>
+              }
+            </ul>
+          </section>
+        }
+        </picture>
+      </section>
+    </section>
+    <app-drop-down-menu-products [groupedClothes]="groupedClothes"></app-drop-down-menu-products>
+  </nav>
+</header>

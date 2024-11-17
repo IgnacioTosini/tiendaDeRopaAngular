@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<section class="filters" aria-labelledby="filters-heading">
+  <h2 id="filters-heading">Filters</h2>
+  <label for="nameFilter">Search by name:</label>
+  <input id="nameFilter" [(ngModel)]="nameFilter" (input)="applyFilters()" (keypress)="preventNumberInput($event)"
+    placeholder="Search by name..." aria-label="Search by name">
+
+  <label for="minPriceFilter">Minimum price:</label>
+  <input id="minPriceFilter" type="number" [(ngModel)]="minPriceFilter" (input)="applyFilters()"
+    [placeholder]="minPriceFilter ? null : 'Minimum price'" (focus)="minPriceFilter = null"
+    (keypress)="preventNumberInputCant($event)" aria-label="Minimum price">
+
+  <label for="maxPriceFilter">Maximum price:</label>
+  <input id="maxPriceFilter" type="number" [(ngModel)]="maxPriceFilter" (input)="applyFilters()"
+    placeholder="Maximum price" (keypress)="preventNumberInputCant($event)" aria-label="Maximum price">
+
+  <label for="typeFilter">Category:</label>
+  <select id="typeFilter" [(ngModel)]="typeFilter" (change)="applyFilters()" aria-label="Category">
+    <option value="">All Categories</option>
+    @for (genericType of genericTypes; track trackByGenericType($index, genericType)) {
+    <optgroup label="{{genericType}}">
+      <option value="{{genericType}}">{{genericType}} (Todos)</option>
+      @for (specificType of groupedTypes[genericType]; track trackBySpecificType($index, specificType)) {
+      <option value="{{specificType}}">{{specificType}}</option>
+      }
+    </optgroup>
+    }
+  </select>
+
+  <section class="containerButtons">
+    <button (click)="setSortOrder('name')" aria-label="Sort by name">Sort by name</button>
+    <button (click)="setSortOrder('price')" aria-label="Sort by price ascending">Sort by price (ascending)</button>
+    <button (click)="setSortOrder('price-desc')" aria-label="Sort by price descending">Sort by price (descending)</button>
+  </section>
+
+  @if (notificationService.showNotification) {
+  <app-toast-notification [message]="notificationService.notificationMessage" [duration]="5000" [imageUrl]=""
+    [imagePosition]="'side'" [isSuccess]="notificationService.typeOfNotification"></app-toast-notification>
+  }
+</section>

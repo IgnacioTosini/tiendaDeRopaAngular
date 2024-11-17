@@ -1,17 +1,18 @@
 <!DOCTYPE html>
 <section>
-  <h2>Tus productos favoritos</h2>
+  <h1>Your Favorite Products</h1>
   <ul class="favorites-container">
     @for (favorite of user.getWisheList(); track $index) {
-    <li class="favorite-item">
+    <li class="favorite-item" itemscope itemtype="http://schema.org/Product">
       <div class="image-container">
-        <img [src]="favorite.getPhoto()" alt="{{ favorite.getName() }}">
-        <button class="favorite" (click)="removeFavorite(favorite)" [class.filled]="true">&#9733;</button>
+        <img [src]="favorite.getPhoto()" alt="{{ favorite.getName() }}" itemprop="image">
+        <button class="favorite" (click)="removeFavorite(favorite)" [class.filled]="true"
+          aria-label="Remove from favorites">&#9733;</button>
       </div>
       <section class="favorite-details">
-        <h2>{{favorite.getName()}}</h2>
+        <h2 itemprop="name">{{favorite.getName()}}</h2>
       </section>
-      <button type="button" class="goProduct" (click)="goToFavoriteProduct(favorite)">Ver Producto</button>
+      <button type="button" class="goProduct" (click)="goToFavoriteProduct(favorite)">View Product</button>
     </li>
     }
   </ul>

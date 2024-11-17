@@ -1,9 +1,11 @@
 import { UserService } from '../services/user.service';
-import { ImageService } from '../services/image.service'; // Importa el servicio de imagen
+import { ImageService } from '../services/image.service';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ToastNotificationComponent } from '../toast-notification/toast-notification.component';
 import { Router } from '@angular/router';
+import { NotificationService } from '../services/notification.service';
+import { Meta } from '@angular/platform-browser';
 const DefaultImageUser = '../../assets/photos/person.svg';
 
 @Component({
@@ -19,7 +21,7 @@ export class RegisterComponent {
   showNotification: boolean = false;
   notificationMessage: string = '';
 
-  constructor(private userService: UserService, private formBuilder: FormBuilder, private imageService: ImageService, private router: Router) {
+  constructor(private userService: UserService, private formBuilder: FormBuilder, private imageService: ImageService, private router: Router, public notificationService: NotificationService, private meta: Meta) {
     this.userForm = this.formBuilder.group({
       password: ['', [Validators.required, Validators.minLength(8)]],
       email: ['', [Validators.required, Validators.email]],
@@ -28,6 +30,12 @@ export class RegisterComponent {
       name: ['', [Validators.required, Validators.minLength(2)]],
       tel: ['', [Validators.required, Validators.pattern("^((\\+91-?)|0)?[0-9]{10}$")]], // Validación para un número de teléfono de 10 dígitos
     });
+
+    this.meta.addTags([
+      { name: 'description', content: 'Register a new user to access our clothing store.' },
+      { name: 'keywords', content: 'register, user, clothing store, sign up' },
+      { name: 'robots', content: 'index, follow' }
+    ]);
   }
 
   // Esta función se llama cuando el usuario selecciona un archivo
@@ -50,12 +58,7 @@ export class RegisterComponent {
   createNewUser(): void {
     // Verificar si el formulario es válido
     if (!this.userForm.valid) {
-      this.showNotification = true;
-      this.notificationMessage = this.getErrorMessage();
-      setTimeout(() => {
-        this.showNotification = false;
-      }, 5000);
-      console.log('Datos del formulario inválidos');
+      this.notificationService.handleNotification(this.getErrorMessage(), false);
       return;
     }
     console.log(this.userForm.value.password);

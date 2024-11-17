@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<section class="search">
+  <input type="text" [(ngModel)]="searchQuery" (input)="searchClothes()" (blur)="clearSearch()"
+    (keypress)="preventNumberInput($event)" placeholder="Search Product...">
+  @if (searchResults.length > 0) {
+  <section class="search-results" (click)="$event.stopPropagation()" [@slideDownUp]>
+    <ul>
+      @for (item of searchResults; track $index) {
+      <li>
+        <a (click)="viewProduct(item)">
+          <img [@zoomInOut] [src]="item.getImages()[item.currentImage].getUrl()" [alt]="item.getName()"
+            (error)="onImageError($event)">
+          <span>{{ item.getName() }}</span>
+        </a>
+      </li>
+      }
+    </ul>
+  </section>
+  } @else if(searchResults.length === 0 && searchQuery.length > 0){
+  <section class="search-results" (click)="$event.stopPropagation()" [@slideDownUp]>
+    <p>No results found</p>
+  </section>
+  }
+</section>
+
+@if (notificationService.showNotification) {
+<app-toast-notification [message]="notificationService.notificationMessage" [duration]="5000" [imageUrl]=""
+  [imagePosition]="'side'" [isSuccess]="notificationService.typeOfNotification"></app-toast-notification>
+}

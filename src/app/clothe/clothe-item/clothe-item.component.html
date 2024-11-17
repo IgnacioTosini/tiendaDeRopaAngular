@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+@if (!clothe) {
+<li class="clothe-item skeleton"></li>
+} @else {
+<li class="clothe-item" (click)="displayShowSubMenu.emit(clothe)" role="listitem" [attr.aria-label]="getAriaLabel()">
+  <script type="application/ld+json">{{ getStructuredData() }}</script>
+  <app-image-wrapper [clothe]="clothe" (changeImage)="changeImage.emit({ index: 1, change: $event })"
+    (setActiveImage)="setActiveImage.emit({ index: 1, imageIndex: $event })" [isAdminMode]="true"></app-image-wrapper>
+  <a (click)="goToProduct.emit(clothe)" role="link">
+    <section class="clothe-details">
+      <h2>{{ clothe.getName() }}</h2>
+      <p>Size: {{ getSizesForProduct() }}</p>
+      <p>${{ clothe.getPrice() }}</p>
+    </section>
+  </a>
+  @if (showSubMenu && selectedClothe === clothe) {
+  <section class="admin-submenu" [class.visible]="isAdminMode" (click)="displayShowSubMenu.emit(clothe)" role="region" aria-label="Admin submenu">
+    <button (click)="viewProduct.emit(clothe)" aria-label="View product">Ver</button>
+    <button (click)="modifyProduct.emit(clothe)" aria-label="Modify product">Modificar</button>
+  </section>
+  }
+</li>
+}

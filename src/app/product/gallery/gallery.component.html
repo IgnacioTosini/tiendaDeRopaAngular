@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<section class="containerGallery">
+  <section class="mainGallery">
+    <ul>
+      @for (clothe of clothes; track $index) {
+      @if (!clothe) {
+      <li class="clothe-item skeleton" aria-hidden="true"></li>
+      } @else {
+      <app-clothe-item [clothe]="clothe" [selectedClothe]="selectedClothe"
+        (changeImage)="changeImage($index, $event.change)" (setActiveImage)="setActiveImage($index, $event.imageIndex)"
+        (goToProduct)="goToProduct($event)"></app-clothe-item>
+      }
+      }
+    </ul>
+  </section>
+</section>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<section class="active-filters" aria-label="Filtros Activos">
+  @if (nameFilter) {
+  <span>Nombre: {{nameFilter}} <button aria-label="Eliminar filtro de nombre"
+      (click)="resetNameFilter()">X</button></span>
+  }
+  @if (minPriceFilter) {
+  <span>Precio mínimo: {{minPriceFilter}} <button aria-label="Eliminar filtro de precio mínimo"
+      (click)="resetMinPriceFilter()">X</button></span>
+  }
+  @if (maxPriceFilter) {
+  <span>Precio máximo: {{maxPriceFilter}} <button aria-label="Eliminar filtro de precio máximo"
+      (click)="resetMaxPriceFilter()">X</button></span>
+  }
+  @if (typeFilter) {
+  <span>Categoría: {{typeFilter}} <button aria-label="Eliminar filtro de categoría"
+      (click)="resetTypeFilter()">X</button></span>
+  }
+  @if (sortOrder) {
+  <span>Orden: {{sortOrder}} <button aria-label="Eliminar filtro de orden" (click)="resetSortOrder()">X</button></span>
+  }
+</section>
