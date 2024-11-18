@@ -2,7 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastNotificationComponent } from '../../toast-notification/toast-notification.component';
-import { PasswordFieldComponent } from '../../password-field/password-field.component';
+import { PasswordFieldComponent } from '../../password/password-field/password-field.component';
 import { User } from '../../models/user.model';
 import { Tax } from 'mercadopago/dist/clients/commonTypes';
 import { UserService } from '../../services/user.service';

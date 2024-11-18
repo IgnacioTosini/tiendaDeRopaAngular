@@ -16,17 +16,20 @@
   </section>
   <section>
     <label for="password">Password:</label>
-    <app-password-field [control]="passwordControl" aria-required="true" aria-describedby="passwordError"></app-password-field>
+    <app-password-field [control]="passwordControl" aria-required="true"
+      aria-describedby="passwordError"></app-password-field>
     @if (loginForm.controls['password'].errors?.['required'] && loginForm.controls['password'].touched) {
     <small id="passwordError">
       Password is required
     </small>
     }
+    <a (click)="navigateToPasswordReset()" aria-label="Forgot Password">Forgot Password?</a>
   </section>
   <button type="submit" aria-label="Login">Login</button>
 
   @if (notificationService.showNotification) {
-  <app-toast-notification [message]="notificationService.notificationMessage" [duration]="5000" [imageUrl]=""
-    [imagePosition]="'side'" [isSuccess]="notificationService.typeOfNotification"></app-toast-notification>
+  <app-toast-notification [message]="notificationService.notificationMessage" [duration]="5000" [imagePosition]="'side'"
+    [isSuccess]="notificationService.typeOfNotification">
+  </app-toast-notification>
   }
 </form>

@@ -3,9 +3,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { UserService } from '../services/user.service';
 import { ToastNotificationComponent } from '../toast-notification/toast-notification.component';
-import { PasswordFieldComponent } from '../password-field/password-field.component';
+import { PasswordFieldComponent } from '../password/password-field/password-field.component';
 import { NotificationService } from '../services/notification.service';
 import { Meta, Title } from '@angular/platform-browser';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -16,11 +17,8 @@ import { Meta, Title } from '@angular/platform-browser';
 })
 export class LoginComponent implements OnInit {
   loginForm: FormGroup = new FormGroup({});
-  showNotification: boolean = false;
-  notificationMessage: string = '';
-  notificationDuration: number = 5000; // Duración de la notificación en milisegundos
 
-  constructor(private formBuilder: FormBuilder, private userService: UserService, private authService: AuthService, public notificationService: NotificationService, private meta: Meta, private title: Title) { }
+  constructor(private formBuilder: FormBuilder, private userService: UserService, private authService: AuthService, public notificationService: NotificationService, private meta: Meta, private title: Title, private router: Router) { }
 
   ngOnInit(): void {
     this.title.setTitle('Login - Your Store Name');
@@ -54,11 +52,7 @@ export class LoginComponent implements OnInit {
         console.log('User not found');
       }
     }, error => {
-      this.showNotification = true;
-      this.notificationMessage = 'El correo electrónico o la contraseña son incorrectos.';
-      setTimeout(() => {
-        this.showNotification = false;
-      }, this.notificationDuration);
+      this.notificationService.handleNotification('El correo electrónico o la contraseña son incorrectos.', false);
       console.error('Login error:', error);
     });
   }
@@ -75,5 +69,9 @@ export class LoginComponent implements OnInit {
 
   get passwordControl(): FormControl {
     return this.loginForm.get('password') as FormControl;
+  }
+
+  navigateToPasswordReset(): void {
+    this.router.navigate(['/sendEmail']);
   }
 }

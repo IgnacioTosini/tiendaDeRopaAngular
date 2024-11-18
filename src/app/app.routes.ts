@@ -15,6 +15,8 @@ import { ViewCreateProductPageComponent } from './view/view-create-product-page/
 import { ViewModifyProductPageComponent } from './view/view-modify-product-page/view-modify-product-page.component';
 import { UserProfileComponent } from './user/user-profile/user-profile.component';
 import { ViewInvoicesPageComponent } from './view/view-invoices-page/view-invoices-page.component';
+import { PasswordResetComponentComponent } from './password/password-reset-component/password-reset-component.component';
+import { SendPasswordRequestComponent } from './password/send-password-request/send-password-request.component';
 
 export const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -32,6 +34,8 @@ export const routes: Routes = [
   { path: 'cart-detail', component: CartDetailComponent },
   { path: 'invoice', component: InvoiceComponent },
   { path: 'favorites', component: FavoritesComponent, canActivate: [AuthGuard] },
+  { path: 'password-reset', component: PasswordResetComponentComponent },
+  { path: 'sendEmail', component: SendPasswordRequestComponent },
   { path: 'refresh', component: HomeComponent }, // Ruta temporal para forzar la recarga
   { path: '**', redirectTo: '/home', pathMatch: 'full' },
 ];
