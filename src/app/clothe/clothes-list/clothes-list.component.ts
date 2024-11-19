@@ -8,11 +8,14 @@ import { ImageService } from '../../services/image.service';
 import { Image } from '../../models/images.model';
 import { NotificationService } from '../../services/notification.service';
 import { Meta, Title } from '@angular/platform-browser';
+import { GlobalConstants } from '../../config/global-constants';
+import { PaginationComponent } from '../../pagination/pagination.component';
+import { Pagination } from '../../models/pagination.model';
 
 @Component({
   selector: 'app-clothes-list',
   standalone: true,
-  imports: [ReactiveFormsModule, FormsModule, ToastNotificationComponent],
+  imports: [ReactiveFormsModule, FormsModule, ToastNotificationComponent, PaginationComponent],
   animations: [slideInOutLeft, slideInOutRight, zoomInOut],
   templateUrl: './clothes-list.component.html',
   styleUrls: ['./clothes-list.component.scss']
@@ -23,6 +26,8 @@ export class ClothesListComponent implements OnInit, OnChanges {
   clothesList: ClothesStock[] = [];
   selectedImage: string = '';
   previewImage: string = '';
+  pagination: Pagination | null = null;
+  currentPage: number = 0;
   clothesForm = new FormGroup({
     name: new FormControl('', Validators.required),
     price: new FormControl(0, [Validators.required, Validators.min(0)]),
@@ -50,21 +55,17 @@ export class ClothesListComponent implements OnInit, OnChanges {
     private title: Title
   ) { }
 
-  ngOnInit(): void {
-    this.clothesService.findAll(0, 10).subscribe(clothes => {
-      this.clothesList = clothes.clothes;
-      console.log(this.clothesList);
-      this.genericTypes = [...new Set(clothes.clothes.map(clothe => clothe.getGenericType()))];
-      this.specificTypes = [...new Set(clothes.clothes.map(clothe => clothe.getSpecificType()))];
-      console.log(this.specificTypes);
-    });
+  async ngOnInit() {
+    await this.loadClothes();
     this.title.setTitle('Clothes List - Clothing Store');
     this.meta.addTags([
       { name: 'description', content: 'Explore our list of available clothes in the store. Find the best clothes at the best prices.' },
       { name: 'keywords', content: 'clothes, clothing store, buy clothes, fashion, cheap clothes' },
       { name: 'robots', content: 'index, follow' },
-      { name: 'author', content: 'Clothing Store' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' }
+      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+      { name: 'author', content: GlobalConstants.storeName },
+      { property: 'og:image', content: GlobalConstants.previewImageUrl },
+      { property: 'og:url', content: window.location.href },
     ]);
   }
 
@@ -72,6 +73,15 @@ export class ClothesListComponent implements OnInit, OnChanges {
     if (changes['selectedClothes'] && this['selectedClothes']) {
       this.selectClothes(this.selectedClothes);
     }
+  }
+
+  async loadClothes(page: number = this.currentPage) {
+    this.clothesService.findAll(page, 8).subscribe(clothes => {
+      this.clothesList = clothes.clothes;
+      this.pagination = clothes.pagination;
+      this.genericTypes = [...new Set(clothes.clothes.map(clothe => clothe.getGenericType()))];
+      this.specificTypes = [...new Set(clothes.clothes.map(clothe => clothe.getSpecificType()))];
+    });
   }
 
   selectClothes(clothes: ClothesStock): void {
@@ -88,12 +98,10 @@ export class ClothesListComponent implements OnInit, OnChanges {
     });
     this.selectedImage = '';
     this.previewImage = '';
-    // Reset the file input
     const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
     if (fileInput) {
       fileInput.value = '';
     }
-    // Update the title and meta description dynamically
     this.title.setTitle(`${clothes.getName()} - Clothing Store`);
     this.meta.updateTag({ name: 'description', content: `Buy ${clothes.getName()} at the best price. ${clothes.getDescription()}` });
   }
@@ -106,7 +114,6 @@ export class ClothesListComponent implements OnInit, OnChanges {
 
     if (this.selectedClothes) {
       const updatedClothes = { ...this.selectedClothes, ...this.clothesForm.value };
-      console.log(updatedClothes);
       const finallyClothe = {
         clothe: updatedClothes,
         subject: this.subject,
@@ -114,7 +121,7 @@ export class ClothesListComponent implements OnInit, OnChanges {
       }
       this.clothesService.createUpdate(finallyClothe).subscribe(() => {
         this.selectedClothes = null;
-        location.reload(); // Reload the page
+        location.reload();
       });
     }
   }
@@ -128,7 +135,7 @@ export class ClothesListComponent implements OnInit, OnChanges {
       }
 
       this.imageService.extractBase64(file).then((res: any) => {
-        this.previewImage = res.base; // Update the preview image
+        this.previewImage = res.base;
       });
     }
   }
@@ -195,12 +202,10 @@ export class ClothesListComponent implements OnInit, OnChanges {
     const genericType = control.get('genericType')?.value;
     const specificType = control.get('specificType')?.value;
 
-    // Ensure genericTypes and specificTypes are defined
     if (!this.genericTypes || !this.specificTypes) {
       return null;
     }
 
-    // Check if the genericType or specificType are new
     const isNewGenericType = !this.genericTypes.includes(genericType);
     const isNewSpecificType = !this.specificTypes.includes(specificType);
 
@@ -228,10 +233,8 @@ export class ClothesListComponent implements OnInit, OnChanges {
     this.imageService.handleImageError(event);
   }
 
-  /*   deleteClothe(clothe: ClothesStock): void {
-      this.clothesService.deleteClothe(clothe).subscribe(() => {
-        this.selectedClothes = null;
-        location.reload(); // Reload the page
-      });
-    } */
+  onPageChange(page: number) {
+    this.currentPage = page;
+    this.loadClothes(page);
+  }
 }

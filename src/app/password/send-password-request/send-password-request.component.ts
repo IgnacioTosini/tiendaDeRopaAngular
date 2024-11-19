@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { PasswordService } from '../../services/password.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ToastNotificationComponent } from '../../toast-notification/toast-notification.component';
+import { GlobalConstants } from '../../config/global-constants';
 
 @Component({
   selector: 'app-send-password-request',
@@ -28,7 +29,10 @@ export class SendPasswordRequestComponent implements OnInit {
     this.title.setTitle('Send Password Reset Request - YourAppName');
     this.meta.addTags([
       { name: 'description', content: 'Send a password reset request to regain access to your account.' },
-      { name: 'keywords', content: 'password reset, account recovery, email reset' }
+      { name: 'keywords', content: 'password reset, account recovery, email reset' },
+      { name: 'author', content: GlobalConstants.storeName },
+      { property: 'og:image', content: GlobalConstants.previewImageUrl },
+      { property: 'og:url', content: window.location.href },
     ]);
   }
 

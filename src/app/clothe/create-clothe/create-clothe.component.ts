@@ -7,6 +7,7 @@ import { ImageService } from '../../services/image.service';
 import { ClothesStockService } from '../../services/clothes-stock.service';
 import { Image } from '../../models/images.model';
 import { Meta, Title } from '@angular/platform-browser';
+import { GlobalConstants } from '../../config/global-constants';
 
 @Component({
   selector: 'app-create-clothe',
@@ -51,7 +52,10 @@ export class CreateClotheComponent implements OnInit {
     this.meta.addTags([
       { name: 'description', content: 'Create a new clothe item in our online store. Fill out the form to add a new product to our catalog.' },
       { name: 'keywords', content: 'create clothe, new clothe, online store, clothing, fashion' },
-      { name: 'robots', content: 'index, follow' }
+      { name: 'robots', content: 'index, follow' },
+      { name: 'author', content: GlobalConstants.storeName },
+      { property: 'og:image', content: GlobalConstants.previewImageUrl },
+      { property: 'og:url', content: window.location.href },
     ]);
   }
 

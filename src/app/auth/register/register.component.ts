@@ -1,11 +1,12 @@
-import { UserService } from '../services/user.service';
-import { ImageService } from '../services/image.service';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ToastNotificationComponent } from '../toast-notification/toast-notification.component';
 import { Router } from '@angular/router';
-import { NotificationService } from '../services/notification.service';
 import { Meta } from '@angular/platform-browser';
+import { ToastNotificationComponent } from '../../toast-notification/toast-notification.component';
+import { UserService } from '../../services/user.service';
+import { ImageService } from '../../services/image.service';
+import { NotificationService } from '../../services/notification.service';
+import { GlobalConstants } from '../../config/global-constants';
 const DefaultImageUser = '../../assets/photos/person.svg';
 
 @Component({
@@ -34,7 +35,10 @@ export class RegisterComponent {
     this.meta.addTags([
       { name: 'description', content: 'Register a new user to access our clothing store.' },
       { name: 'keywords', content: 'register, user, clothing store, sign up' },
-      { name: 'robots', content: 'index, follow' }
+      { name: 'robots', content: 'index, follow' },
+      { name: 'author', content: GlobalConstants.storeName },
+      { property: 'og:image', content: GlobalConstants.previewImageUrl },
+      { property: 'og:url', content: window.location.href },
     ]);
   }
 

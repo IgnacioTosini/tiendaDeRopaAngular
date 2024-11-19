@@ -4,6 +4,7 @@ import { Component, OnInit } from '@angular/core';
 import { ClothesStock } from '../../models/clothesStock.model';
 import { Meta, Title } from '@angular/platform-browser';
 import { ClotheItemComponent } from '../../clothe/clothe-item/clothe-item.component';
+import { GlobalConstants } from '../../config/global-constants';
 
 @Component({
   selector: 'app-gallery',
@@ -24,7 +25,8 @@ export class GalleryComponent implements OnInit {
   ) { }
 
   async ngOnInit() {
-    const response = await this.clothesStockService.findAll(0, 3).toPromise();
+    const randomStartIndex = Math.floor(Math.random() * 2);
+    const response = await this.clothesStockService.findAll(randomStartIndex, 3).toPromise();
     this.clothes = response ? response.clothes : [];
     for (let i = this.clothes.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -41,7 +43,10 @@ export class GalleryComponent implements OnInit {
     this.meta.addTags([
       { name: 'description', content: 'Explore our latest collection of clothes in the gallery.' },
       { name: 'keywords', content: 'clothes, fashion, gallery, tienda de ropa' },
-      { name: 'robots', content: 'index, follow' }
+      { name: 'robots', content: 'index, follow' },
+      { name: 'author', content: GlobalConstants.storeName },
+      { property: 'og:image', content: GlobalConstants.previewImageUrl },
+      { property: 'og:url', content: window.location.href },
     ]);
   }
 

@@ -4,6 +4,7 @@ import { ToastNotificationComponent } from '../../toast-notification/toast-notif
 import { ClothesStock } from '../../models/clothesStock.model';
 import { NotificationService } from '../../services/notification.service';
 import { Meta, Title } from '@angular/platform-browser';
+import { GlobalConstants } from '../../config/global-constants';
 
 @Component({
   selector: 'app-filters',
@@ -26,7 +27,6 @@ export class FiltersComponent implements OnInit {
 
   showNotification: boolean = false;
   notificationMessage: string = '';
-
   private currentSortOrder: 'name' | 'price' | 'price-desc' | null = null;
 
   constructor(public notificationService: NotificationService, private meta: Meta, private titleService: Title) {}
@@ -35,7 +35,10 @@ export class FiltersComponent implements OnInit {
     this.titleService.setTitle('Clothing Filters - Clothing Store');
     this.meta.addTags([
       { name: 'description', content: 'Use our filters to find the clothing you are looking for in our clothing store.' },
-      { name: 'keywords', content: 'clothing filters, clothing store, search clothing, clothing by name, clothing by price, clothing by category' }
+      { name: 'keywords', content: 'clothing filters, clothing store, search clothing, clothing by name, clothing by price, clothing by category' },
+      { name: 'author', content: GlobalConstants.storeName },
+      { property: 'og:image', content: GlobalConstants.previewImageUrl },
+      { property: 'og:url', content: window.location.href },
     ]);
   }
 
@@ -56,10 +59,8 @@ export class FiltersComponent implements OnInit {
 
     if (this.typeFilter && this.typeFilter !== 'Todas las Categorias') {
       if (this.genericTypes.includes(this.typeFilter)) {
-        // Filtrar por genericType y todos sus specificTypes
         filtered = filtered.filter(clothe => clothe.getGenericType() === this.typeFilter || this.groupedTypes[this.typeFilter].includes(clothe.getSpecificType()));
       } else {
-        // Filtrar por specificType
         filtered = filtered.filter(clothe => clothe.getSpecificType() === this.typeFilter);
       }
     }

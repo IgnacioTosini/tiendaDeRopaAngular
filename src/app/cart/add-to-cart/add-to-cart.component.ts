@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
+import { GlobalConstants } from '../../config/global-constants';
 
 @Component({
   selector: 'app-add-to-cart',
@@ -20,7 +21,10 @@ export class AddToCartComponent {
     this.title.setTitle('Add to Cart - Your Online Clothing Store');
     this.meta.addTags([
       { name: 'description', content: 'Add your favorite clothing items to your cart. Choose the size and quantity you need. Shop the latest fashion trends at our online store.' },
-      { name: 'keywords', content: 'clothing, online store, add to cart, fashion, shopping, buy clothes, latest trends, apparel, e-commerce' }
+      { name: 'keywords', content: 'clothing, online store, add to cart, fashion, shopping, buy clothes, latest trends, apparel, e-commerce' },
+      { name: 'author', content: GlobalConstants.storeName },
+      { property: 'og:image', content: GlobalConstants.previewImageUrl },
+      { property: 'og:url', content: window.location.href },
     ]);
   }
 

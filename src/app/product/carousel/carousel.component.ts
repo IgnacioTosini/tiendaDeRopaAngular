@@ -1,9 +1,11 @@
-import { NavigationService } from './../services/navigation-service.service';
-import { ClothesStockService } from './../services/clothes-stock.service';
+import { ImageService } from './../../services/image.service';
 import { Component, HostListener } from '@angular/core';
-import { ClothesStock } from '../models/clothesStock.model';
 import { Router } from '@angular/router';
 import { Meta, Title } from '@angular/platform-browser';
+import { ClothesStockService } from '../../services/clothes-stock.service';
+import { ClothesStock } from '../../models/clothesStock.model';
+import { SkeletonService } from '../../services/skeleton-service.service';
+import { GlobalConstants } from '../../config/global-constants';
 
 @Component({
   selector: 'app-carousel',
@@ -14,21 +16,36 @@ import { Meta, Title } from '@angular/platform-browser';
 })
 export class CarouselComponent {
   clothes: ClothesStock[] = [];
+  skeletonItems: number[] = [];
   currentImageIndex = 0;
   startX!: number;
   isDragging = false;
   selectedClothe: ClothesStock | null = null;
+  isLoading: boolean = true;
 
-  constructor(private ClothesStockService: ClothesStockService, private router: Router, private navigationService: NavigationService, private meta: Meta, private titleService: Title) { }
+  constructor(
+    private clothesStockService: ClothesStockService,
+    private router: Router,
+    private meta: Meta,
+    private titleService: Title,
+    private skeletonService: SkeletonService,
+    private imageService: ImageService
+  ) { }
 
   async ngOnInit() {
     this.titleService.setTitle('Clothes Carousel - Best Fashion Collection');
     this.meta.addTags([
       { name: 'description', content: 'Discover the best fashion collection in our clothes carousel. Find the latest trends and styles.' },
-      { name: 'keywords', content: 'fashion, clothes, carousel, trends, styles' }
+      { name: 'keywords', content: 'fashion, clothes, carousel, trends, styles' },
+      { name: 'author', content: GlobalConstants.storeName },
+      { property: 'og:image', content: GlobalConstants.previewImageUrl },
+      { property: 'og:url', content: window.location.href },
     ]);
-    await this.ClothesStockService.findAll(0, 5).toPromise();
-    this.clothes = this.ClothesStockService.clothesArray;
+    this.skeletonItems = this.skeletonService.generateSkeletonItems(5);
+    const randomStartIndex = Math.floor(Math.random() * 2);
+    await this.clothesStockService.findAll(randomStartIndex, 5).toPromise();
+    this.clothes = this.clothesStockService.clothesArray;
+    this.isLoading = false;
   }
 
   nextImage() {
@@ -68,7 +85,7 @@ export class CarouselComponent {
   }
 
   @HostListener('mouseup', ['$event'])
-  onMouseUp(event: MouseEvent) {
+  onMouseUp() {
     this.isDragging = false;
   }
 
@@ -76,5 +93,9 @@ export class CarouselComponent {
     this.router.navigate(['/product', clothe.getCode()], { state: { name: clothe.getName() } }).then(() => {
       window.scrollTo(0, 0);
     });
+  }
+
+  onImageError(event: Event) {
+    this.imageService.handleImageError(event);
   }
 }

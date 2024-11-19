@@ -7,6 +7,7 @@ import { ImageService } from '../../services/image.service';
 import { AuthService } from '../../services/auth.service';
 import { UserService } from '../../services/user.service';
 import { Meta } from '@angular/platform-browser';
+import { GlobalConstants } from '../../config/global-constants';
 
 @Component({
   selector: 'app-image-wrapper',
@@ -39,7 +40,10 @@ export class ImageWrapperComponent implements OnInit {
     this.meta.addTags([
       { name: 'description', content: `Buy ${this.clothe.getName()} at our store. High quality and affordable prices.` },
       { name: 'keywords', content: `${this.clothe.getName()}, clothes, fashion, buy clothes online` },
-      { name: 'robots', content: 'index, follow' }
+      { name: 'robots', content: 'index, follow' },
+      { name: 'author', content: GlobalConstants.storeName },
+      { property: 'og:image', content: GlobalConstants.previewImageUrl },
+      { property: 'og:url', content: window.location.href },
     ]);
   }
 

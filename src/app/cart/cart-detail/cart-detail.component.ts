@@ -1,22 +1,23 @@
+import { Component, OnInit } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
+import { Title, Meta } from '@angular/platform-browser';
+import { CartService } from '../../services/cart.service';
 import { ClothesStockService } from '../../services/clothes-stock.service';
 import { MercadoPagoService } from '../../services/mercado-pago.service';
 import { LocalStorageService } from '../../services/local-storage.service';
 import { AuthService } from '../../services/auth.service';
-import { Component, OnInit } from '@angular/core';
-import { CartService } from '../../services/cart.service';
-import { ClothesStock } from '../../models/clothesStock.model';
-import { Router, ActivatedRoute } from '@angular/router';
-import { Tax } from '../../models/tax.model';
 import { TaxService } from '../../services/tax.service';
+import { NotificationService } from '../../services/notification.service';
+import { SkeletonService } from '../../services/skeleton-service.service';
+import { ClothesStock } from '../../models/clothesStock.model';
+import { Tax } from '../../models/tax.model';
 import { User } from '../../models/user.model';
 import { ClothesSold } from '../../models/clothesSold.model';
 import { ItemMercadoPago } from '../../models/ItemMercadoPago.model';
 import { ToastNotificationComponent } from '../../toast-notification/toast-notification.component';
 import { CartActionsComponent } from '../cart-actions/cart-actions.component';
 import { CartItemComponent } from '../cart-item/cart-item.component';
-import { NotificationService } from '../../services/notification.service';
-import { Title, Meta } from '@angular/platform-browser';
-import { SkeletonService } from '../../services/skeleton-service.service';
+import { GlobalConstants } from '../../config/global-constants';
 
 @Component({
   selector: 'app-cart-detail',
@@ -64,7 +65,6 @@ export class CartDetailComponent implements OnInit {
       this.isLoading = false;
     }
 
-    // Manejar las URLs de retorno
     this.route.queryParams.subscribe(params => {
       if (params['status'] === 'success') {
         this.handleSuccess();
@@ -84,11 +84,12 @@ export class CartDetailComponent implements OnInit {
       { property: 'og:description', content: 'Review the products in your shopping cart and proceed to checkout.' },
       { property: 'og:type', content: 'website' },
       { property: 'og:url', content: window.location.href },
-      { property: 'og:image', content: 'URL_TO_IMAGE' },
+      { name: 'author', content: GlobalConstants.storeName },
+      { property: 'og:image', content: GlobalConstants.previewImageUrl },
       { name: 'twitter:card', content: 'summary_large_image' },
       { name: 'twitter:title', content: 'Shopping Cart Details - Clothing Store' },
       { name: 'twitter:description', content: 'Review the products in your shopping cart and proceed to checkout.' },
-      { name: 'twitter:image', content: 'URL_TO_IMAGE' }
+      { name: 'twitter:image', content: GlobalConstants.previewImageUrl }
     ]);
   }
 
@@ -212,7 +213,6 @@ export class CartDetailComponent implements OnInit {
     const tax = this.createTax(randomCode, clothesSoldItems);
     console.log('Factura a guardar:', tax);
 
-    // Guardar la factura en el backend
     this.taxService.create(this.user.getId().toString(), tax).subscribe({
       next: (response: any) => {
         console.log('Factura creada:', response);
@@ -235,10 +235,7 @@ export class CartDetailComponent implements OnInit {
           });
         });
 
-        // Navega al componente de factura después de confirmar la compra
         this.router.navigate(['/invoice']);
-
-        // Limpia el carrito
         this.clearCart();
       },
       error: (err) => {
@@ -254,15 +251,9 @@ export class CartDetailComponent implements OnInit {
   }
 
   async compraMercadoPago(productos: any) {
-    /*     const backUrls = {
-          success: 'http://localhost:4200/success',
-          pending: 'http://localhost:4200/pending',
-          failure: 'http://localhost:4200/failure'
-        }; */
-
     this.mercadoPagoService.createPreferences(productos).subscribe((response: any) => {
       console.log('Response:', response);
-      window.open(response.initPoint, '_blank'); // Abrir en una nueva pestaña
+      window.open(response.initPoint, '_blank');
       this.clearCart();
     }, (error) => {
       console.error('Error creating preferences:', error);
@@ -284,10 +275,7 @@ export class CartDetailComponent implements OnInit {
 
   private updateClothesStock(clothesSoldItems: ClothesSold[]): { clothe: ClothesStock, subject: string, message: string }[] {
     return clothesSoldItems.map(soldItem => {
-      console.log(soldItem)
-      console.log(this.cartItems)
       const stockItem = this.cartItems.find(item => item.product.getCode() === soldItem.getCode() && item.product.getSize() === soldItem.getSize())?.product;
-      console.log(stockItem)
       if (stockItem) {
         const updatedStock = stockItem.getStock() - soldItem.getcant();
         const updatedClothe = new ClothesStock(

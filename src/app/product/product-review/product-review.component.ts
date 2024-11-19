@@ -6,6 +6,7 @@ import { AuthService } from '../../services/auth.service';
 import { CommentService } from '../../services/comment.service';
 import { NotificationService } from '../../services/notification.service';
 import { Meta, Title } from '@angular/platform-browser';
+import { GlobalConstants } from '../../config/global-constants';
 
 @Component({
   selector: 'app-product-review',
@@ -42,7 +43,10 @@ export class ProductReviewComponent implements OnInit, OnChanges {
     this.meta.addTags([
       { name: 'description', content: 'Read and add reviews for our products' },
       { name: 'keywords', content: 'product reviews, customer feedback, clothing reviews' },
-      { name: 'robots', content: 'index, follow' }
+      { name: 'robots', content: 'index, follow' },
+      { name: 'author', content: GlobalConstants.storeName },
+      { property: 'og:image', content: GlobalConstants.previewImageUrl },
+      { property: 'og:url', content: window.location.href },
     ]);
   }
 

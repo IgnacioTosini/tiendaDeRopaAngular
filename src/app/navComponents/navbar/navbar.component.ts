@@ -12,6 +12,7 @@ import { SearchComponent } from '../search/search.component';
 import { DropDownMenuProductsComponent } from '../drop-down-menu-products/drop-down-menu-products.component';
 import { SearchService } from '../../services/search.service';
 import { Meta, Title } from '@angular/platform-browser';
+import { GlobalConstants } from '../../config/global-constants';
 
 @Component({
   selector: 'app-navbar',
@@ -68,7 +69,10 @@ export class NavbarComponent implements OnInit {
       this.metaService.addTags([
         { name: 'description', content: 'Explore our wide range of clothing items and accessories. Shop now and enjoy great deals!' },
         { name: 'keywords', content: 'clothing, online store, fashion, accessories, shop' },
-        { name: 'robots', content: 'index, follow' }
+        { name: 'robots', content: 'index, follow' },
+        { name: 'author', content: GlobalConstants.storeName },
+      { property: 'og:image', content: GlobalConstants.previewImageUrl },
+      { property: 'og:url', content: window.location.href },
       ]);
     }
 

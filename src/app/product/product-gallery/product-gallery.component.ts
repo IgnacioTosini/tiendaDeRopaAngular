@@ -1,3 +1,4 @@
+import { ImageService } from './../../services/image.service';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
@@ -5,7 +6,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   standalone: true,
   imports: [],
   templateUrl: './product-gallery.component.html',
-  styleUrl: './product-gallery.component.scss'
+  styleUrls: ['./product-gallery.component.scss']
 })
 export class ProductGalleryComponent {
   @Input() smallImages: string[] = [];
@@ -17,11 +18,17 @@ export class ProductGalleryComponent {
   @Output() imageChange = new EventEmitter<string>();
   @Output() openModal = new EventEmitter<void>();
 
+  constructor(private imageService: ImageService) {}
+
   changeMainImage(image: string) {
     this.imageChange.emit(image);
   }
 
   openImageModal() {
     this.openModal.emit();
+  }
+
+  onImageError(event: Event): void {
+      this.imageService.handleImageError(event);
   }
 }

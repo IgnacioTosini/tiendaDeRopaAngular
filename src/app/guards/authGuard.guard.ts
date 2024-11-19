@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { Title, Meta } from '@angular/platform-browser';
+import { GlobalConstants } from '../config/global-constants';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +17,9 @@ export class AuthGuard implements CanActivate {
     this.titleService.setTitle('Login - Your App Name');
     this.metaService.addTags([
       { name: 'description', content: 'Login to access your account and explore our exclusive collection.' },
-      { name: 'keywords', content: 'login, user account, exclusive collection, your app name' }
+      { name: 'keywords', content: 'login, user account, exclusive collection, your app name' },
+      { name: 'author', content: GlobalConstants.storeName },
+      { property: 'og:image', content: GlobalConstants.previewImageUrl },
     ]);
   }
 

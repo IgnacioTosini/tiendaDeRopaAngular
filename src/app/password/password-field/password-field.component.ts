@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Meta } from '@angular/platform-browser';
+import { GlobalConstants } from '../../config/global-constants';
 
 @Component({
   selector: 'app-password-field',
@@ -16,7 +17,10 @@ export class PasswordFieldComponent {
   constructor(private meta: Meta) {
     this.meta.addTags([
       { name: 'description', content: 'Secure password input field with toggle visibility feature' },
-      { name: 'keywords', content: 'password, input, toggle, visibility, secure' }
+      { name: 'keywords', content: 'password, input, toggle, visibility, secure' },
+      { name: 'author', content: GlobalConstants.storeName },
+      { property: 'og:image', content: GlobalConstants.previewImageUrl },
+      { property: 'og:url', content: window.location.href },
     ]);
   }
 }

@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AddToCartComponent } from '../../cart/add-to-cart/add-to-cart.component';
 import { Meta, Title } from '@angular/platform-browser';
+import { GlobalConstants } from '../../config/global-constants';
 
 @Component({
   selector: 'app-product-info',
@@ -26,7 +27,10 @@ export class ProductInfoComponent {
     this.title.setTitle(this.product?.getName() || 'Product Info');
     this.meta.addTags([
       { name: 'description', content: this.product?.getDescription() || 'Product description' },
-      { name: 'keywords', content: 'clothing, fashion, buy clothes, online store' }
+      { name: 'keywords', content: 'clothing, fashion, buy clothes, online store' },
+      { name: 'author', content: GlobalConstants.storeName },
+      { property: 'og:image', content: GlobalConstants.previewImageUrl },
+      { property: 'og:url', content: window.location.href },
     ]);
   }
 

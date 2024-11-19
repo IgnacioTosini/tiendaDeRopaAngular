@@ -1,19 +1,21 @@
-import { zoomInOut, slideInOutRight, slideInOutLeft } from '../../shared/animations/animation';
-import { ToastNotificationComponent } from '../../toast-notification/toast-notification.component';
-import { ProductReviewComponent } from '../product-review/product-review.component';
-import { ClothesStockService } from '../../services/clothes-stock.service';
-import { AuthService } from '../../services/auth.service';
-import { CartService } from '../../services/cart.service';
-import { ClothesStock } from '../../models/clothesStock.model';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { EMPTY, catchError } from 'rxjs';
 import { CommonModule, Location } from '@angular/common';
+import { Meta, Title } from '@angular/platform-browser';
+import { ImageService } from '../../services/image.service'; // Importa el servicio de imagen
+import { ClothesStockService } from '../../services/clothes-stock.service';
+import { AuthService } from '../../services/auth.service';
+import { CartService } from '../../services/cart.service';
+import { ClothesStock } from '../../models/clothesStock.model';
+import { GlobalConstants } from '../../config/global-constants';
+import { zoomInOut, slideInOutRight, slideInOutLeft } from '../../shared/animations/animation';
+import { ToastNotificationComponent } from '../../toast-notification/toast-notification.component';
+import { ProductReviewComponent } from '../product-review/product-review.component';
 import { ImageModalComponent } from '../../img/image-modal/image-modal.component';
 import { ProductGalleryComponent } from '../product-gallery/product-gallery.component';
 import { ProductInfoComponent } from '../product-info/product-info.component';
-import { Meta, Title } from '@angular/platform-browser';
 import { GalleryComponent } from '../gallery/gallery.component';
 
 @Component({
@@ -33,7 +35,7 @@ import { GalleryComponent } from '../gallery/gallery.component';
   templateUrl: './unique-product.component.html',
   styleUrls: ['./unique-product.component.scss']
 })
-export class UniqueProductComponent {
+export class UniqueProductComponent implements OnInit {
   product: ClothesStock = new ClothesStock('', '', 0, '', '', [], '', '', '', '', 0, []);
   quantity: number = 1;
   mainImage: string = '';
@@ -51,13 +53,14 @@ export class UniqueProductComponent {
   notificationType: string = '';
 
   constructor(
-    private CartService: CartService,
+    private cartService: CartService,
     private route: ActivatedRoute,
     private clothesStockService: ClothesStockService,
     private authService: AuthService,
     private location: Location,
     private meta: Meta,
-    private titleService: Title
+    private titleService: Title,
+    private imageService: ImageService // Inyecta el servicio de imagen
   ) { }
 
   ngOnInit() {
@@ -85,6 +88,8 @@ export class UniqueProductComponent {
             for (let i = 0; i < product.getImages().length; i++) {
               this.smallImages.push(product.getImages()[i].getUrl());
             }
+            console.log("if");
+            console.log(this.mainImage);
           }
 
           // Filtrar los tamaños disponibles y sus cantidades
@@ -104,6 +109,9 @@ export class UniqueProductComponent {
           this.titleService.setTitle(this.product.getName());
           this.meta.addTags([
             { name: 'description', content: this.product.getDescription() },
+            { name: 'author', content: GlobalConstants.storeName },
+            { property: 'og:image', content: GlobalConstants.previewImageUrl },
+            { property: 'og:url', content: window.location.href },
           ]);
         });
       }
@@ -144,7 +152,7 @@ export class UniqueProductComponent {
     }
 
     console.log('Adding to cart:', this.product, this.quantity, this.selectedSize);
-    this.CartService.addToCart(this.product, this.quantity, this.selectedSize);
+    this.cartService.addToCart(this.product, this.quantity, this.selectedSize);
     this.quantity = 1;
     this.selectedProduct = this.product;
 

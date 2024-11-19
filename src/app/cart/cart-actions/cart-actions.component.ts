@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
+import { GlobalConstants } from '../../config/global-constants';
 
 @Component({
   selector: 'app-cart-actions',
@@ -21,7 +22,10 @@ export class CartActionsComponent {
     this.title.setTitle('Cart Actions - Online Clothing Store');
     this.meta.addTags([
       { name: 'description', content: 'Manage your cart actions including clearing the cart and making payments.' },
-      { name: 'keywords', content: 'cart, actions, online store, clothing, payments' }
+      { name: 'keywords', content: 'cart, actions, online store, clothing, payments' },
+      { name: 'author', content: GlobalConstants.storeName },
+      { property: 'og:image', content: GlobalConstants.previewImageUrl },
+      { property: 'og:url', content: window.location.href },
     ]);
   }
 

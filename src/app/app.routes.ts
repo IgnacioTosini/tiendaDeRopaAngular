@@ -1,8 +1,6 @@
 import { Routes } from '@angular/router';
-import { HomeComponent } from './home/home.component';
-import { RegisterComponent } from './register/register.component';
+import { HomeComponent } from './view/home/home.component';
 import { ClothesGalleryComponent } from './clothe/clothes-gallery/clothes-gallery.component';
-import { LoginComponent } from './login/login.component';
 import { CartDetailComponent } from './cart/cart-detail/cart-detail.component';
 import { AdminComponent } from './user/admin/admin.component';
 import { InvoiceComponent } from './invoice/invoice.component';
@@ -17,6 +15,8 @@ import { UserProfileComponent } from './user/user-profile/user-profile.component
 import { ViewInvoicesPageComponent } from './view/view-invoices-page/view-invoices-page.component';
 import { PasswordResetComponentComponent } from './password/password-reset-component/password-reset-component.component';
 import { SendPasswordRequestComponent } from './password/send-password-request/send-password-request.component';
+import { RegisterComponent } from './auth/register/register.component';
+import { LoginComponent } from './auth/login/login.component';
 
 export const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -29,7 +29,7 @@ export const routes: Routes = [
   { path: 'modifyProductPage', component: ViewModifyProductPageComponent, canActivate: [AdminGuard, AuthGuard] },
   { path: 'admin', component: AdminComponent, canActivate: [AdminGuard, AuthGuard] },
   { path: 'clothes-gallery', component: ClothesGalleryComponent },
-    { path: 'product/:code', component: UniqueProductComponent },
+  { path: 'product/:code', component: UniqueProductComponent },
   { path: 'login', component: LoginComponent },
   { path: 'cart-detail', component: CartDetailComponent },
   { path: 'invoice', component: InvoiceComponent },

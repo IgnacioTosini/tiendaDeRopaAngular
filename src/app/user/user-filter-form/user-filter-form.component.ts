@@ -8,6 +8,7 @@ import { Pagination } from '../../models/pagination.model';
 import { UserService } from '../../services/user.service';
 import { NotificationService } from '../../services/notification.service';
 import { Meta, Title } from '@angular/platform-browser';
+import { GlobalConstants } from '../../config/global-constants';
 
 @Component({
   selector: 'app-user-filter-form',
@@ -32,7 +33,10 @@ export class UserFilterFormComponent implements OnInit {
     this.meta.addTags([
       { name: 'description', content: 'Filter and search users by ID or email in our clothing store.' },
       { name: 'keywords', content: 'user filter, search user, clothing store, user ID, user email' },
-      { name: 'robots', content: 'index, follow' }
+      { name: 'robots', content: 'index, follow' },
+      { name: 'author', content: GlobalConstants.storeName },
+      { property: 'og:image', content: GlobalConstants.previewImageUrl },
+      { property: 'og:url', content: window.location.href },
     ]);
   }
 

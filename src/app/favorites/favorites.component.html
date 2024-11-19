@@ -5,7 +5,7 @@
     @for (favorite of user.getWisheList(); track $index) {
     <li class="favorite-item" itemscope itemtype="http://schema.org/Product">
       <div class="image-container">
-        <img [src]="favorite.getPhoto()" alt="{{ favorite.getName() }}" itemprop="image">
+        <img [src]="favorite.getPhoto()" alt="{{ favorite.getName() }}" itemprop="image" (error)="onImageError($event)">
         <button class="favorite" (click)="removeFavorite(favorite)" [class.filled]="true"
           aria-label="Remove from favorites">&#9733;</button>
       </div>

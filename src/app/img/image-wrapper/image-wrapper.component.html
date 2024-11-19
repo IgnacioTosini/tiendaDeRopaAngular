@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <section class="image-wrapper">
   <a (click)="onImageClick()">
-    <img [@zoomInOut] [src]="clothe.getImages()[clothe.currentImage].getUrl()" [alt]="clothe.getName() + ' - High quality and affordable prices'"
-      (error)="onImageError($event)">
+    <img [@zoomInOut] [src]="clothe.getImages()[clothe.currentImage].getUrl()"
+      [alt]="clothe.getName() + ' - High quality and affordable prices'" (error)="onImageError($event)">
   </a>
   @if (isLogging) {
   <button class="favorite" (click)="toggleFavorite(clothe)" [class.filled]="isFavorite">&#9733;</button>

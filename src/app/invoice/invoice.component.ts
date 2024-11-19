@@ -8,6 +8,7 @@ import { PaginationComponent } from '../pagination/pagination.component';
 import { Pagination } from '../models/pagination.model';
 import { NotificationService } from '../services/notification.service';
 import { Meta, Title } from '@angular/platform-browser';
+import { GlobalConstants } from '../config/global-constants';
 
 @Component({
   selector: 'app-invoice',
@@ -39,7 +40,9 @@ export class InvoiceComponent implements OnInit {
     this.meta.addTags([
       { name: 'description', content: 'Manage your invoices efficiently with our invoice management system.' },
       { name: 'keywords', content: 'invoices, invoice management, tax, store, online store' },
-      { name: 'author', content: 'Your Store' }
+      { name: 'author', content: GlobalConstants.storeName },
+      { property: 'og:image', content: GlobalConstants.previewImageUrl },
+      { property: 'og:url', content: window.location.href },
     ]);
   }
 

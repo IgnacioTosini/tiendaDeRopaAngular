@@ -1,3 +1,4 @@
+import { ImageService } from './../../services/image.service';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
@@ -14,6 +15,8 @@ export class ImageModalComponent {
   @Output() closeModal = new EventEmitter<void>();
 
   currentIndex: number = 0;
+
+  constructor(private imageService: ImageService) {}
 
   ngOnInit() {
     this.currentIndex = this.smallImages.indexOf(this.mainImage);
@@ -33,5 +36,9 @@ export class ImageModalComponent {
 
   close() {
     this.closeModal.emit();
+  }
+
+  onImageError(event: Event): void {
+    this.imageService.handleImageError(event);
   }
 }

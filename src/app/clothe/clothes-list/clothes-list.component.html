@@ -13,6 +13,8 @@
       </section>
     </section>
     }
+    <app-pagination [pagination]="pagination" (previousPage)="onPageChange(currentPage - 1)"
+        (nextPage)="onPageChange(currentPage + 1)"></app-pagination>
   </section>
   @if (selectedClothes) {
   <form [formGroup]="clothesForm" (ngSubmit)="updateClothes()" class="product-form" [@slideInOutRight]>
@@ -158,5 +160,3 @@
     [imagePosition]="'side'" [isSuccess]="notificationService.typeOfNotification"></app-toast-notification>
   }
 </section>
-
-// TODO Ver si se puede hacer pagination

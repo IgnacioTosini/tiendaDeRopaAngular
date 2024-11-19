@@ -7,10 +7,10 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   styleUrls: ['./active-filters.component.scss']
 })
 export class ActiveFiltersComponent {
-  @Input() nameFilter: string = '';
+  @Input() nameFilter = '';
   @Input() minPriceFilter: number | null = null;
   @Input() maxPriceFilter: number | null = null;
-  @Input() typeFilter: string = '';
+  @Input() typeFilter = '';
   @Input() sortOrder: 'name' | 'price' | 'price-desc' | null = null;
 
   @Output() resetFilterEvent = new EventEmitter<string>();

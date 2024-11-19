@@ -8,6 +8,7 @@ import { ImageService } from '../../services/image.service';
 import { NotificationService } from '../../services/notification.service';
 import { SearchService } from '../../services/search.service';
 import { Meta, Title } from '@angular/platform-browser';
+import { GlobalConstants } from '../../config/global-constants';
 
 @Component({
   selector: 'app-search',
@@ -34,7 +35,9 @@ export class SearchComponent {
     this.meta.addTags([
       { name: 'description', content: 'Search for clothes in our store. Find the best deals and latest trends.' },
       { name: 'keywords', content: 'clothes, search, fashion, store, buy clothes' },
-      { name: 'robots', content: 'index, follow' }
+      { name: 'robots', content: 'index, follow' },
+      { name: 'author', content: GlobalConstants.storeName },
+      { property: 'og:image', content: GlobalConstants.previewImageUrl },
     ]);
   }
 

@@ -1,10 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Title, Meta } from '@angular/platform-browser';
 import { CartService } from '../../services/cart.service';
+import { SkeletonService } from '../../services/skeleton-service.service';
 import { ClothesStock } from '../../models/clothesStock.model';
 import { slideDownUp } from '../../shared/animations/animation';
-import { SkeletonService } from '../../services/skeleton-service.service';
-import { Title, Meta } from '@angular/platform-browser';
+import { GlobalConstants } from '../../config/global-constants';
 
 @Component({
   selector: 'app-cart-dropdown',
@@ -18,7 +19,7 @@ export class CartDropdownComponent implements OnInit {
   @Input() cartItems: { product: ClothesStock, quantity: number }[] = [];
   @Input() isLogging: Boolean = false;
   isCartDropdownVisible = false;
-  isLoading: boolean = true;
+  isLoading = true;
   skeletonItems: number[] = [];
 
   constructor(
@@ -38,7 +39,10 @@ export class CartDropdownComponent implements OnInit {
     this.titleService.setTitle('Shopping Cart - Clothing Store');
     this.metaService.addTags([
       { name: 'description', content: 'Check and manage the products in your shopping cart at our clothing store. Find the latest fashion trends and shop your favorite clothes.' },
-      { name: 'keywords', content: 'shopping cart, clothing store, fashion, buy clothes, latest trends, online shopping' }
+      { name: 'keywords', content: 'shopping cart, clothing store, fashion, buy clothes, latest trends, online shopping' },
+      { name: 'author', content: GlobalConstants.storeName },
+      { property: 'og:image', content: GlobalConstants.previewImageUrl },
+      { property: 'og:url', content: window.location.href },
     ]);
   }
 

@@ -14,6 +14,7 @@ export class ClotheItemComponent {
   @Input() isAdminMode: boolean = false;
   @Input() showSubMenu: boolean = false;
   @Input() selectedClothe: ClothesStock | null = null;
+
   @Output() displayShowSubMenu = new EventEmitter<ClothesStock>();
   @Output() changeImage = new EventEmitter<{ index: number, change: number }>();
   @Output() setActiveImage = new EventEmitter<{ index: number, imageIndex: number }>();
@@ -38,7 +39,7 @@ export class ClotheItemComponent {
       "description": this.clothe.getDescription(),
       "offers": {
         "@type": "Offer",
-        "priceCurrency": "USD",
+        "priceCurrency": "ARS, USD",
         "price": this.clothe.getPrice(),
         "availability": "https://schema.org/InStock"
       }

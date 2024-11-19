@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { Title, Meta } from '@angular/platform-browser';
+import { GlobalConstants } from '../config/global-constants';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AdminGuard implements CanActivate {
   constructor(
-    private authService: AuthService, 
+    private authService: AuthService,
     private router: Router,
     private titleService: Title,
     private metaService: Meta
@@ -16,7 +17,9 @@ export class AdminGuard implements CanActivate {
     this.titleService.setTitle('Admin - Your App Name');
     this.metaService.addTags([
       { name: 'description', content: 'Admin access to manage and oversee the platform.' },
-      { name: 'keywords', content: 'admin, management, platform, your app name' }
+      { name: 'keywords', content: 'admin, management, platform, your app name' },
+      { name: 'author', content: GlobalConstants.storeName },
+      { property: 'og:image', content: GlobalConstants.previewImageUrl },
     ]);
   }
 

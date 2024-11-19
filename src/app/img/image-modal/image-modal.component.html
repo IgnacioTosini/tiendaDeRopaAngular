@@ -2,12 +2,14 @@
 <section class="modalBackground" (click)="close()">
   <button class="closeButton" (click)="close()">×</button>
   <section class="modalContent" (click)="$event.stopPropagation()">
-    <img [src]="smallImages[currentIndex]" class="mainImage" [alt]="altTexts[currentIndex] || 'Main Image'">
+    <img [src]="smallImages[currentIndex]" class="mainImage" [alt]="altTexts[currentIndex] || 'Main Image'"
+      (error)="onImageError($event)">
     <section class="navigation">
       <button class="navButton" (click)="previousImage()" [disabled]="currentIndex === 0">←</button>
       <section class="smallImages">
         @for (image of smallImages; track $index) {
-        <img [src]="image" [alt]="altTexts[$index] || 'Small Image'" [class.selected]="$index === currentIndex" (click)="currentIndex = $index">
+        <img [src]="image" [alt]="altTexts[$index] || 'Small Image'" [class.selected]="$index === currentIndex"
+          (click)="currentIndex = $index" (error)="onImageError($event)">
         }
       </section>
       <button class="navButton" (click)="nextImage()" [disabled]="currentIndex === smallImages.length - 1">→</button>

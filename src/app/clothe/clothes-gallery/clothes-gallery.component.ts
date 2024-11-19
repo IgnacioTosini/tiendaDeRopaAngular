@@ -1,15 +1,18 @@
-import { NavigationService } from '../../services/navigation-service.service';
 import { Component, ViewChild, OnInit, Input, Output, EventEmitter, HostListener, ElementRef } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { Title, Meta } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms';
+
+import { NavigationService } from '../../services/navigation-service.service';
 import { ClothesStockService } from '../../services/clothes-stock.service';
 import { ClothesStock } from '../../models/clothesStock.model';
-import { ActivatedRoute } from '@angular/router';
-import { FormsModule } from '@angular/forms';
+import { Pagination } from '../../models/pagination.model';
+
 import { ActiveFiltersComponent } from '../../filter/active-filters/active-filters.component';
 import { PaginationComponent } from '../../pagination/pagination.component';
 import { ClotheItemComponent } from '../clothe-item/clothe-item.component';
-import { Pagination } from '../../models/pagination.model';
 import { FiltersComponent } from '../../filter/filters/filters.component';
-import { Title, Meta } from '@angular/platform-browser';
+import { GlobalConstants } from '../../config/global-constants';
 
 @Component({
   selector: 'app-clothes-gallery',
@@ -20,6 +23,7 @@ import { Title, Meta } from '@angular/platform-browser';
 })
 export class ClothesGalleryComponent implements OnInit {
   @ViewChild(FiltersComponent) filtersComponent!: FiltersComponent;
+  @ViewChild('gallery') gallery!: ElementRef;
   @Input() isAdminMode: boolean = false;
   @Output() productSelected = new EventEmitter<ClothesStock>();
 
@@ -38,8 +42,6 @@ export class ClothesGalleryComponent implements OnInit {
   selectedClothe: ClothesStock | null = null;
   showSubMenu: boolean = false;
 
-  @ViewChild('gallery') gallery!: ElementRef;
-
   constructor(
     private clothesStockService: ClothesStockService,
     private route: ActivatedRoute,
@@ -52,7 +54,10 @@ export class ClothesGalleryComponent implements OnInit {
     this.titleService.setTitle('Clothes Gallery - Fashion Store');
     this.metaService.addTags([
       { name: 'description', content: 'Explore our clothes gallery with a wide variety of styles and prices. Find the latest fashion trends and shop your favorite outfits.' },
-      { name: 'keywords', content: 'clothes, clothes gallery, fashion store, fashion trends, outfits, styles, prices, shopping' }
+      { name: 'keywords', content: 'clothes, clothes gallery, fashion store, fashion trends, outfits, styles, prices, shopping' },
+      { name: 'author', content: GlobalConstants.storeName },
+      { property: 'og:image', content: GlobalConstants.previewImageUrl },
+      { property: 'og:url', content: window.location.href },
     ]);
     await this.loadClothes();
     this.route.params.subscribe(params => {
@@ -62,7 +67,7 @@ export class ClothesGalleryComponent implements OnInit {
     this.filtersComponent.filtersChanged.subscribe(() => this.handleFiltersChanged());
   }
 
-  async loadClothes(page: number = 0) {
+  async loadClothes(page: number = this.currentPage) {
     try {
       const response = await this.clothesStockService.findAll(page, this.pageSize).toPromise();
       if (response) {

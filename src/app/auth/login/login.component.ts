@@ -1,12 +1,13 @@
-import { AuthService } from './../services/auth.service';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { UserService } from '../services/user.service';
-import { ToastNotificationComponent } from '../toast-notification/toast-notification.component';
-import { PasswordFieldComponent } from '../password/password-field/password-field.component';
-import { NotificationService } from '../services/notification.service';
 import { Meta, Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
+import { ToastNotificationComponent } from '../../toast-notification/toast-notification.component';
+import { PasswordFieldComponent } from '../../password/password-field/password-field.component';
+import { UserService } from '../../services/user.service';
+import { AuthService } from '../../services/auth.service';
+import { NotificationService } from '../../services/notification.service';
+import { GlobalConstants } from '../../config/global-constants';
 
 @Component({
   selector: 'app-login',
@@ -25,7 +26,10 @@ export class LoginComponent implements OnInit {
     this.meta.addTags([
       { name: 'description', content: 'Login to access your account and start shopping at Store.' },
       { name: 'keywords', content: 'login, user login, account access' },
-      { name: 'robots', content: 'index, follow' }
+      { name: 'robots', content: 'index, follow' },
+      { name: 'author', content: GlobalConstants.storeName },
+      { property: 'og:image', content: GlobalConstants.previewImageUrl },
+      { property: 'og:url', content: window.location.href },
     ]);
     this.loginForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],

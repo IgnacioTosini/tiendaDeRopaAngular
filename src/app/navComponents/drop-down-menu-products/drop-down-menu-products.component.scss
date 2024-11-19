@@ -20,7 +20,7 @@
     &:hover {
       color: $warning-button-background;
       font-weight: 800;
-      filter: drop-shadow(0 0 1rem $warning-button-background) saturate(150%) contrast(120%);
+      filter: drop-shadow(0 0 0.3rem $warning-button-background) saturate(150%) contrast(120%);
     }
 
     &:focus {
@@ -50,14 +50,16 @@
         .generic-list {
           visibility: visible;
           opacity: 1;
-          height: auto; // Ajusta la altura automáticamente
+          height: 7rem;
+          overflow-y: auto;
           transform: scaleY(1);
           border-top: 0.1rem solid #ffffff;
           z-index: 99;
+          scrollbar-width: none;
         }
 
-        .panelDeControl{
-          a{
+        .panelDeControl {
+          a {
             font-size: 1.2rem
           }
         }
@@ -83,7 +85,8 @@
         border-radius: 0 0 1rem 1rem;
 
         .generic-item {
-          height: auto;
+          height: 5rem;
+          overflow-y: auto;
           margin-left: 0;
           font-size: 1.5rem;
           cursor: pointer;
@@ -91,6 +94,7 @@
           border-right: 0.2rem double #ffffff; // Borde doble
           border-right: 0.2rem ridge #ffffff; // Borde en relieve inverso
           transition: border-color 1s;
+          scrollbar-width: none;
 
           &:hover {
             animation: rainbow 10s infinite;

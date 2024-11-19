@@ -1,5 +1,5 @@
-@import '../utilities/mixins';
-@import '../utilities/variables';
+@import '../../utilities/mixins';
+@import '../../utilities/variables';
 
 form {
   @include properties-flex(column, center, center);

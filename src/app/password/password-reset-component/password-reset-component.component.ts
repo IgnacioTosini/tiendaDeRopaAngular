@@ -6,6 +6,7 @@ import { RestorePasswordData } from '../../models/restorePasswordData';
 import { Router } from '@angular/router';
 import { Meta, Title } from '@angular/platform-browser';
 import { ToastNotificationComponent } from '../../toast-notification/toast-notification.component';
+import { GlobalConstants } from '../../config/global-constants';
 
 @Component({
   selector: 'app-password-reset-component',
@@ -25,7 +26,10 @@ export class PasswordResetComponentComponent implements OnInit {
     this.title.setTitle('Reset Your Password - YourAppName');
     this.meta.addTags([
       { name: 'description', content: 'Reset your password to regain access to your account.' },
-      { name: 'keywords', content: 'password reset, account recovery, new password' }
+      { name: 'keywords', content: 'password reset, account recovery, new password' },
+      { name: 'author', content: GlobalConstants.storeName },
+      { property: 'og:image', content: GlobalConstants.previewImageUrl },
+      { property: 'og:url', content: window.location.href },
     ]);
     this.resetForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],

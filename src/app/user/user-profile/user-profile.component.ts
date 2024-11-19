@@ -10,6 +10,7 @@ import { ImageService } from '../../services/image.service';
 import { TaxService } from '../../services/tax.service';
 import { NotificationService } from '../../services/notification.service';
 import { Meta, Title } from '@angular/platform-browser';
+import { GlobalConstants } from '../../config/global-constants';
 
 @Component({
   selector: 'app-user-profile',
@@ -72,7 +73,10 @@ export class UserProfileComponent implements OnInit {
     this.meta.addTags([
       { name: 'description', content: 'View and update your user profile details on Your Store Name.' },
       { name: 'keywords', content: 'user profile, update details, Your Store Name' },
-      { name: 'robots', content: 'index, follow' }
+      { name: 'robots', content: 'index, follow' },
+      { name: 'author', content: GlobalConstants.storeName },
+      { property: 'og:image', content: GlobalConstants.previewImageUrl },
+      { property: 'og:url', content: window.location.href },
     ]);
   }
 

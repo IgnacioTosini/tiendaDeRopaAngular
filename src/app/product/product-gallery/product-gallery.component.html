@@ -7,7 +7,8 @@
       } @else {
       @for (smallImage of smallImages; track $index) {
       <img [src]="smallImage" [alt]="altText || 'Product image'" (click)="changeMainImage(smallImage)"
-        [class.selected]="smallImage === mainImage" [class.notselected]="smallImage !== mainImage"
+      (error)="onImageError($event)" [class.selected]="smallImage === mainImage"
+        [class.notselected]="smallImage !== mainImage"
         [attr.aria-label]="imageDescriptions[$index] || 'Small product image'">
       }
       }
@@ -17,7 +18,8 @@
     @if (isLoadingImages) {
     <div class="skeletonMain"></div>
     } @else {
-    <img [src]="mainImage" [alt]="productName || 'Main product image'" [attr.aria-label]="productName">
+    <img [src]="mainImage" [alt]="productName || 'Main product image'" [attr.aria-label]="productName"
+    (error)="onImageError($event)">
     }
   </section>
 </section>
