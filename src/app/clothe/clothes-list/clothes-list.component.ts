@@ -114,6 +114,10 @@ export class ClothesListComponent implements OnInit, OnChanges {
     this.meta.updateTag({ name: 'description', content: `Buy ${clothes?.getName?.() || 'Clothing'} at the best price. ${clothes?.getDescription?.() || ''}` });
   }
 
+  hasMultipleImages(num: number): boolean {
+    return (this.selectedClothes?.getImages()?.length ?? 0) > num;
+  }
+
   updateClothes(): void {
     if (this.clothesForm.invalid) {
       this.notificationService.handleNotification('Por favor, complete todos los campos requeridos correctamente.', false);

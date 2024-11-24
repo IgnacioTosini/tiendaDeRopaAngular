@@ -193,4 +193,8 @@ export class UniqueProductComponent implements OnInit {
   closeModal() {
     this.showModal = false;
   }
+
+  hasMultipleImages(num: number): boolean {
+    return (this.product?.getImages()?.length ?? 0) > num;
+  }
 }

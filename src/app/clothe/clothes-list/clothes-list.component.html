@@ -94,14 +94,14 @@
       <p class="help-text">Select an image to change the product image.</p>
 
       <section class="image-list">
-        @for (image of selectedClothes.getImages(); track $index) {
-        @if (selectedImage !== image.getUrl() || previewImage) {
+        @for (image of selectedClothes?.getImages(); track $index) {
+        @if (selectedImage !== image?.getUrl() || previewImage) {
         <section class="image-container">
-          <img [src]="selectedImage === image.getUrl() ? previewImage : image.getUrl()"
+          <img [src]="selectedImage === image?.getUrl() ? previewImage : image?.getUrl()"
             [alt]="selectClothes.name + ' image'" (error)="onImageError($event)"
-            [class.selected]="selectedImage === image.getUrl()" (click)="onImageClick(image.getUrl())" />
-          @if (selectedClothes.getImages().length > 1) {
-          <button type="button" (click)="deleteImage(image.getUrl())">Eliminar</button>
+            [class.selected]="selectedImage === image?.getUrl()" (click)="onImageClick(image?.getUrl()!)" />
+          @if (hasMultipleImages(1)) {
+          <button type="button" (click)="image?.getUrl() && deleteImage(image.getUrl())">Eliminar</button>
           }
         </section>
         }
@@ -132,7 +132,7 @@
     <button type="button" (click)="updateImage()">Actualizar imagen</button>
     <p class="help-text">Haga clic en 'Actualizar imagen' para obtener una vista previa de la nueva imagen.</p>
     }
-    @if (selectedClothes.getImages().length < 3 && previewImage) { <button type="button" (click)="addImage()">Agregar
+    @if (hasMultipleImages(3) && previewImage) { <button type="button" (click)="addImage()">Agregar
       imagen</button>
       <p class="help-text">Haga clic en 'Agregar imagen' para agregar la imagen previsualizada al producto</p>
       }
