@@ -67,7 +67,7 @@ export class NavbarComponent implements OnInit {
     try {
       const response = await this.clothesStockService.findAll(0, 10).toPromise();
       this.clothes = response?.clothes || [];
-      console.log('NavbarComponent clothes:', this.clothes);
+      console.log(this.clothes);
 
       // Group clothes by genericType and specificType
       this.groupedClothes = this.groupByTypes(this.clothes);

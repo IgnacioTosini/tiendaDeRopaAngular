@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { SharedDataService } from '../../services/shared-data.service';
@@ -11,7 +11,7 @@ import { SharedDataService } from '../../services/shared-data.service';
   styleUrls: ['./drop-down-menu-products.component.scss']
 })
 export class DropDownMenuProductsComponent implements OnInit {
-  groupedClothes: { [genericType: string]: string[] } = {};
+  @Input() groupedClothes: { [genericType: string]: string[] } = {}; // Definir como @Input
   isAdminMode: Boolean = false;
 
   constructor(
