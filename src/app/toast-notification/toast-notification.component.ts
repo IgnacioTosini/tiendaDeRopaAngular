@@ -1,12 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
-import { FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faCheckCircle, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-toast-notification',
   standalone: true,
-  imports: [FontAwesomeModule, CommonModule],
+  imports: [CommonModule],
   templateUrl: './toast-notification.component.html',
   styleUrls: ['./toast-notification.component.scss']
 })
@@ -19,8 +18,7 @@ export class ToastNotificationComponent implements OnInit, OnDestroy {
   isVisible: boolean = false;
   private timeoutId: any;
 
-  constructor(library: FaIconLibrary) {
-    library.addIcons(faCheckCircle, faTimesCircle);
+  constructor() {
   }
 
   ngOnInit(): void {
