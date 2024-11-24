@@ -2,7 +2,7 @@
 @if (isVisible) {
 <section class="toast-notification" [class.show]="isVisible" [class.hide]="!isVisible" [class.success]="isSuccess"
   [class.error]="!isSuccess" (click)="closeNotification()">
-  <fa-icon [icon]="isSuccess ? ['fas', 'check-circle'] : ['fas', 'times-circle']"></fa-icon>
+<!--   <fa-icon [icon]="isSuccess ? ['fas', 'check-circle'] : ['fas', 'times-circle']"></fa-icon> -->
   <div class="message-container"
     [ngClass]="{'image-side': imagePosition === 'side', 'image-below': imagePosition === 'below'}">
     @if (imageUrl) {
