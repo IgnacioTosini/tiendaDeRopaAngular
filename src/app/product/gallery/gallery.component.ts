@@ -1,10 +1,11 @@
 import { NavigationService } from '../../services/navigation-service.service';
 import { ClothesStockService } from '../../services/clothes-stock.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
 import { ClothesStock } from '../../models/clothesStock.model';
 import { Meta, Title } from '@angular/platform-browser';
 import { ClotheItemComponent } from '../../clothe/clothe-item/clothe-item.component';
 import { GlobalConstants } from '../../config/global-constants';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-gallery',
@@ -21,7 +22,8 @@ export class GalleryComponent implements OnInit {
     private clothesStockService: ClothesStockService,
     private navigationService: NavigationService,
     private meta: Meta,
-    private title: Title
+    private title: Title,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) { }
 
   async ngOnInit() {
@@ -40,13 +42,19 @@ export class GalleryComponent implements OnInit {
     });
 
     this.title.setTitle('Gallery - Tienda de Ropa');
+
+    let ogUrlContent = '';
+    if (isPlatformBrowser(this.platformId)) {
+      ogUrlContent = window.location.href;
+    }
+
     this.meta.addTags([
       { name: 'description', content: 'Explore our latest collection of clothes in the gallery.' },
       { name: 'keywords', content: 'clothes, fashion, gallery, tienda de ropa' },
       { name: 'robots', content: 'index, follow' },
       { name: 'author', content: GlobalConstants.storeName },
       { property: 'og:image', content: GlobalConstants.previewImageUrl },
-      { property: 'og:url', content: window.location.href },
+      { property: 'og:url', content: ogUrlContent },
     ]);
   }
 

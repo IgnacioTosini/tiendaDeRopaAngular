@@ -1,18 +1,21 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
 import { ClothesStock } from '../models/clothesStock.model';
 import { Wish } from '../models/wish.model';
+import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
 })
 export class NavigationService {
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, @Inject(PLATFORM_ID) private platformId: Object) {}
 
   goToProduct(clothe: ClothesStock): void {
     this.router.navigate(['/product', clothe.getCode()], { state: { name: clothe.getName() } }).then(() => {
-      window.scrollTo(0, 0);
+      if (isPlatformBrowser(this.platformId)) {
+        window.scrollTo(0, 0);
+      }
     });
   }
 
@@ -21,7 +24,9 @@ export class NavigationService {
       return selectedClothe === clothe ? null : clothe;
     } else {
       this.router.navigate(['/product', clothe.getCode()], { state: { name: clothe.getName() } }).then(() => {
-        window.scrollTo(0, 0);
+        if (isPlatformBrowser(this.platformId)) {
+          window.scrollTo(0, 0);
+        }
       });
       return selectedClothe;
     }
@@ -29,13 +34,17 @@ export class NavigationService {
 
   viewProduct(clothe: ClothesStock): void {
     this.router.navigate(['/product', clothe.getCode()], { state: { name: clothe.getName() } }).then(() => {
-      window.scrollTo(0, 0);
+      if (isPlatformBrowser(this.platformId)) {
+        window.scrollTo(0, 0);
+      }
     });
   }
 
   goToProductFromWish(favorite: Wish): void {
     this.router.navigate(['/product', favorite.getUrl()], { state: { name: favorite.getName() } }).then(() => {
-      window.scrollTo(0, 0);
+      if (isPlatformBrowser(this.platformId)) {
+        window.scrollTo(0, 0);
+      }
     });
   }
 }

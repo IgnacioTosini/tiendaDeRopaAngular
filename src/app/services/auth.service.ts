@@ -74,29 +74,30 @@ export class AuthService {
 
   get UserData(): Promise<User> {
     let user = this.userService.recoverUser();
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        let token = this.localStorageService.getItem("token");
-        if (!token) {
-          reject('User ID not found in local storage');
+    return new Promise(async (resolve, reject) => {
+      let token = this.localStorageService.getItem("token");
+      if (!token) {
+        console.warn('User ID not found in local storage');
+        return;
+      }
+      try {
+        const userData = await this.userService.getUserById(user.id).toPromise();
+        if (userData) {
+          this.user.setImage(userData.image);
+          this.user.setEmail(userData.email);
+          this.user.setId(userData.id);
+          this.user.setName(userData.name);
+          this.user.setLastname(userData.lastname);
+          this.user.setCellphone(userData.tel);
+          this.user.setWisheList(userData.wisheList);
+          this.user.setComments(userData.comments);
+          resolve(this.user);
         } else {
-          this.userService.getUserById(user.id).subscribe((user: any) => {
-            if (user) {
-              this.user.setImage(user.image);
-              this.user.setEmail(user.email);
-              this.user.setId(user.id);
-              this.user.setName(user.name);
-              this.user.setLastname(user.lastname);
-              this.user.setCellphone(user.tel);
-              this.user.setWisheList(user.wisheList);
-              this.user.setComments(user.comments);
-              resolve(this.user);
-            } else {
-              reject('User not found');
-            }
-          }, reject);
+          reject('User not found');
         }
-      }, 1000);
+      } catch (error) {
+        reject(error);
+      }
     });
   }
 }

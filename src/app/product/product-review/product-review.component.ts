@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, OnChanges, SimpleChanges, Inject, PLATFORM_ID } from '@angular/core';
 import { ToastNotificationComponent } from '../../toast-notification/toast-notification.component';
 import { ClothesStock } from '../../models/clothesStock.model';
 import { User } from '../../models/user.model';
@@ -7,6 +7,7 @@ import { CommentService } from '../../services/comment.service';
 import { NotificationService } from '../../services/notification.service';
 import { Meta, Title } from '@angular/platform-browser';
 import { GlobalConstants } from '../../config/global-constants';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-product-review',
@@ -29,7 +30,8 @@ export class ProductReviewComponent implements OnInit, OnChanges {
     private authService: AuthService,
     public notificationService: NotificationService,
     private meta: Meta,
-    private title: Title
+    private title: Title,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) { }
 
   async ngOnInit() {
@@ -40,13 +42,19 @@ export class ProductReviewComponent implements OnInit, OnChanges {
     }
     this.loadComments();
     this.title.setTitle('Product Reviews');
+
+    let ogUrlContent = '';
+    if (isPlatformBrowser(this.platformId)) {
+      ogUrlContent = window.location.href;
+    }
+
     this.meta.addTags([
       { name: 'description', content: 'Read and add reviews for our products' },
       { name: 'keywords', content: 'product reviews, customer feedback, clothing reviews' },
       { name: 'robots', content: 'index, follow' },
       { name: 'author', content: GlobalConstants.storeName },
       { property: 'og:image', content: GlobalConstants.previewImageUrl },
-      { property: 'og:url', content: window.location.href },
+      { property: 'og:url', content: ogUrlContent },
     ]);
   }
 

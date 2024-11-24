@@ -1,5 +1,5 @@
 import { AuthService } from '../../services/auth.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
 import { CartService } from '../../services/cart.service';
 import { FormsModule } from '@angular/forms';
 import { ClothesStockService } from '../../services/clothes-stock.service';
@@ -13,6 +13,7 @@ import { DropDownMenuProductsComponent } from '../drop-down-menu-products/drop-d
 import { SearchService } from '../../services/search.service';
 import { Meta, Title } from '@angular/platform-browser';
 import { GlobalConstants } from '../../config/global-constants';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-navbar',
@@ -20,7 +21,7 @@ import { GlobalConstants } from '../../config/global-constants';
   imports: [FormsModule, SearchComponent, CartDropdownComponent, DropDownMenuProductsComponent],
   animations: [slideDownUp],
   templateUrl: './navbar.component.html',
-  styleUrl: './navbar.component.scss'
+  styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent implements OnInit {
   cartItems: { product: ClothesStock, quantity: number }[] = [];
@@ -31,50 +32,65 @@ export class NavbarComponent implements OnInit {
   groupedClothes: { [genericType: string]: string[] } = {};
   isUserDropdownVisible = false;
 
-  constructor(protected cartService: CartService, private clothesStockService: ClothesStockService, private authService: AuthService, private router: Router, private searchService: SearchService, private titleService: Title, private metaService: Meta) { }
+  constructor(
+    protected cartService: CartService,
+    private clothesStockService: ClothesStockService,
+    private authService: AuthService,
+    private router: Router,
+    private searchService: SearchService,
+    private titleService: Title,
+    private metaService: Meta,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) { }
 
-    async ngOnInit() {
-      try {
-        this.user = await this.authService.UserData;
-        this.authService.isLoggedIn = this.authService.UserLogged;
-        this.authService.isAdmin();
+  async ngOnInit() {
+    try {
+      this.user = await this.authService.UserData;
+      this.authService.isLoggedIn = this.authService.UserLogged;
+      this.authService.isAdmin();
 
-        if (this.authService.isLoggedIn !== false) {
-          this.cartItems = [];
+      if (this.authService.isLoggedIn !== false) {
+        this.cartItems = [];
 
-          // Load user and cart
-          this.cartService.loadUser(this.user.getEmail());
+        // Load user and cart
+        this.cartService.loadUser(this.user.getEmail());
 
-          // Subscribe to cart items
-          this.cartService.getItems().subscribe(items => {
-            this.cartItems = items;
-          });
-        }
-      } catch (error) {
-        console.info('Error getting user data:', error);
+        // Subscribe to cart items
+        this.cartService.getItems().subscribe(items => {
+          this.cartItems = items;
+        });
       }
-
-      try {
-        const response = await this.clothesStockService.findAll(0, 10).toPromise();
-        this.clothes = response?.clothes || [];
-
-        // Group clothes by genericType and specificType
-        this.groupedClothes = this.groupByTypes(this.clothes);
-      } catch (error) {
-        console.error('Error loading clothes:', error);
-      }
-
-      // Set the title and meta tags for SEO
-      this.titleService.setTitle('Online Clothing Store - Navbar');
-      this.metaService.addTags([
-        { name: 'description', content: 'Explore our wide range of clothing items and accessories. Shop now and enjoy great deals!' },
-        { name: 'keywords', content: 'clothing, online store, fashion, accessories, shop' },
-        { name: 'robots', content: 'index, follow' },
-        { name: 'author', content: GlobalConstants.storeName },
-      { property: 'og:image', content: GlobalConstants.previewImageUrl },
-      { property: 'og:url', content: window.location.href },
-      ]);
+    } catch (error) {
+      console.info('Error getting user data:', error);
     }
+
+    try {
+      const response = await this.clothesStockService.findAll(0, 10).toPromise();
+      this.clothes = response?.clothes || [];
+
+      // Group clothes by genericType and specificType
+      this.groupedClothes = this.groupByTypes(this.clothes);
+    } catch (error) {
+      console.error('Error loading clothes:', error);
+    }
+
+    // Set the title and meta tags for SEO
+    this.titleService.setTitle('Online Clothing Store - Navbar');
+
+    let ogUrlContent = '';
+    if (isPlatformBrowser(this.platformId)) {
+      ogUrlContent = window.location.href;
+    }
+
+    this.metaService.addTags([
+      { name: 'description', content: 'Explore our wide range of clothing items and accessories. Shop now and enjoy great deals!' },
+      { name: 'keywords', content: 'clothing, online store, fashion, accessories, shop' },
+      { name: 'robots', content: 'index, follow' },
+      { name: 'author', content: GlobalConstants.storeName },
+      { property: 'og:image', content: GlobalConstants.previewImageUrl },
+      { property: 'og:url', content: ogUrlContent },
+    ]);
+  }
 
   groupByTypes(clothes: ClothesStock[]) {
     const grouped: { [key: string]: string[] } = {};
@@ -101,6 +117,7 @@ export class NavbarComponent implements OnInit {
   get isAdminIn(): Boolean {
     return this.authService.isAdminIn;
   }
+
   logOut() {
     this.authService.logOut();
   }

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Inject, PLATFORM_ID } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Tax } from '../models/tax.model';
 import { TaxService } from '../services/tax.service';
@@ -9,6 +9,7 @@ import { Pagination } from '../models/pagination.model';
 import { NotificationService } from '../services/notification.service';
 import { Meta, Title } from '@angular/platform-browser';
 import { GlobalConstants } from '../config/global-constants';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-invoice',
@@ -32,17 +33,24 @@ export class InvoiceComponent implements OnInit {
     private userService: UserService,
     public notificationService: NotificationService,
     private meta: Meta,
-    private title: Title
+    private title: Title,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) { }
 
   ngOnInit(): void {
     this.title.setTitle('Invoice Management - Your Store');
+
+    let ogUrlContent = '';
+    if (isPlatformBrowser(this.platformId)) {
+      ogUrlContent = window.location.href;
+    }
+
     this.meta.addTags([
       { name: 'description', content: 'Manage your invoices efficiently with our invoice management system.' },
       { name: 'keywords', content: 'invoices, invoice management, tax, store, online store' },
       { name: 'author', content: GlobalConstants.storeName },
       { property: 'og:image', content: GlobalConstants.previewImageUrl },
-      { property: 'og:url', content: window.location.href },
+      { property: 'og:url', content: ogUrlContent },
     ]);
   }
 

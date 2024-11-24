@@ -1,10 +1,11 @@
-import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, Inject, PLATFORM_ID } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ToastNotificationComponent } from '../../toast-notification/toast-notification.component';
 import { ClothesStock } from '../../models/clothesStock.model';
 import { NotificationService } from '../../services/notification.service';
 import { Meta, Title } from '@angular/platform-browser';
 import { GlobalConstants } from '../../config/global-constants';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-filters',
@@ -29,16 +30,22 @@ export class FiltersComponent implements OnInit {
   notificationMessage: string = '';
   private currentSortOrder: 'name' | 'price' | 'price-desc' | null = null;
 
-  constructor(public notificationService: NotificationService, private meta: Meta, private titleService: Title) {}
+  constructor(public notificationService: NotificationService, private meta: Meta, private titleService: Title, @Inject(PLATFORM_ID) private platformId: Object) {}
 
   ngOnInit() {
     this.titleService.setTitle('Clothing Filters - Clothing Store');
+
+    let ogUrlContent = '';
+    if (isPlatformBrowser(this.platformId)) {
+      ogUrlContent = window.location.href;
+    }
+
     this.meta.addTags([
       { name: 'description', content: 'Use our filters to find the clothing you are looking for in our clothing store.' },
       { name: 'keywords', content: 'clothing filters, clothing store, search clothing, clothing by name, clothing by price, clothing by category' },
       { name: 'author', content: GlobalConstants.storeName },
       { property: 'og:image', content: GlobalConstants.previewImageUrl },
-      { property: 'og:url', content: window.location.href },
+      { property: 'og:url', content: ogUrlContent },
     ]);
   }
 

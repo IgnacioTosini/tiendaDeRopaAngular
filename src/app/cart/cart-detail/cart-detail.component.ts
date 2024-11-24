@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Title, Meta } from '@angular/platform-browser';
 import { CartService } from '../../services/cart.service';
@@ -18,6 +18,7 @@ import { ToastNotificationComponent } from '../../toast-notification/toast-notif
 import { CartActionsComponent } from '../cart-actions/cart-actions.component';
 import { CartItemComponent } from '../cart-item/cart-item.component';
 import { GlobalConstants } from '../../config/global-constants';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-cart-detail',
@@ -45,6 +46,7 @@ export class CartDetailComponent implements OnInit {
     public notificationService: NotificationService,
     private titleService: Title,
     private metaService: Meta,
+    @Inject(PLATFORM_ID) private platformId: Object,
     private skeletonService: SkeletonService
   ) {
     this.cartService.getItems().subscribe(items => {
@@ -75,6 +77,11 @@ export class CartDetailComponent implements OnInit {
       }
     });
 
+    let ogUrlContent = '';
+    if (isPlatformBrowser(this.platformId)) {
+      ogUrlContent = window.location.href;
+    }
+
     this.titleService.setTitle('Detalle del Carrito - Tienda de Ropa');
     this.metaService.addTags([
       { name: 'description', content: 'Review the products in your shopping cart and proceed to checkout.' },
@@ -83,7 +90,7 @@ export class CartDetailComponent implements OnInit {
       { property: 'og:title', content: 'Shopping Cart Details - Clothing Store' },
       { property: 'og:description', content: 'Review the products in your shopping cart and proceed to checkout.' },
       { property: 'og:type', content: 'website' },
-      { property: 'og:url', content: window.location.href },
+      { property: 'og:url', content: ogUrlContent },
       { name: 'author', content: GlobalConstants.storeName },
       { property: 'og:image', content: GlobalConstants.previewImageUrl },
       { name: 'twitter:card', content: 'summary_large_image' },

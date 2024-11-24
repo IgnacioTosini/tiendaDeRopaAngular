@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges, ElementRef, ViewChild, Inject, PLATFORM_ID } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { slideInOutLeft, slideInOutRight, zoomInOut } from '../../shared/animations/animation';
 import { ToastNotificationComponent } from '../../toast-notification/toast-notification.component';
@@ -11,6 +11,7 @@ import { Meta, Title } from '@angular/platform-browser';
 import { GlobalConstants } from '../../config/global-constants';
 import { PaginationComponent } from '../../pagination/pagination.component';
 import { Pagination } from '../../models/pagination.model';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-clothes-list',
@@ -52,12 +53,19 @@ export class ClothesListComponent implements OnInit, OnChanges {
     private imageService: ImageService,
     public notificationService: NotificationService,
     private meta: Meta,
-    private title: Title
+    private title: Title,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) { }
 
   async ngOnInit() {
     await this.loadClothes();
     this.title.setTitle('Clothes List - Clothing Store');
+
+    let ogUrlContent = '';
+    if (isPlatformBrowser(this.platformId)) {
+      ogUrlContent = window.location.href;
+    }
+
     this.meta.addTags([
       { name: 'description', content: 'Explore our list of available clothes in the store. Find the best clothes at the best prices.' },
       { name: 'keywords', content: 'clothes, clothing store, buy clothes, fashion, cheap clothes' },
@@ -65,7 +73,7 @@ export class ClothesListComponent implements OnInit, OnChanges {
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { name: 'author', content: GlobalConstants.storeName },
       { property: 'og:image', content: GlobalConstants.previewImageUrl },
-      { property: 'og:url', content: window.location.href },
+      { property: 'og:url', content: ogUrlContent },
     ]);
   }
 

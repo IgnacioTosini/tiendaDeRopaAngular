@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnInit, Input, Output, EventEmitter, HostListener, ElementRef } from '@angular/core';
+import { Component, ViewChild, OnInit, Input, Output, EventEmitter, HostListener, ElementRef, Inject, PLATFORM_ID } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Title, Meta } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
@@ -13,6 +13,7 @@ import { PaginationComponent } from '../../pagination/pagination.component';
 import { ClotheItemComponent } from '../clothe-item/clothe-item.component';
 import { FiltersComponent } from '../../filter/filters/filters.component';
 import { GlobalConstants } from '../../config/global-constants';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-clothes-gallery',
@@ -47,17 +48,24 @@ export class ClothesGalleryComponent implements OnInit {
     private route: ActivatedRoute,
     private navigationService: NavigationService,
     private titleService: Title,
-    private metaService: Meta
+    private metaService: Meta,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) { }
 
   async ngOnInit() {
     this.titleService.setTitle('Clothes Gallery - Fashion Store');
+
+    let ogUrlContent = '';
+    if (isPlatformBrowser(this.platformId)) {
+      ogUrlContent = window.location.href;
+    }
+
     this.metaService.addTags([
       { name: 'description', content: 'Explore our clothes gallery with a wide variety of styles and prices. Find the latest fashion trends and shop your favorite outfits.' },
       { name: 'keywords', content: 'clothes, clothes gallery, fashion store, fashion trends, outfits, styles, prices, shopping' },
       { name: 'author', content: GlobalConstants.storeName },
       { property: 'og:image', content: GlobalConstants.previewImageUrl },
-      { property: 'og:url', content: window.location.href },
+      { property: 'og:url', content: ogUrlContent },
     ]);
     await this.loadClothes();
     this.route.params.subscribe(params => {

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Inject, PLATFORM_ID } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Meta } from '@angular/platform-browser';
@@ -7,6 +7,8 @@ import { UserService } from '../../services/user.service';
 import { ImageService } from '../../services/image.service';
 import { NotificationService } from '../../services/notification.service';
 import { GlobalConstants } from '../../config/global-constants';
+import { isPlatformBrowser } from '@angular/common';
+
 const DefaultImageUser = '../../assets/photos/person.svg';
 
 @Component({
@@ -22,7 +24,15 @@ export class RegisterComponent {
   showNotification: boolean = false;
   notificationMessage: string = '';
 
-  constructor(private userService: UserService, private formBuilder: FormBuilder, private imageService: ImageService, private router: Router, public notificationService: NotificationService, private meta: Meta) {
+  constructor(
+    private userService: UserService,
+    private formBuilder: FormBuilder,
+    private imageService: ImageService,
+    private router: Router,
+    public notificationService: NotificationService,
+    private meta: Meta,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {
     this.userForm = this.formBuilder.group({
       password: ['', [Validators.required, Validators.minLength(8)]],
       email: ['', [Validators.required, Validators.email]],
@@ -32,13 +42,18 @@ export class RegisterComponent {
       tel: ['', [Validators.required, Validators.pattern("^((\\+91-?)|0)?[0-9]{10}$")]], // Validación para un número de teléfono de 10 dígitos
     });
 
+    let ogUrlContent = '';
+    if (isPlatformBrowser(this.platformId)) {
+      ogUrlContent = window.location.href;
+    }
+
     this.meta.addTags([
       { name: 'description', content: 'Register a new user to access our clothing store.' },
       { name: 'keywords', content: 'register, user, clothing store, sign up' },
       { name: 'robots', content: 'index, follow' },
       { name: 'author', content: GlobalConstants.storeName },
       { property: 'og:image', content: GlobalConstants.previewImageUrl },
-      { property: 'og:url', content: window.location.href },
+      { property: 'og:url', content: ogUrlContent },
     ]);
   }
 
@@ -69,7 +84,9 @@ export class RegisterComponent {
     this.userService.register(this.userForm.value).subscribe(response => {
       console.log(response);
       this.router.navigate(["/login"]).then(() => {
-        window.location.reload();
+        if (isPlatformBrowser(this.platformId)) {
+          window.location.reload();
+        }
       });
     });
   }

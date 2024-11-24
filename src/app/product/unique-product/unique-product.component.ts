@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { EMPTY, catchError } from 'rxjs';
@@ -17,6 +17,7 @@ import { ImageModalComponent } from '../../img/image-modal/image-modal.component
 import { ProductGalleryComponent } from '../product-gallery/product-gallery.component';
 import { ProductInfoComponent } from '../product-info/product-info.component';
 import { GalleryComponent } from '../gallery/gallery.component';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-unique-product',
@@ -60,7 +61,8 @@ export class UniqueProductComponent implements OnInit {
     private location: Location,
     private meta: Meta,
     private titleService: Title,
-    private imageService: ImageService // Inyecta el servicio de imagen
+    private imageService: ImageService, // Inyecta el servicio de imagen
+    @Inject(PLATFORM_ID) private platformId: Object
   ) { }
 
   ngOnInit() {
@@ -107,11 +109,17 @@ export class UniqueProductComponent implements OnInit {
           }
 
           this.titleService.setTitle(this.product.getName());
+
+          let ogUrlContent = '';
+          if (isPlatformBrowser(this.platformId)) {
+            ogUrlContent = window.location.href;
+          }
+
           this.meta.addTags([
             { name: 'description', content: this.product.getDescription() },
             { name: 'author', content: GlobalConstants.storeName },
             { property: 'og:image', content: GlobalConstants.previewImageUrl },
-            { property: 'og:url', content: window.location.href },
+            { property: 'og:url', content: ogUrlContent },
           ]);
         });
       }

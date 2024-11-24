@@ -1,5 +1,5 @@
 import { Router } from '@angular/router';
-import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, Inject, PLATFORM_ID } from '@angular/core';
 import { slideInOutLeft, slideInOutRight, zoomInOut } from '../../shared/animations/animation';
 import { ClothesStock } from '../../models/clothesStock.model';
 import { User } from '../../models/user.model';
@@ -8,6 +8,7 @@ import { AuthService } from '../../services/auth.service';
 import { UserService } from '../../services/user.service';
 import { Meta } from '@angular/platform-browser';
 import { GlobalConstants } from '../../config/global-constants';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-image-wrapper',
@@ -26,7 +27,14 @@ export class ImageWrapperComponent implements OnInit {
   isFavorite: boolean = false;
   user: User = new User(0, '', '', '', '', '', [], [], '');
 
-  constructor(private router: Router, private userService: UserService, private authService: AuthService, private imageService: ImageService, private meta: Meta) { }
+  constructor(
+    private router: Router,
+    private userService: UserService,
+    private authService: AuthService,
+    private imageService: ImageService,
+    private meta: Meta,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) { }
 
   async ngOnInit() {
     this.user = await this.authService.UserData;
@@ -37,13 +45,18 @@ export class ImageWrapperComponent implements OnInit {
   }
 
   setMetaTags() {
+    let ogUrlContent = '';
+    if (isPlatformBrowser(this.platformId)) {
+      ogUrlContent = window.location.href;
+    }
+
     this.meta.addTags([
       { name: 'description', content: `Buy ${this.clothe.getName()} at our store. High quality and affordable prices.` },
       { name: 'keywords', content: `${this.clothe.getName()}, clothes, fashion, buy clothes online` },
       { name: 'robots', content: 'index, follow' },
       { name: 'author', content: GlobalConstants.storeName },
       { property: 'og:image', content: GlobalConstants.previewImageUrl },
-      { property: 'og:url', content: window.location.href },
+      { property: 'og:url', content: ogUrlContent },
     ]);
   }
 

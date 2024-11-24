@@ -1,5 +1,5 @@
 import { ImageService } from './../services/image.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
 import { AuthService } from './../services/auth.service';
 import { NavigationService } from './../services/navigation-service.service';
@@ -7,6 +7,7 @@ import { UserService } from '../services/user.service';
 import { User } from '../models/user.model';
 import { Wish } from '../models/wish.model';
 import { GlobalConstants } from '../config/global-constants';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-favorites',
@@ -24,12 +25,19 @@ export class FavoritesComponent implements OnInit {
     private navigationService: NavigationService,
     private meta: Meta,
     private titleService: Title,
-    private imageService: ImageService
+    private imageService: ImageService,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) { }
 
   async ngOnInit() {
     this.user = await this.authService.UserData;
     this.titleService.setTitle('Your Favorite Products - Clothing Store');
+
+    let ogUrlContent = '';
+    if (isPlatformBrowser(this.platformId)) {
+      ogUrlContent = window.location.href;
+    }
+
     this.meta.addTags([
       { name: 'description', content: 'Discover and manage your favorite products in our clothing store. Find the best fashion items and keep track of your favorites.' },
       { name: 'keywords', content: 'favorites, clothing store, products, fashion, wishlist, favorite products, best fashion items' },
@@ -40,7 +48,7 @@ export class FavoritesComponent implements OnInit {
       { name: 'og:description', content: 'Discover and manage your favorite products in our clothing store. Find the best fashion items and keep track of your favorites.' },
       { name: 'twitter:title', content: 'Your Favorite Products - Clothing Store' },
       { name: 'twitter:description', content: 'Discover and manage your favorite products in our clothing store. Find the best fashion items and keep track of your favorites.' },
-      { property: 'og:url', content: window.location.href },
+      { property: 'og:url', content: ogUrlContent },
     ]);
   }
 

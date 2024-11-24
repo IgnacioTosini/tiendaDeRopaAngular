@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { UserListComponent } from '../user-list/user-list.component';
 import { ToastNotificationComponent } from '../../toast-notification/toast-notification.component';
@@ -9,6 +9,7 @@ import { UserService } from '../../services/user.service';
 import { NotificationService } from '../../services/notification.service';
 import { Meta, Title } from '@angular/platform-browser';
 import { GlobalConstants } from '../../config/global-constants';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-user-filter-form',
@@ -26,17 +27,23 @@ export class UserFilterFormComponent implements OnInit {
   showNotification: boolean = false;
   notificationMessage: string = '';
 
-  constructor(private userService: UserService, public notificationService: NotificationService, private meta: Meta, private title: Title) {}
+  constructor(private userService: UserService, public notificationService: NotificationService, private meta: Meta, private title: Title, @Inject(PLATFORM_ID) private platformId: Object) {}
 
   ngOnInit() {
     this.title.setTitle('User Filter Form - Clothing Store');
+
+    let ogUrlContent = '';
+    if (isPlatformBrowser(this.platformId)) {
+      ogUrlContent = window.location.href;
+    }
+
     this.meta.addTags([
       { name: 'description', content: 'Filter and search users by ID or email in our clothing store.' },
       { name: 'keywords', content: 'user filter, search user, clothing store, user ID, user email' },
       { name: 'robots', content: 'index, follow' },
       { name: 'author', content: GlobalConstants.storeName },
       { property: 'og:image', content: GlobalConstants.previewImageUrl },
-      { property: 'og:url', content: window.location.href },
+      { property: 'og:url', content: ogUrlContent },
     ]);
   }
 

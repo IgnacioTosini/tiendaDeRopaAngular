@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
 import { FormArray, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpResponse } from '@angular/common/http';
 import { ToastNotificationComponent } from '../../toast-notification/toast-notification.component';
@@ -8,6 +8,7 @@ import { ClothesStockService } from '../../services/clothes-stock.service';
 import { Image } from '../../models/images.model';
 import { Meta, Title } from '@angular/platform-browser';
 import { GlobalConstants } from '../../config/global-constants';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-create-clothe',
@@ -42,20 +43,27 @@ export class CreateClotheComponent implements OnInit {
     private clothesStockService: ClothesStockService,
     private imageService: ImageService,
     private meta: Meta,
-    private titleService: Title
+    private titleService: Title,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) { }
 
   async ngOnInit() {
     await this.clothesStockService.findAll(0, 10).toPromise();
     this.clothes = this.clothesStockService.clothesArray;
     this.titleService.setTitle('Create New Clothe - Tienda de Ropa');
+
+    let ogUrlContent = '';
+    if (isPlatformBrowser(this.platformId)) {
+      ogUrlContent = window.location.href;
+    }
+
     this.meta.addTags([
       { name: 'description', content: 'Create a new clothe item in our online store. Fill out the form to add a new product to our catalog.' },
       { name: 'keywords', content: 'create clothe, new clothe, online store, clothing, fashion' },
       { name: 'robots', content: 'index, follow' },
       { name: 'author', content: GlobalConstants.storeName },
       { property: 'og:image', content: GlobalConstants.previewImageUrl },
-      { property: 'og:url', content: window.location.href },
+      { property: 'og:url', content: ogUrlContent },
     ]);
   }
 

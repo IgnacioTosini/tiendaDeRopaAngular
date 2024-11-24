@@ -25,16 +25,20 @@ export class DropDownMenuProductsComponent implements OnInit {
   }
 
   addMetaTags() {
-    const metaTags = [
-      { name: 'description', content: 'Explore our wide range of clothing products. Find the best clothes for men, women, and children.' },
-      { name: 'keywords', content: 'clothes, fashion, men, women, children, buy clothes, clothing store' }
-    ];
-    metaTags.forEach(tag => {
-      const meta = document.createElement('meta');
-      meta.name = tag.name;
-      meta.content = tag.content;
-      document.head.appendChild(meta);
-    });
+    if (typeof document !== 'undefined') {
+      const metaTags = [
+        { name: 'description', content: 'Explore our wide range of clothing products. Find the best clothes for men, women, and children.' },
+        { name: 'keywords', content: 'clothes, fashion, men, women, children, buy clothes, clothing store' }
+      ];
+      metaTags.forEach(tag => {
+        const meta = document.createElement('meta');
+        meta.name = tag.name;
+        meta.content = tag.content;
+        document.head.appendChild(meta);
+      });
+    } else {
+      console.error('document is not defined');
+    }
   }
 
   get isLogging(): Boolean {

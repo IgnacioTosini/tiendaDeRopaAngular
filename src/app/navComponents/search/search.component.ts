@@ -1,5 +1,5 @@
 import { Router } from '@angular/router';
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Output, Inject, PLATFORM_ID } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ToastNotificationComponent } from '../../toast-notification/toast-notification.component';
 import { slideDownUp } from '../../shared/animations/animation';
@@ -9,6 +9,7 @@ import { NotificationService } from '../../services/notification.service';
 import { SearchService } from '../../services/search.service';
 import { Meta, Title } from '@angular/platform-browser';
 import { GlobalConstants } from '../../config/global-constants';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-search',
@@ -29,15 +30,23 @@ export class SearchComponent {
     public notificationService: NotificationService,
     private searchService: SearchService,
     private meta: Meta,
-    private titleService: Title
+    private titleService: Title,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {
     this.titleService.setTitle('Search Clothes - Your Store Name');
+
+    let ogUrlContent = '';
+    if (isPlatformBrowser(this.platformId)) {
+      ogUrlContent = window.location.href;
+    }
+
     this.meta.addTags([
       { name: 'description', content: 'Search for clothes in our store. Find the best deals and latest trends.' },
       { name: 'keywords', content: 'clothes, search, fashion, store, buy clothes' },
       { name: 'robots', content: 'index, follow' },
       { name: 'author', content: GlobalConstants.storeName },
       { property: 'og:image', content: GlobalConstants.previewImageUrl },
+      { property: 'og:url', content: ogUrlContent },
     ]);
   }
 

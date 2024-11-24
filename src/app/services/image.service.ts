@@ -1,12 +1,13 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
+import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ImageService {
 
-  constructor(private sanitizer: DomSanitizer) { }
+  constructor(private sanitizer: DomSanitizer, @Inject(PLATFORM_ID) private platformId: Object) { }
 
   validateImage(file: File): boolean {
     return file.type.startsWith('image/');
@@ -15,7 +16,10 @@ export class ImageService {
   extractBase64(file: File): Promise<any> {
     return new Promise((resolve, reject) => {
       try {
-        const unsafeImg = window.URL.createObjectURL(file);
+        let unsafeImg = '';
+        if (isPlatformBrowser(this.platformId)) {
+          unsafeImg = window.URL.createObjectURL(file);
+        }
         const image = this.sanitizer.bypassSecurityTrustUrl(unsafeImg);
         const reader = new FileReader();
         reader.readAsDataURL(file);
