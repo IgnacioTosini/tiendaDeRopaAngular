@@ -78,7 +78,7 @@ export class ClothesListComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['selectedClothes'] && this['selectedClothes']) {
+    if (changes['selectedClothes'] && this.selectedClothes) {
       this.selectClothes(this.selectedClothes);
     }
   }
@@ -110,8 +110,8 @@ export class ClothesListComponent implements OnInit, OnChanges {
     if (fileInput) {
       fileInput.value = '';
     }
-    this.title.setTitle(`${clothes.getName()} - Clothing Store`);
-    this.meta.updateTag({ name: 'description', content: `Buy ${clothes.getName()} at the best price. ${clothes.getDescription()}` });
+    this.title.setTitle(`${clothes?.getName?.() || 'Clothing'} - Clothing Store`);
+    this.meta.updateTag({ name: 'description', content: `Buy ${clothes?.getName?.() || 'Clothing'} at the best price. ${clothes?.getDescription?.() || ''}` });
   }
 
   updateClothes(): void {

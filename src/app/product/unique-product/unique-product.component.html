@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <section class="uniqueProduct">
-  <app-product-gallery [smallImages]="smallImages" [mainImage]="mainImage" [productName]="product.getName()"
+  <app-product-gallery [smallImages]="smallImages" [mainImage]="mainImage" [productName]="product.getName() || ''"
     [isLoadingImages]="isLoadingImages" (imageChange)="changeMainImage($event)" (openModal)="openModal()"></app-product-gallery>
 
   <app-product-info [product]="product" [sizesAvailable]="sizesAvailable" [sizeQuantities]="sizeQuantities"
