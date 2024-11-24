@@ -4,12 +4,13 @@ import { Observable, of, throwError } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { Comment } from '../models/comment.model';
 import { UserService } from './user.service';
+import { GlobalConstants } from '../config/global-constants';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CommentService {
-  private baseUrl = 'http://localhost:8080/api/comments';
+  private baseUrl = `${GlobalConstants.apiUrl}/api/comments`;
 
   constructor(private http: HttpClient, private userService: UserService) { }
 

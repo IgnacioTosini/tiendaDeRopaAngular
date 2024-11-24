@@ -6,12 +6,13 @@ import { Tax } from '../models/tax.model';
 import { ClothesSold } from '../models/clothesSold.model';
 import { UserService } from './user.service';
 import { Pagination } from '../models/pagination.model';
+import { GlobalConstants } from '../config/global-constants';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TaxService {
-  private baseUrl = 'http://localhost:8080/api/taxs';
+  private baseUrl = `${GlobalConstants.apiUrl}/api/taxs`;
   invoiceArray: Array<Tax> = [];
 
   constructor(private http: HttpClient, private userService: UserService) { }

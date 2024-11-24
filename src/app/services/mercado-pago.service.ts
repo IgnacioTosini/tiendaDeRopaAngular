@@ -3,13 +3,14 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ItemMercadoPago } from '../models/ItemMercadoPago.model';
 import { Preference } from 'mercadopago';
+import { GlobalConstants } from '../config/global-constants';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MercadoPagoService {
 
-  private apiUrl = 'http://localhost:8080/api/mercado'; // URL del controlador de Spring
+  private apiUrl = `${GlobalConstants.apiUrl}/api/mercado`; // URL del controlador de Spring
 
   constructor(private http: HttpClient) { }
 

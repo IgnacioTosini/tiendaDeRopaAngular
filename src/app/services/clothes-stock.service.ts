@@ -5,12 +5,13 @@ import { ClothesStock } from '../models/clothesStock.model';
 import { Image } from '../models/images.model';
 import { UserService } from './user.service';
 import { Pagination } from '../models/pagination.model';
+import { GlobalConstants } from '../config/global-constants';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ClothesStockService {
-  private apiUrl = 'http://localhost:8080/api/clothes';
+  private apiUrl = `${GlobalConstants.apiUrl}/api/clothes`;
   clothesArray: Array<ClothesStock> = [];
   private headers = new HttpHeaders({ "Content-Type": "application/json" });
 

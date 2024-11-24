@@ -5,6 +5,7 @@ import { LocalStorageService } from './local-storage.service';
 import { Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { GlobalConstants } from '../config/global-constants';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,7 @@ export class AuthService {
   users: User[] = [];
   isLoggedIn: Boolean = false;
   isAdminIn: Boolean = false;
-  private apiUrl = "http://localhost:8080";
+  private apiUrl = GlobalConstants.apiUrl;
   private headers = new HttpHeaders({ "Content-Type": "application/json" });
 
   constructor(

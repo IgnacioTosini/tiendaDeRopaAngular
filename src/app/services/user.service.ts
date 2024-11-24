@@ -7,12 +7,13 @@ import { User } from '../models/user.model';
 import { catchError, tap } from 'rxjs/operators';
 import { Comment } from '../models/comment.model';
 import { Pagination } from '../models/pagination.model';
+import { GlobalConstants } from '../config/global-constants';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-  private apiUrl = 'http://localhost:8080/api/users';
+  private apiUrl = `${GlobalConstants.apiUrl}/api/users`;
   usersArray: Array<User> = [];
   userRole: string = '';
   userRoles: string[] = [];
