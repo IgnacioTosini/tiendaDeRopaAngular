@@ -1,6 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { SharedDataService } from '../../services/shared-data.service';
 
 @Component({
   selector: 'app-drop-down-menu-products',
@@ -10,15 +11,27 @@ import { AuthService } from '../../services/auth.service';
   styleUrls: ['./drop-down-menu-products.component.scss']
 })
 export class DropDownMenuProductsComponent implements OnInit {
-  @Input() groupedClothes: { [genericType: string]: string[] } = {};
+  groupedClothes: { [genericType: string]: string[] } = {};
   isAdminMode: Boolean = false;
 
-  constructor(private router: Router, private authService: AuthService) { }
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+    private sharedDataService: SharedDataService
+  ) { }
 
   async ngOnInit() {
     try {
       this.isAdminMode = await this.authService.isAdmin();
       this.addMetaTags();
+
+      // Suscríbete a los cambios en groupedClothes
+      this.sharedDataService.groupedClothes$.subscribe(groupedClothes => {
+        if (groupedClothes) {
+          this.groupedClothes = groupedClothes;
+          console.log('DropDownMenuProductsComponent groupedClothes:', this.groupedClothes);
+        }
+      });
     } catch (error) {
       console.error('Error checking admin status:', error);
     }

@@ -4,7 +4,6 @@ import { CartService } from '../../services/cart.service';
 import { FormsModule } from '@angular/forms';
 import { ClothesStockService } from '../../services/clothes-stock.service';
 import { ClothesStock } from '../../models/clothesStock.model';
-import { Router } from '@angular/router';
 import { User } from '../../models/user.model';
 import { slideDownUp } from '../../shared/animations/animation';
 import { CartDropdownComponent } from '../../cart/cart-dropdown/cart-dropdown.component';
@@ -14,6 +13,7 @@ import { SearchService } from '../../services/search.service';
 import { Meta, Title } from '@angular/platform-browser';
 import { GlobalConstants } from '../../config/global-constants';
 import { isPlatformBrowser } from '@angular/common';
+import { SharedDataService } from '../../services/shared-data.service';
 
 @Component({
   selector: 'app-navbar',
@@ -36,10 +36,10 @@ export class NavbarComponent implements OnInit {
     protected cartService: CartService,
     private clothesStockService: ClothesStockService,
     private authService: AuthService,
-    private router: Router,
     private searchService: SearchService,
     private titleService: Title,
     private metaService: Meta,
+    private sharedDataService: SharedDataService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) { }
 
@@ -67,9 +67,11 @@ export class NavbarComponent implements OnInit {
     try {
       const response = await this.clothesStockService.findAll(0, 10).toPromise();
       this.clothes = response?.clothes || [];
+      console.log('NavbarComponent clothes:', this.clothes);
 
       // Group clothes by genericType and specificType
       this.groupedClothes = this.groupByTypes(this.clothes);
+      this.sharedDataService.setGroupedClothes(this.groupedClothes); // Actualiza el servicio compartido
     } catch (error) {
       console.error('Error loading clothes:', error);
     }
