@@ -7,7 +7,7 @@ import { CartService } from '../../services/cart.service';
   standalone: true,
   imports: [],
   templateUrl: './cart-item.component.html',
-  styleUrl: './cart-item.component.scss',
+  styleUrls: ['./cart-item.component.scss'],
   host: {
     'role': 'listitem',
     'aria-label': 'Cart item'

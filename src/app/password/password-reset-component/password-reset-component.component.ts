@@ -14,7 +14,7 @@ import { isPlatformBrowser } from '@angular/common';
   standalone: true,
   imports: [ReactiveFormsModule, ToastNotificationComponent],
   templateUrl: './password-reset-component.component.html',
-  styleUrl: './password-reset-component.component.scss'
+  styleUrls: ['./password-reset-component.component.scss']
 })
 export class PasswordResetComponentComponent implements OnInit {
   resetForm: FormGroup = new FormGroup({});

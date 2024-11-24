@@ -8,7 +8,7 @@ import { isPlatformBrowser } from '@angular/common';
   standalone: true,
   imports: [],
   templateUrl: './cart-actions.component.html',
-  styleUrl: './cart-actions.component.scss'
+  styleUrls: ['./cart-actions.component.scss']
 })
 export class CartActionsComponent {
   @Input() totalPrice: number = 0;

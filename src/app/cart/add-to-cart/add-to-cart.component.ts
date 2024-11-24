@@ -8,7 +8,7 @@ import { isPlatformBrowser } from '@angular/common';
   standalone: true,
   imports: [],
   templateUrl: './add-to-cart.component.html',
-  styleUrls: ['./add-to-cart.component.scss']
+  styleUrl: './add-to-cart.component.scss'
 })
 export class AddToCartComponent {
   @Input() quantity: number = 1;

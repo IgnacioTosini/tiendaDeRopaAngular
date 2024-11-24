@@ -9,7 +9,7 @@ import { isPlatformBrowser } from '@angular/common';
   selector: 'app-home',
   standalone: true,
   templateUrl: './home.component.html',
-  styleUrl: './home.component.scss',
+  styleUrls: ['./home.component.scss'],
   imports: [CarouselComponent, GalleryComponent]
 })
 export class HomeComponent implements OnInit {

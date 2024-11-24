@@ -6,7 +6,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   standalone: true,
   imports: [],
   templateUrl: './image-modal.component.html',
-  styleUrl: './image-modal.component.scss'
+  styleUrls: ['./image-modal.component.scss']
 })
 export class ImageModalComponent {
   @Input() mainImage: string = '';

@@ -6,7 +6,7 @@ import { InvoiceComponent } from '../../invoice/invoice.component';
   standalone: true,
   imports: [InvoiceComponent],
   templateUrl: './view-invoices-page.component.html',
-  styleUrl: './view-invoices-page.component.scss'
+  styleUrls: ['./view-invoices-page.component.scss']
 })
 export class ViewInvoicesPageComponent {
 }

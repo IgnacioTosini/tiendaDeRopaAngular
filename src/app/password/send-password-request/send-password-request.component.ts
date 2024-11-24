@@ -13,7 +13,7 @@ import { isPlatformBrowser } from '@angular/common';
   standalone: true,
   imports: [ReactiveFormsModule, ToastNotificationComponent],
   templateUrl: './send-password-request.component.html',
-  styleUrl: './send-password-request.component.scss'
+  styleUrls: ['./send-password-request.component.scss']
 })
 export class SendPasswordRequestComponent implements OnInit {
   resetForm: FormGroup;

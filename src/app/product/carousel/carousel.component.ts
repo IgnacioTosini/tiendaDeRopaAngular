@@ -13,7 +13,7 @@ import { isPlatformBrowser } from '@angular/common';
   standalone: true,
   imports: [],
   templateUrl: './carousel.component.html',
-  styleUrl: './carousel.component.scss'
+  styleUrls: ['./carousel.component.scss']
 })
 export class CarouselComponent {
   clothes: ClothesStock[] = [];

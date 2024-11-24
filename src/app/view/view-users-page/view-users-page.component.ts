@@ -6,7 +6,7 @@ import { UserFilterFormComponent } from '../../user/user-filter-form/user-filter
   standalone: true,
   imports: [UserFilterFormComponent],
   templateUrl: './view-users-page.component.html',
-  styleUrl: './view-users-page.component.scss'
+  styleUrls: ['./view-users-page.component.scss']
 })
 export class ViewUsersPageComponent {
 

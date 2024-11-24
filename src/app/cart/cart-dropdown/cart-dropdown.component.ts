@@ -14,7 +14,7 @@ import { isPlatformBrowser } from '@angular/common';
   imports: [],
   animations: [slideDownUp],
   templateUrl: './cart-dropdown.component.html',
-  styleUrl: './cart-dropdown.component.scss'
+  styleUrls: ['./cart-dropdown.component.scss']
 })
 export class CartDropdownComponent implements OnInit {
   @Input() cartItems: { product: ClothesStock, quantity: number }[] = [];

@@ -4,7 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { EMPTY, catchError } from 'rxjs';
 import { CommonModule, Location } from '@angular/common';
 import { Meta, Title } from '@angular/platform-browser';
-import { ImageService } from '../../services/image.service'; // Importa el servicio de imagen
 import { ClothesStockService } from '../../services/clothes-stock.service';
 import { AuthService } from '../../services/auth.service';
 import { CartService } from '../../services/cart.service';
@@ -61,7 +60,6 @@ export class UniqueProductComponent implements OnInit {
     private location: Location,
     private meta: Meta,
     private titleService: Title,
-    private imageService: ImageService, // Inyecta el servicio de imagen
     @Inject(PLATFORM_ID) private platformId: Object
   ) { }
 
@@ -70,7 +68,7 @@ export class UniqueProductComponent implements OnInit {
       this.smallImages = [];
       const code = params['code'];
       const state = this.location.getState() as { [key: string]: any };
-      const name = state['name'];
+      const name = state ? state['name'] : null; // Verificar si state está definido
       console.log(name);
       if (code !== null) {
         const searchParams = { name: name }; // Crear un objeto con los parámetros necesarios

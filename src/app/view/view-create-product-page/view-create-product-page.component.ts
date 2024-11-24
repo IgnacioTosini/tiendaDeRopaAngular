@@ -6,6 +6,6 @@ import { CreateClotheComponent } from '../../clothe/create-clothe/create-clothe.
   standalone: true,
   imports: [CreateClotheComponent],
   templateUrl: './view-create-product-page.component.html',
-  styleUrl: './view-create-product-page.component.scss'
+  styleUrls: ['./view-create-product-page.component.scss']
 })
 export class ViewCreateProductPageComponent { }

@@ -16,7 +16,7 @@ import { isPlatformBrowser } from '@angular/common';
   standalone: true,
   imports: [FormsModule, UserListComponent, PaginationComponent, ToastNotificationComponent],
   templateUrl: './user-filter-form.component.html',
-  styleUrl: './user-filter-form.component.scss'
+  styleUrls: ['./user-filter-form.component.scss']
 })
 export class UserFilterFormComponent implements OnInit {
   users: User[] = [];

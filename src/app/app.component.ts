@@ -9,7 +9,7 @@ import { FooterComponent } from './view/footer/footer.component';
   standalone: true,
   imports: [CommonModule, RouterOutlet, NavbarComponent, FooterComponent],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
   title = 'tiendaDeRopaAngular';
