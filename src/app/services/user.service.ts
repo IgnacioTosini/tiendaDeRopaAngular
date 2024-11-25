@@ -181,7 +181,7 @@ export class UserService {
 
   getUserByEmail(email: string, token: string): Observable<any> {
     console.log(email);
-    console.log(token);
+    console
     return this.http.get<any>(`${this.apiUrl}/email/${email}`, this.getUserToken(token)).pipe(
       map(response => {
         const data = response.body;
@@ -320,22 +320,13 @@ export class UserService {
     } else {
       tokenStorage = this.localStorageService.getItem("token") || '';
     }
-
-    // Log para depuración
-    console.log('Token recuperado:', tokenStorage);
-
-    // Validación del formato del token
-    if (!tokenStorage || !/^eyJ[a-zA-Z0-9-_]+\.[a-zA-Z0-9-_]+\.[a-zA-Z0-9-_]+$/.test(tokenStorage)) {
-      console.error('Formato de token inválido:', tokenStorage);
-      throw new Error('Formato de token inválido');
-    }
-
     const http = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + tokenStorage
       })
     };
+    console.log(http);
     return http;
   }
 
