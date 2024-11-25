@@ -180,6 +180,8 @@ export class UserService {
   }
 
   getUserByEmail(email: string, token: string): Observable<any> {
+    console.log(email);
+    console.log(token);
     return this.http.get<any>(`${this.apiUrl}/email/${email}`, this.getUserToken(token)).pipe(
       map(response => {
         const data = response.body;
