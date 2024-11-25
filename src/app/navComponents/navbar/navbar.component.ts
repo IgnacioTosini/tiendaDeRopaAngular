@@ -13,7 +13,6 @@ import { SearchService } from '../../services/search.service';
 import { Meta, Title } from '@angular/platform-browser';
 import { GlobalConstants } from '../../config/global-constants';
 import { isPlatformBrowser } from '@angular/common';
-import { SharedDataService } from '../../services/shared-data.service';
 
 @Component({
   selector: 'app-navbar',
@@ -39,7 +38,6 @@ export class NavbarComponent implements OnInit {
     private searchService: SearchService,
     private titleService: Title,
     private metaService: Meta,
-    private sharedDataService: SharedDataService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) { }
 
@@ -67,11 +65,9 @@ export class NavbarComponent implements OnInit {
     try {
       const response = await this.clothesStockService.findAll(0, 10).toPromise();
       this.clothes = response?.clothes || [];
-      console.log(this.clothes);
 
       // Group clothes by genericType and specificType
       this.groupedClothes = this.groupByTypes(this.clothes);
-      this.sharedDataService.setGroupedClothes(this.groupedClothes); // Actualiza el servicio compartido
     } catch (error) {
       console.error('Error loading clothes:', error);
     }

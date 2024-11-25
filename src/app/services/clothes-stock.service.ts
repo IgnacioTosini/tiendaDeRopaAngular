@@ -17,7 +17,7 @@ export class ClothesStockService {
 
   constructor(private http: HttpClient, private userService: UserService) { }
 
-  findAll(page: number, size: number): Observable<{ clothes: ClothesStock[], pagination: Pagination }> {
+    findAll(page: number, size: number): Observable<{ clothes: ClothesStock[], pagination: Pagination }> {
     const params = {
       page: page,
       cant: size
@@ -25,7 +25,6 @@ export class ClothesStockService {
 
     return this.http.get<any>(`${this.apiUrl}`, { params, headers: this.headers }).pipe(
       map(response => {
-        this.clothesArray = [];
         response.body.content.forEach((item: any) => {
           const existingClothes = this.clothesArray.find(clothes => clothes.getId() === item.id);
           if (!existingClothes) {

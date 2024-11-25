@@ -1,7 +1,8 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
-import { SharedDataService } from '../../services/shared-data.service';
+import { ClothesStockService } from '../../services/clothes-stock.service';
+import { ClothesStock } from '../../models/clothesStock.model';
 
 @Component({
   selector: 'app-drop-down-menu-products',
@@ -11,29 +12,25 @@ import { SharedDataService } from '../../services/shared-data.service';
   styleUrls: ['./drop-down-menu-products.component.scss']
 })
 export class DropDownMenuProductsComponent implements OnInit {
-  @Input() groupedClothes: { [genericType: string]: string[] } = {}; // Definir como @Input
+  groupedClothes: { [genericType: string]: string[] } = {};
   isAdminMode: Boolean = false;
 
-  constructor(
-    private router: Router,
-    private authService: AuthService,
-    private sharedDataService: SharedDataService
-  ) { }
+  constructor(private router: Router, private authService: AuthService, private clothesStockService: ClothesStockService) { }
 
   async ngOnInit() {
     try {
       this.isAdminMode = await this.authService.isAdmin();
       this.addMetaTags();
-
-      // Suscríbete a los cambios en groupedClothes
-      this.sharedDataService.groupedClothes$.subscribe(groupedClothes => {
-        if (groupedClothes) {
-          this.groupedClothes = groupedClothes;
-          console.log('DropDownMenuProductsComponent groupedClothes:', this.groupedClothes);
-        }
-      });
     } catch (error) {
       console.error('Error checking admin status:', error);
+    }
+
+    try {
+      const response = await this.clothesStockService.findAll(0, 10).toPromise();
+      const clothes = response?.clothes || [];
+      this.groupedClothes = this.groupByTypes(clothes);
+    } catch (error) {
+      console.error('Error loading clothes:', error);
     }
   }
 
@@ -64,5 +61,23 @@ export class DropDownMenuProductsComponent implements OnInit {
 
   goToGallery(type: string) {
     this.router.navigate(['/clothes-gallery', { type }]);
+  }
+
+  private groupByTypes(clothes: ClothesStock[]): { [genericType: string]: string[] } {
+    const grouped: { [key: string]: string[] } = {};
+
+    clothes.forEach(clothe => {
+      const genericType = clothe.getGenericType();
+      const specificType = clothe.getSpecificType();
+
+      if (!grouped[genericType]) {
+        grouped[genericType] = [];
+      }
+      if (!grouped[genericType].includes(specificType)) {
+        grouped[genericType].push(specificType);
+      }
+    });
+
+    return grouped;
   }
 }
