@@ -314,14 +314,15 @@ export class UserService {
   }
 
   getUserToken(token: string): { headers: HttpHeaders } {
-    let tokenStorage = "";
-    if (this.localStorageService.getItem("token") == '' || null) {
+    let tokenStorage = this.localStorageService.getItem("token");
+
+    if (tokenStorage === null || tokenStorage === '') {
       tokenStorage = token;
       console.log('entre al if');
     } else {
-      tokenStorage = this.localStorageService.getItem("token") || '';
       console.log('entre al else');
     }
+
     const http = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
