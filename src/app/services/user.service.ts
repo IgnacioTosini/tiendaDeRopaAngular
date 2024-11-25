@@ -315,7 +315,7 @@ export class UserService {
 
   getUserToken(token: string): { headers: HttpHeaders } {
     let tokenStorage = "";
-    if (this.localStorageService.getItem("token") == '') {
+    if (this.localStorageService.getItem("token") == '' || null) {
       tokenStorage = token;
       console.log('entre al if');
     } else {
