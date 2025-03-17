@@ -19,6 +19,7 @@ import { RegisterComponent } from './auth/register/register.component';
 import { LoginComponent } from './auth/login/login.component';
 
 export const routes: Routes = [
+  { path: '', redirectTo: 'home', pathMatch: 'full' }, // Redirección automática desde la raíz
   { path: 'home', component: HomeComponent },
   { path: 'create-user', component: RegisterComponent },
   { path: 'user-profile', component: UserProfileComponent, canActivate: [AuthGuard] },
@@ -37,5 +38,5 @@ export const routes: Routes = [
   { path: 'password-reset', component: PasswordResetComponentComponent },
   { path: 'sendEmail', component: SendPasswordRequestComponent },
   { path: 'refresh', component: HomeComponent }, // Ruta temporal para forzar la recarga
-  { path: '**', redirectTo: '/home', pathMatch: 'full' },
+  { path: '**', redirectTo: 'home', pathMatch: 'full' },
 ];
