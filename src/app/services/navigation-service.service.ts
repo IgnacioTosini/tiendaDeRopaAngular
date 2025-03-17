@@ -8,7 +8,6 @@ import { isPlatformBrowser } from '@angular/common';
   providedIn: 'root'
 })
 export class NavigationService {
-
   constructor(private router: Router, @Inject(PLATFORM_ID) private platformId: Object) {}
 
   goToProduct(clothe: ClothesStock): void {

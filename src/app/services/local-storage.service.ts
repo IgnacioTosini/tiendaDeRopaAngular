@@ -8,7 +8,7 @@ export class LocalStorageService {
   constructor(@Inject(PLATFORM_ID) private platformId: Object) { }
 
   getItem(key: string): string | null {
-    if (isPlatformBrowser(this.platformId) || window.location.hostname !== 'localhost') {
+    if (isPlatformBrowser(this.platformId)) {
       console.log(key, localStorage.getItem(key));
       return localStorage.getItem(key);
     }
@@ -16,7 +16,7 @@ export class LocalStorageService {
   }
 
   setItem(key: string, value: string): void {
-    if (isPlatformBrowser(this.platformId) || window.location.hostname !== 'localhost') {
+    if (isPlatformBrowser(this.platformId)) {
       localStorage.setItem(key, value);
     }
   }
